@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+    margin: 0; 
+    padding: 0;
+    font-family: 'Tektur', sans-serif;
+}
+
+body {
+  background: black;
+    height: 100vh;
+}
+
+.rusFon, .rusFon * {
+    font-family: 'Rutenia' !important;
+}
+
+@font-face {
+    font-family: 'B52';
+    src: url('../fonts/B52.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Kobzar KS';
+    src: url('../fonts/KobzarKS_v1-020.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'KyivType Sans';
+    src: url('../fonts/KyivTypeSans-VarGX.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Mariupol';
+    font-weight: bold;
+    src: url('../fonts/Mariupol-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Rutenia';
+    src: url('../fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('../fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    font-weight: 500 900; 
+    font-style: normal;
+}
+.rusBack {
+    background-image: url(../images/rus.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
+}
+model-viewer {
+  width: 100%;
+  height: 100vh;
+  display: block;
+}
+
+.Hotspot {
+  background: #ff0000;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.2s;
+}
+
+.Hotspot:hover {
+  transform: scale(1.2);
+  background: #ff5555;
+}
+
+.Hotspot[data-visible="false"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.annotation {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  padding: 8px;
+  position: absolute;
+  transform: translate(25px, -15px);
+  display: none;
+  color: #000;
+  font-family: sans-serif;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.Hotspot:hover .annotation {
+  display: block;
+}
+.boss{
+    background:rgb(97, 0, 118)00;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.2s;
+}
+.boss:hover{
+    transform: scale(1.2);
+  background: #df04df;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="test.css">
+</head>
+<body>
+    <button class="backToEarth styled" onclick="CameBack()">Back</button>
+    
+    <div class="styled exercise ">
+        
+        <div class="Points all">
+            <div class="answ good">✔</div>
+            <div class="answ bad">✖</div>
+        </div>
+        <div class="styled text-qust qust cool-text all"></div>
+        <div class="variants all">
+            <button class="my-btns styled cor cool-text" onclick="win(1)"></button>
+            <button class="my-btns styled incor cool-text" onclick="lose(2)"></button>
+            <button class="my-btns styled incor2 cool-text" onclick="lose(3)"></button>
+        </div>
+        <button class="cont all" onclick="Next()">Next =></button>
+          <div class="end hidden ">
+     <div class='like endIn styled'>
+        <p>Результат</p>
+        <p class="resultsIn resData">111</p>
+     </div>
+    <div class=' endIn styled'>
+        <p>Точність</p>
+        <p class="perc resData">111</p>        
+    </div>
+    <div class=' endIn styled'>
+        <p class="goodResult"></p>
+        <p class="badResult"></p>
+    </div>
+
+    <div class="askGemini">
+      <button  class="BtnGeminiTest">Система тимчасово не працює</button>
+    </div>
+    
+  </div>
+    </div>
+    <script src="arrays.js"></script>
+    <script src="AI.js"></script>
+    <script src="script.js"></script>
+    <script type="module" src="main.js"></script>
+
+</body>
+</html>

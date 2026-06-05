@@ -1,0 +1,221 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Tektur', sans-serif;
+}
+
+body {
+      background: black;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    font-weight: 500 900;
+    font-style: normal;
+}
+
+.styled {
+    background: rgba(129, 129, 129, 0.241);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 3px solid rgba(158, 158, 158, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 15px;
+    transition: 1s;
+    font-family: 'KyivType', serif;
+}
+
+.exercise {
+    width: 800px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+}
+
+.text-qust {
+    background: rgba(0, 0, 0, 0.532);
+    width: 90%;
+    min-height: 120px;
+    margin-top: 30px;
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.variants {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 70%;
+    margin-top: 30px;
+    align-self: flex-start;
+    margin-left: 50px;
+    min-height: 70%;
+}
+
+.my-btns {
+    width: 100%;
+    max-width: 300px;
+    height: 70px;
+    cursor: pointer;
+    border: 5px solid rgba(0, 0, 0, 0);
+}
+
+.my-btns:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.02);
+}
+
+.cool-text {
+    color: rgb(237, 237, 237);
+}
+
+.backToEarth {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 120px;
+    height: 50px;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.cont {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    transition: 0.3s;
+}
+
+.cont:hover {
+    transform: translateX(10px);
+    text-shadow: 0 0 10px white;
+}
+.wrong{
+  border:5px solid red
+}
+.correct{
+  border: 5px solid rgb(65, 182, 65);
+}
+button:disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+}
+.Points{
+    position: absolute;
+    height: 5%;
+    width: 20%;
+    margin-bottom: 45%;
+    margin-left:70%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.answ{
+    height: 80%;
+    width: 40%;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.bad{
+    background: rgba(255, 0, 0, 0.507);
+    color:rgba(255, 124, 124, 0.73);
+}
+.good{
+    background: rgba(172, 255, 47, 0.475);
+    color:rgba(205, 255, 131, 0.807);
+}
+.end {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: row;
+  gap: 20px;
+  transition: 1s;
+}
+
+.endIn p {
+  margin: 0;
+}
+
+.endIn {
+  width: 30%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  font-size: 15px;
+  background: rgba(0, 0, 0, 0.1);
+  color: white;
+  gap: 5px;
+  
+}
+.endIn > *{
+margin:5%
+}
+
+
+.line {
+  height: 20px;
+  width: 80%;
+  align-self: center;
+  background-color: rgb(158, 0, 0);
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.full {
+  background: green;
+  width: 0px;
+  color: white;
+  border-radius: 15px;
+}
+
+.quality {
+  position: absolute;
+  align-self: start;
+  margin-left: 50px;
+  margin-top: 200px;
+}
+.resData{
+    font-size:30px
+}
+.askGemini{
+    width: 90%;
+    max-height: 70%;
+    position: absolute;
+    margin-top: 20%;
+    color:white;
+    font-size: 20px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+}
+.hidden{
+    display: none;
+}

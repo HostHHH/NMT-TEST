@@ -1,0 +1,263 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0; 
+  padding: 0;
+   font-family: 'Tektur', sans-serif;
+}
+
+body {
+    background: black;
+
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+justify-content: center;
+  margin: 0;
+  padding: 0;
+
+}
+
+
+
+div{
+  transition: 1s;
+}
+p{
+  transition: 1s;
+}
+.menu {
+  width: 200px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  position: absolute;
+  left: 0;
+  top: 0;
+  gap:20px
+}
+
+
+.block {
+  background: #707070;
+  border: 10px solid #707070;
+  width: 180px;
+  height: 80px;
+  border-radius: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  transition: 1s
+}
+
+
+
+
+.block:hover {
+  border: 10px solid #ffffff55;
+
+  font-size: 25px;
+}
+
+.hidden {
+    display: none;
+}
+.selected{
+  border: 10px solid #7c7c7c;
+
+  font-size: 25px;
+}
+.styled{
+    background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-radius: 15px;
+  transition:1s;
+font-family: 'KyivType', serif;
+}
+.introducing{
+  width: 70vh;
+  height: 50vh;
+    border: 8px solid rgba(255, 255, 255, 0.432);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.coloring{
+
+  width: 80%;
+  height: 20%;
+ align-self: center;
+ 
+}
+
+.abs{
+    position: absolute;
+}
+.onIt{
+  width: 50px;
+  height: 20%;
+  align-self: center;
+  font-size: 10px;
+}
+.colorInside {
+
+height: 50%;
+width: 100%;
+gap: 10px;
+display: flex;
+}
+
+.down {
+    margin-top: 90px; 
+    height: 30%;
+}
+.settings{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 40%;
+  height: 60%;
+  align-self: end;
+ gap:20%
+}
+
+.test{
+  border: 5px solid red;
+}
+.colorsIns{
+  display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-self: center;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 17px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(13px);
+}
+.SwitcherIn{
+  display: flex;
+  gap: 20px
+}
+@font-face {
+    font-family: 'B52';
+    src: url('fonts/B52.ttf') format('truetype');
+}
+.B52 * {
+  font-family: 'B52';
+}
+@font-face {
+    font-family: 'Kobzar KS';
+    src: url('fonts/KobzarKS_v1-020.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'KyivType Sans';
+    src: url('fonts/KyivTypeSans-VarGX.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Mariupol';
+    font-weight: bold;
+    src: url('fonts/Mariupol-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Rutenia';
+    src: url('fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Tektur';
+    src: url('fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    font-weight: 500 900; 
+    font-style: normal;
+}
+.info{
+  height: 80vh;
+  width: 40%;
+  font-size: 30px;
+}
+.hidden{
+  display: none;
+}
+.set{
+  background-image: url(/images/set.png);
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0);
+  border:0px solid red;
+    background-size: 50%;
+}
+.home{
+    background-image: url(/images/home.png);
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0);
+  border:0px solid red;
+    background-size: 50%;
+}
+.gameIcon{
+    background-image: url(/images/game.png);
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(0, 0, 0, 0);
+  border:0px solid red;
+    background-size: 50%;
+}

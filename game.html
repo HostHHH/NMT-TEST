@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+    <div class="menu">
+        <button onclick="goToDef()" class="set"></button>
+        <button onclick="goToRus()" class="home"></button>
+        <button onclick="goToGame()" class="gameIcon"></button>
+    </div>
+
+    <button class="btn show-leaderboard" onclick="showLeaderboard()">Top 10</button>
+
+    <div id="leaderboard-modal" class="leaderboard-container hidden">
+        <h2>Топ 10 Гравців</h2>
+        <ul id="leaderboard-list"></ul>
+        <button class="btn close-leaderboard" onclick="hideLeaderboard()">Закрити</button>
+    </div>
+
+    <div class="invisible-line hidden"></div>
+    <div class="def">:)</div>
+    <div class="scored hidden">Score: 0</div>
+    
+    <div class="hearts hidden">Hearts: 3</div>
+    <button class="bonus hidden" onclick="RandomEvent()">bonus</button>
+    
+    <div class="mobile-controls">
+        <button class="left-btn btnMove" onclick="moveLeft()"></button>
+        <button class="right-btn btnMove" onclick="moveRight()"></button>
+    </div>
+    
+    <input class="color" type="color" id="nativeColorPicker" value="#0000ff">
+    <button class="btn start" onclick="start()">start</button>
+    
+    <div class="blocks-container">
+        <div class="LookBonus reverse hidden">Reversed Controls!</div> 
+        <div class="LookBonus lucky hidden">70% Luck!</div>
+        <div class="LookBonus slow hidden">Slow down!</div>
+        <div class="LookBonus shield hidden">Shield!</div>
+    </div>
+    
+    <script src="defFunc.js"></script>
+    <script type="module" src="main.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

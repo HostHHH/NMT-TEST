@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Головна сторінка</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="AI.css">
+</head>
+<body>
+      <div class="menu ">
+    <button onclick="goToDef()" class="set"></button>
+
+    <button onclick="goToRus()" class="home"></button>
+<button onclick="goToGame()" class="gameIcon"></button>
+
+      </div>
+<div class="styled Aiback ">
+  <div class="LogoAi" ></div>
+  <div id="aiResponse" class="ai-output-box styled textColor">Система тимчасово НЕ ПРАВЦЮЄ</div>
+  <div class="styled downPanel">
+    <textarea id="userInput" maxlength="120" class="ai-input-field textColor" placeholder="НЕ ПРАВЦЮЄ." rows="1"></textarea>
+    <button id="askButton" class="ai-submit-btn" >⬆</button>
+    <div class="btnContainer">
+      <button class="styled ProAiBtn AiBtn" >Pro</button>
+    <button title="~~~~~~Увага!~~~~~~~
+    Коли ви вмикаєте режим 'Role' модель 
+    здатна робити помилки або створювати галюцінації 
+    цей режим треба тільки для понирення в атмосферу "   class="styled RoleAiBtn AiBtn" >Role</button>
+   </div>
+  </div>
+</div>
+
+    </div>
+      <div class="introducing styled">
+        <div class="settings ">
+          <div class="SwitcherIn">
+            <label class="switch font">
+  <input type="checkbox">
+  <span class="slider"></span>
+</label>
+<p>Шрифти</p>
+          </div>
+          <div class="SwitcherIn">
+            <label class="switch back">
+  <input type="checkbox">
+  <span class="slider"></span>
+</label>
+<p>Фон</p>
+          </div>
+          <div class="SwitcherIn things">
+            <label class="switch">
+  <input type="checkbox">
+  <span class="slider"></span>
+</label>
+<p>Каст</p>
+          </div>
+        </div>
+        
+        <div class="colorInside down ">
+          <div>
+            <button onclick="randomBackground()" class="onIt "> random</button>
+            
+          </div>
+          
+          <div class="color1 colorInside colorsIns">
+          <input type="range" class="coloring aa " min="0" max="360" value="360">
+          <input type="range" class="coloring bb " min="0" max="100" value="100">
+          <input type="range" class="coloring cc " min="0" max="100" value="100">
+          </div>
+          <div class="color2 colorInside colorsIns hidden">
+          <input type="range" class="coloring aa2 " min="0" max="360" value="0">
+          <input type="range" class="coloring bb2 " min="0" max="100" value="0">
+          <input type="range" class="coloring cc2 " min="0" max="100" value="0">
+          </div>
+          <button onclick="other()" class="onIt">Change</button>
+        </div>
+        
+      </div>
+
+    <script src="script.js"></script>
+    <script src="defFunc.js"></script>
+    <script src="AI.js"></script>
+    <script type="module" src="main.js"></script>
+    
+</body>
+</html>
