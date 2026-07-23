@@ -203,6 +203,7 @@ function startGameLoops() {
 
 function start() {
     work = true;
+    window.__gameActive = true;   // сигнал для трекера бонусного часу (bonus.js)
     audio.play();
     reverse = false;
     TriggerEvent2 = false;
@@ -263,6 +264,7 @@ function checkEnd() {
         clearInterval(physics);
         clearInterval(speedInterval);
         work = false;
+        window.__gameActive = false;
         alert('Гру закінчено! Ваш рахунок: ' + pointsCount);
         
         if (window.updateHighScore) {

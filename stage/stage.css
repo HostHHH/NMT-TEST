@@ -1,0 +1,260 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Tektur', sans-serif;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('../shared/fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    font-weight: 500 900;
+    font-style: normal;
+}
+
+body {
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 16px;
+    color: rgb(237, 237, 237);
+}
+
+.styled {
+    background: rgba(129, 129, 129, 0.241);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 3px solid rgba(158, 158, 158, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-radius: 15px;
+}
+
+.stage-screen {
+    width: 100%;
+    max-width: 720px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+/* ── Шапка ── */
+.head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.titles {
+    flex: 1;
+    text-align: center;
+}
+
+.stage-name {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.stage-tag {
+    font-size: 13px;
+    opacity: 0.55;
+}
+
+/* ── Прогрес до боса ── */
+.progress-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stars-line {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.stars-count {
+    font-size: 22px;
+    color: gold;
+}
+
+.bonus-note {
+    font-size: 13px;
+    opacity: 0.55;
+}
+
+.bar {
+    height: 12px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 6px;
+    background: rgba(255, 215, 0, 0.65);
+    transition: width 0.4s ease;
+}
+
+.bar-fill.full {
+    background: rgb(65, 182, 65);
+}
+
+.hint {
+    font-size: 14px;
+    opacity: 0.75;
+    min-height: 18px;
+}
+
+/* ── Бонусні зірки ── */
+.bonus-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    font-size: 14px;
+    color: rgba(255, 215, 0, 0.9);
+}
+
+.bonus-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #111;
+    background: gold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s;
+}
+
+.bonus-btn:hover:not(:disabled) {
+    background: rgb(255, 230, 90);
+}
+
+.bonus-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* ── Картки рівнів ── */
+.levels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.level-card {
+    padding: 18px 10px;
+    cursor: pointer;
+    color: rgb(237, 237, 237);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.level-card:hover {
+    background: rgba(255, 255, 255, 0.14);
+    transform: translateY(-3px);
+}
+
+.level-card.done {
+    border-color: rgba(255, 215, 0, 0.45);
+}
+
+.level-num {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.level-stars {
+    font-size: 17px;
+    color: gold;
+    letter-spacing: 2px;
+}
+
+/* ── Бос ── */
+.boss-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    border-radius: 15px;
+    border: 3px solid rgba(158, 158, 158, 0.3);
+    background: rgba(0, 0, 0, 0.45);
+    color: rgb(237, 237, 237);
+    cursor: pointer;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.boss-card:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.boss-card.unlocked {
+    border-color: rgba(200, 60, 60, 0.7);
+    background: rgba(200, 60, 60, 0.16);
+}
+
+.boss-card.unlocked:hover {
+    background: rgba(200, 60, 60, 0.28);
+}
+
+.boss-card.defeated {
+    border-color: rgba(255, 215, 0, 0.6);
+    background: rgba(255, 215, 0, 0.12);
+}
+
+.boss-icon {
+    font-size: 34px;
+}
+
+.boss-title {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.boss-sub {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.locked-msg {
+    text-align: center;
+    opacity: 0.7;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 560px) {
+    .levels { grid-template-columns: repeat(2, 1fr); }
+    .stage-name { font-size: 22px; }
+}

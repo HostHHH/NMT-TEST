@@ -1,29 +1,81 @@
-const FontIf = localStorage.getItem('fontState') 
-const backPhoto = localStorage.getItem('backPhoto') 
-h = localStorage.getItem('colorH');
-o = localStorage.getItem('colorO');
-s = localStorage.getItem('colorS');
-h2 = localStorage.getItem('colorH2');
-o2 = localStorage.getItem('colorO2');
-s2 = localStorage.getItem('colorS2');
-function applyColors() {
-    
-document.body.style.background = `linear-gradient(45deg, hsl(${h}, ${o}%, ${s}%), hsl(${h2}, ${o2}%, ${s2}%))`
+// map/map.js
+// Глобус із 8 хотспотами — по одному на стадію.
+//
+// Хотспоти малюються з коду, а не зашиті в HTML: їхній вигляд залежить
+// від прогресу (заблокована / доступна / зірки / бос переможений).
+//
+// Тему (градієнтний фон) тут більше не чіпаємо — це робить shared/main.js
+// через свій onSnapshot. Раніше map.js читав кольори з localStorage, куди
+// їх ніхто не писав, тож фон на карті просто не працював.
+
+import { summarizeAllStages } from '../core/rules.js';
+import { subscribeProgress } from '../core/progressStore.js';
+
+// Точки на поверхні глобуса (формат model-viewer: меш, приміт., 3 вершини
+// трикутника + барицентричні ваги). Задані вручну в редакторі model-viewer;
+// підправити розташування можна там само.
+const SURFACES = [
+    '0 1 235 363 230 0.007 0.882 0.111',
+    '0 3 3807 3822 3824 1.825 -5.213 4.388',
+    '0 1 181 178 383 1.458 -0.146 -0.312',
+    '0 2 38 33 60 0.188 0.153 0.660',
+    '0 1 217 389 211 0.290 0.609 0.101',
+    '0 1 438 444 431 0.713 -0.150 0.438',
+    '0 1 321 292 299 0.858 0.737 -0.595',
+    '0 1 181 178 383 0.34 0.33 0.33'
+];
+
+const modelViewer = document.querySelector('model-viewer');
+
+function goToStage(stage) {
+    window.location.href = `../stage/stage.html?stage=${stage}`;
 }
 
+// Визначає вигляд однієї точки за станом стадії.
+function hotspotLook(info) {
+    if (info.bossDefeated) return { cls: 'done',       dot: info.stage, badge: '🏆' };
+    if (!info.unlocked)    return { cls: 'locked',     dot: '🔒',       badge: '' };
+    if (info.bossUnlocked) return { cls: 'boss-ready', dot: info.stage, badge: '⚔' };
+    return { cls: 'available', dot: info.stage, badge: `★${info.earnedStars}` };
+}
 
-if (FontIf === 'true'){
-    document.body.classList.add('rusFon')
-}else{
-    document.body.classList.remove('rusFon')
-    
+function renderHotspots(progress) {
+    // Прибираємо попередні перед перемальовуванням (прогрес міг оновитись).
+    modelViewer.querySelectorAll('.hs').forEach((el) => el.remove());
+
+    summarizeAllStages(progress).forEach((info, i) => {
+        const look = hotspotLook(info);
+
+        const btn = document.createElement('button');
+        btn.className = `hs ${look.cls}`;
+        btn.slot = `hotspot-stage-${info.stage}`;
+        btn.dataset.surface = SURFACES[i];
+        btn.dataset.visibilityAttribute = 'visible';   // ховати точки на зворотному боці глобуса
+
+        btn.innerHTML =
+            `<span class="hs-dot">${look.dot}</span>` +
+            (look.badge ? `<span class="hs-badge">${look.badge}</span>` : '');
+
+        // Заблоковану стадію теж пускаємо — екран стадії сам покаже,
+        // що вона закрита, і чому.
+        btn.addEventListener('click', () => goToStage(info.stage));
+
+        modelViewer.appendChild(btn);
+    });
 }
-if (backPhoto === 'true'){
-    document.body.classList.add('rusBack')
-}else{
-    document.body.classList.remove('rusBack')
-  applyColors()
-}
-function Level(){
-    window.location.href = '../test.html'
+
+// Одразу малюємо з порожнім прогресом (щоб глобус не був голим), а далі
+// підписуємось на живий прогрес — точки на глобусі завжди відображають
+// поточний стан і оновлюються самі (як і екран стадії).
+renderHotspots(null);
+
+if (window.limboReady) {
+    window.limboReady.then((r) => {
+        const uid = r?.uid ?? null;
+        if (!uid) {
+            renderHotspots(r?.progress ?? null);
+            return;
+        }
+        subscribeProgress(uid, (progress) => renderHotspots(progress));
+    });
 }

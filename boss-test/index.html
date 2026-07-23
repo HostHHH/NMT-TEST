@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бій з босом</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="boss-bg" class="boss-bg state-idle">
+    <div class="boss-bg__gradient"></div>
+    <div class="boss-bg__pulse"></div>
+    <canvas id="boss-bg-canvas"></canvas>
+    <div class="boss-bg__vignette"></div>
+    <div class="boss-bg__flash"></div>
+</div>
+
+<div class="glass-container">
+
+    <div class="hud">
+        <div class="boss-info">
+            <div class="boss-portrait" id="boss-portrait">…</div>
+            <div class="boss-meta">
+                <div class="boss-name" id="boss-name">Завантаження…</div>
+                <div class="hp-bar"><div class="hp-fill" id="hp-fill"></div></div>
+                <div class="hp-text" id="hp-text"></div>
+            </div>
+        </div>
+        <div class="lives" id="lives"></div>
+    </div>
+
+    <div class="question-box" id="question"></div>
+
+    <div class="answers-container" id="answers"></div>
+
+    <div class="explanation hidden" id="explanation"></div>
+
+    <button class="next-btn" id="next-btn" disabled>Далі →</button>
+
+    <!-- Екран перемоги або поразки -->
+    <div class="overlay hidden" id="overlay">
+        <div class="overlay-icon" id="overlay-icon"></div>
+        <h2 class="overlay-title" id="overlay-title"></h2>
+        <p class="overlay-text" id="overlay-text"></p>
+        <p class="cert hidden" id="cert"></p>
+        <p class="save-state" id="save-state"></p>
+        <div class="overlay-actions">
+            <button class="overlay-btn" id="retry-btn">Ще раз</button>
+            <button class="overlay-btn" id="stage-btn">До стадії</button>
+        </div>
+    </div>
+
+</div>
+
+<script type="module" src="../shared/main.js"></script>
+<script type="module" src="script.js"></script>
+</body>
+</html>

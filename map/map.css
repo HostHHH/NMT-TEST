@@ -10,44 +10,44 @@ body {
     height: 100vh;
 }
 
-.rusFon, .rusFon * {
+.mapFon, .mapFon * {
     font-family: 'Rutenia' !important;
 }
 
 @font-face {
     font-family: 'B52';
-    src: url('../fonts/B52.ttf') format('truetype');
+    src: url('../shared/fonts/B52.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Kobzar KS';
-    src: url('../fonts/KobzarKS_v1-020.otf') format('opentype');
+    src: url('../shared/fonts/KobzarKS_v1-020.otf') format('opentype');
 }
 
 @font-face {
     font-family: 'KyivType Sans';
-    src: url('../fonts/KyivTypeSans-VarGX.ttf') format('truetype');
+    src: url('../shared/fonts/KyivTypeSans-VarGX.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Mariupol';
     font-weight: bold;
-    src: url('../fonts/Mariupol-Bold.ttf') format('truetype');
+    src: url('../shared/fonts/Mariupol-Bold.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Rutenia';
-    src: url('../fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
+    src: url('../shared/fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Tektur';
-    src: url('../fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    src: url('../shared/fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
     font-weight: 500 900; 
     font-style: normal;
 }
-.rusBack {
-    background-image: url(../images/rus.png);
+.mapBack {
+    background-image: url(map.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -60,53 +60,64 @@ model-viewer {
   display: block;
 }
 
-.Hotspot {
-  background: #ff0000;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  width: 20px;
-  height: 20px;
+/* ── Хотспоти стадій ── */
+.hs {
+  --c: #3a86c8;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  transition: opacity 0.3s, transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-family: 'Tektur', sans-serif;
+  transition: transform 0.2s;
 }
 
-.Hotspot:hover {
-  transform: scale(1.2);
-  background: #ff5555;
+.hs:hover {
+  transform: scale(1.15);
 }
 
-.Hotspot[data-visible="false"] {
+.hs-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--c);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 12px var(--c);
+}
+
+.hs-badge {
+  font-size: 12px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+/* Стани */
+.hs.locked { --c: #555; }
+.hs.locked .hs-dot { box-shadow: none; opacity: 0.85; }
+.hs.available  { --c: #3a86c8; }
+.hs.boss-ready { --c: #c83c3c; }
+.hs.boss-ready .hs-dot { animation: hsPulse 1.4s ease-in-out infinite; }
+.hs.done { --c: #d4af37; }
+
+@keyframes hsPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--c); }
+  50%      { box-shadow: 0 0 22px var(--c); }
+}
+
+/* model-viewer ховає точки на зворотному боці глобуса */
+.hs[data-visible="false"] {
   opacity: 0;
   pointer-events: none;
-}
-
-.annotation {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 4px;
-  padding: 8px;
-  position: absolute;
-  transform: translate(25px, -15px);
-  display: none;
-  color: #000;
-  font-family: sans-serif;
-  font-size: 14px;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.Hotspot:hover .annotation {
-  display: block;
-}
-.boss{
-    background:rgb(97, 0, 118)00;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  transition: opacity 0.3s, transform 0.2s;
-}
-.boss:hover{
-    transform: scale(1.2);
-  background: #df04df;
 }

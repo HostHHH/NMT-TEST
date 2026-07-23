@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Стадія</title>
+    <link rel="stylesheet" href="stage.css">
+</head>
+<body>
+
+<div class="stage-screen styled">
+
+    <div class="head">
+        <button class="back-btn" id="back-btn">← Карта</button>
+        <div class="titles">
+            <h1 class="stage-name" id="stage-name"></h1>
+            <span class="stage-tag" id="stage-tag"></span>
+        </div>
+    </div>
+
+    <div class="progress-block">
+        <div class="stars-line">
+            <span class="stars-count" id="stars-count"></span>
+            <span class="bonus-note" id="bonus-note"></span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
+        <div class="hint" id="hint"></div>
+        <div class="bonus-block hidden" id="bonus-block">
+            <span class="bonus-text" id="bonus-text"></span>
+            <button class="bonus-btn hidden" id="bonus-btn"></button>
+        </div>
+    </div>
+
+    <div class="levels" id="levels"></div>
+
+    <button class="boss-card" id="boss-card">
+        <div class="boss-icon" id="boss-icon">🔒</div>
+        <div class="boss-text">
+            <div class="boss-title">Бос стадії</div>
+            <div class="boss-sub" id="boss-sub"></div>
+        </div>
+    </button>
+
+    <p class="locked-msg hidden" id="locked-msg">
+        Ця стадія ще закрита. Перемоги над босом попередньої стадії, щоб її відкрити.
+    </p>
+
+</div>
+
+<script type="module" src="../shared/main.js"></script>
+<script type="module" src="stage.js"></script>
+</body>
+</html>

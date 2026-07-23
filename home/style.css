@@ -192,34 +192,34 @@ input:checked + .slider:before {
 }
 @font-face {
     font-family: 'B52';
-    src: url('fonts/B52.ttf') format('truetype');
+    src: url('../shared/fonts/B52.ttf') format('truetype');
 }
 .B52 * {
   font-family: 'B52';
 }
 @font-face {
     font-family: 'Kobzar KS';
-    src: url('fonts/KobzarKS_v1-020.otf') format('opentype');
+    src: url('../shared/fonts/KobzarKS_v1-020.otf') format('opentype');
 }
 
 @font-face {
     font-family: 'KyivType Sans';
-    src: url('fonts/KyivTypeSans-VarGX.ttf') format('truetype');
+    src: url('../shared/fonts/KyivTypeSans-VarGX.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Mariupol';
     font-weight: bold;
-    src: url('fonts/Mariupol-Bold.ttf') format('truetype');
+    src: url('../shared/fonts/Mariupol-Bold.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Rutenia';
-    src: url('fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
+    src: url('../shared/fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Tektur';
-    src: url('fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    src: url('../shared/fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
     font-weight: 500 900; 
     font-style: normal;
 }

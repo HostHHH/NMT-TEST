@@ -2,6 +2,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, onSnapshot, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+import { initProgressStore, ensureProgress } from "../core/progressStore.js";
+// Імпортується заради побічного ефекту: nav.js реєструє goToMap/goToDef/
+// goToGame у window для інлайнових onclick у наявній розмітці.
+import "../core/nav.js";
+
 const firebaseConfig = {
     apiKey: "AIzaSyBKwDPowjfNRm-Y9WHn37ytoC_Wy_QYYRI",
     authDomain: "hhhh-c5f0a.firebaseapp.com",
@@ -17,7 +22,28 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-const isSubfolder = window.location.pathname.includes('/Rus/');
+// Сховище прогресу не створює власного Firebase — отримує вже готовий
+// екземпляр, щоб у застосунку не з'явився другий initializeApp.
+initProgressStore(db);
+
+// Сторінки Етапу 2+ (рівень, стадія, бос) чекають на цей промис замість
+// того, щоб самим стежити за станом автентифікації.
+let currentProgress = null;
+let resolveLimboReady;
+window.limboReady = new Promise((resolve) => { resolveLimboReady = resolve; });
+window.limboGetProgress = () => currentProgress;
+
+// Коли сторінку відновлено з bfcache (кнопки «назад/вперед»), скрипти НЕ
+// перезапускаються — а отже window.limboReady тримає застарілий прогрес.
+// Через це один екран міг показувати «бос переможений», а сусідній —
+// «стадія закрита». Перезавантаження гарантує свіжі дані.
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) window.location.reload();
+});
+
+// stage і boss-test додані: без них редирект неавторизованого користувача
+// з цих сторінок будував би шлях до lobby від кореня замість '../'.
+const isSubfolder = /\/(home|game|lobby|test|map|stage|boss-test)\//.test(window.location.pathname);
 const isLobbyPage = window.location.pathname.includes('lobby.html');
 const loader = document.getElementById('loader');
 
@@ -28,14 +54,9 @@ let unsubListener = null;
 let h = 0, o = 0, s = 0, h2 = 0, o2 = 0, s2 = 0;
 let fontState = false, backState = false, thingsState = false;
 
-window.goToRus = function() { 
-    window.location.href = isSubfolder ? 'rus.html' : 'Rus/rus.html'; 
-}
-
-window.goToDef = function() { 
-    window.location.href = isSubfolder ? '../index.html' : 'index.html'; 
-}
-
+// goToMap / goToDef / goToGame більше не оголошуються тут — вони живуть
+// у core/nav.js, який реєструє їх у window самостійно (див. блок
+// сумісності наприкінці того файлу).
 window.other = function() {
     const color1 = document.querySelector('.color1');
     const color2 = document.querySelector('.color2');
@@ -214,7 +235,7 @@ window.hideLeaderboard = function() {
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         if (isLobbyPage) {
-            window.location.href = 'index.html';
+            window.location.href = '../home/index.html';
         } else {
             currentUserUid = user.uid;
             const docRef = doc(db, "users", currentUserUid);
@@ -238,9 +259,22 @@ onAuthStateChanged(auth, async (user) => {
                     }, { merge: true });
                 }
             }
-            
+
+            // Створює progress для нового акаунта або доповнює наявний
+            // (акаунти, створені до Етапу 1, мають лише settings і highScore).
+            //
+            // Помилку навмисно не прокидаємо далі: якщо Firestore Rules
+            // відхилять запис, гра має лишитись робочою в частині входу
+            // й налаштувань, а не впасти повністю.
+            try {
+                currentProgress = await ensureProgress(currentUserUid);
+            } catch (error) {
+                console.error('Не вдалося ініціалізувати прогрес:', error);
+            }
+            resolveLimboReady({ uid: currentUserUid, progress: currentProgress });
+
             if (unsubListener) unsubListener();
-            
+
             unsubListener = onSnapshot(docRef, (snap) => {
                 if (snap.exists() && snap.data().settings) {
                     const data = snap.data().settings;
@@ -267,7 +301,7 @@ onAuthStateChanged(auth, async (user) => {
         }
         
         if (!isLobbyPage) {
-            window.location.href = isSubfolder ? '../lobby.html' : 'lobby.html';
+            window.location.href = isSubfolder ? '../lobby/lobby.html' : 'lobby/lobby.html';
         } else {
             if (loader) loader.style.display = 'none';
             const authUi = document.getElementById('auth-ui');
