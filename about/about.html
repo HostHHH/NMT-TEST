@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iSторія — Про проєкт</title>
+    <link rel="stylesheet" href="../home/style.css">
+    <link rel="stylesheet" href="about.css">
+</head>
+<body>
+    <!-- Анімований геометричний фон (керується тумблером "Фактура фону") -->
+    <div class="bg-shapes-container floating-shapes-backdrop" id="floating-shapes-backdrop" aria-hidden="true">
+        <div class="floating-shape shape-sq-1"></div>
+        <div class="floating-shape shape-ci-1"></div>
+        <div class="floating-shape shape-sq-2"></div>
+        <div class="floating-shape shape-ci-2"></div>
+        <div class="floating-shape shape-sq-3"></div>
+        <div class="floating-shape shape-ci-3"></div>
+        <div class="floating-shape shape-sq-4"></div>
+        <div class="floating-shape shape-ci-4"></div>
+        <div class="floating-shape shape-sq-5"></div>
+        <div class="floating-shape shape-ci-5"></div>
+    </div>
+
+    <!-- Верхня панель навігації -->
+    <header class="top-nav">
+        <a href="../map/map.html" class="nav-brand">
+            <span class="nav-brand-tag">iS</span>
+            <span class="nav-brand-title">iSторія</span>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="../map/map.html" class="nav-link" title="3D Карта стадій">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+                <span>Карта</span>
+            </a>
+            <a href="../game/game.html" class="nav-link" title="Козацький Шлях">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="11" x2="15.01" y2="11"></line><line x1="18" y1="13" x2="18.01" y2="13"></line></svg>
+                <span>Гра</span>
+            </a>
+            <a href="../about/about.html" class="nav-link active" title="Про науковий проєкт">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                <span>Про проєкт</span>
+            </a>
+            <a href="../home/index.html" class="nav-link" title="Налаштування теми">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                <span>Налаштування</span>
+            </a>
+            <button id="logout-btn" class="nav-link nav-logout" title="Вийти з акаунту">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Вийти</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Основний зміст сторінки -->
+    <main class="page-main">
+        <div class="about-container">
+
+            <!-- Головна картка з назвою проєкту -->
+            <section class="about-hero-card">
+                <div class="about-hero-head">
+                    <h1 class="about-main-title">
+                        <span>📜</span>
+                        <span>Науково-дослідний проєкт «iSторія»</span>
+                    </h1>
+                    <span class="card-tag">Гейміфікація освіти</span>
+                </div>
+                <p class="about-subtitle">
+                    Інноваційна інтерактивна вебсистема для підготовки абітурієнтів до Національного мультипредметного тесту (НМТ) з історії України
+                </p>
+            </section>
+
+            <!-- 1. Актуальність дослідження -->
+            <section class="about-card">
+                <h2 class="about-card-title">
+                    <span>🎯</span>
+                    <span>Актуальність дослідження</span>
+                </h2>
+                <p class="about-p">
+                    Національний мультипредметний тест (НМТ) є обов'язковою формою державної підсумкової атестації, необхідною для вступу до закладів вищої освіти України. Історія України входить до переліку профільних предметів, які абітурієнти складають найчастіше. З огляду на щорічне зростання кількості абітурієнтів та рівня складності тестових завдань, питання якісної підготовки до іспиту набуває особливої актуальності.
+                </p>
+                <div class="about-highlight-box">
+                    Традиційні форми підготовки — проходження тестових завдань та механічне запам'ятовування дат і подій — здебільшого є монотонними та психологічно навантажують здобувача освіти відчуттям постійного оцінювання, що негативно впливає на мотивацію до систематичного навчання.
+                </div>
+            </section>
+
+            <!-- 2. Наукове підґрунтя гейміфікації -->
+            <section class="about-card">
+                <h2 class="about-card-title">
+                    <span>🔬</span>
+                    <span>Наукове підґрунтя застосування ігрових елементів</span>
+                </h2>
+                <p class="about-p">
+                    Ефективність застосування ігрових елементів у навчальному процесі підтверджується сучасними дослідженнями. Зокрема, дослідження впровадження гейміфікації під час вивчення дисципліни «Медична біохімія» у закладі вищої освіти показало, що більшість здобувачів освіти позитивно оцінили гейміфіковану форму навчання, відзначивши підвищення інтересу до предмета [1]. Водночас автори зазначають, що частина учасників надала перевагу традиційному формату, що свідчить про потребу поступової адаптації до нового підходу.
+                </p>
+            </section>
+
+            <!-- 3. Інноваційний підхід «iSторії» -->
+            <section class="about-card">
+                <h2 class="about-card-title">
+                    <span>💡</span>
+                    <span>Концепція та підхід вебсистеми «iSторія»</span>
+                </h2>
+                <p class="about-p">
+                    На відміну від традиційного тестування, у якому абітурієнт постійно перебуває в ситуації прямого оцінювання, запропонований у роботі підхід передбачає занурення користувача в ігровий процес із чіткою метою — проходженням рівнів та перемогою над тематичним «босом». Такий формат дозволяє опосередковано знизити психологічне навантаження, пов'язане з відчуттям тиску традиційного тестування, зберігаючи при цьому освітню цінність матеріалу.
+                </p>
+                <div class="about-highlight-box">
+                    У межах цього дослідження розроблено гейміфіковану вебсистему «iSторія», яка надає абітурієнтам можливість підготуватися до НМТ з історії України у форматі гри, поєднуючи засвоєння навчального матеріалу з ігровим процесом проходження рівнів.
+                </div>
+            </section>
+
+            <!-- 4. Ключові модулі системи -->
+            <section class="about-card">
+                <h2 class="about-card-title">
+                    <span>🧩</span>
+                    <span>Архітектура та компоненти вебсистеми</span>
+                </h2>
+                <div class="modules-grid">
+                    <div class="module-item">
+                        <div class="module-header">
+                            <span class="module-icon">🗺️</span>
+                            <span>3D Карта стадій</span>
+                        </div>
+                        <div class="module-desc">
+                            Інтерактивний глобус із 8 хронологічними епохами України — від зародження Русі до сучасності.
+                        </div>
+                    </div>
+
+                    <div class="module-item">
+                        <div class="module-header">
+                            <span class="module-icon">📚</span>
+                            <span>База 248 питань НМТ</span>
+                        </div>
+                        <div class="module-desc">
+                            Перевірений банк завдань, розбитий на рівні складності з фінальними викликами тематичних босів.
+                        </div>
+                    </div>
+
+                    <div class="module-item">
+                        <div class="module-header">
+                            <span class="module-icon">⚔️</span>
+                            <span>RPG «Козацький Шлях»</span>
+                        </div>
+                        <div class="module-desc">
+                            Тактичний ігровий модуль із 3 лицарями, економікою, озвучкою та нарахуванням бонусних зірок.
+                        </div>
+                    </div>
+
+                    <div class="module-item">
+                        <div class="module-header">
+                            <span class="module-icon">🛡️</span>
+                            <span>Верифікація знань</span>
+                        </div>
+                        <div class="module-desc">
+                            Детерміновані коди сертифікатів (IST-XXXX-XXXX-XXXX) для перевірки реального проходження викладачем.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Екосистема Telegram-бота «iSторія Bot» -->
+            <section class="about-card bot-section">
+                <div class="about-hero-head">
+                    <h2 class="about-card-title">
+                        <span>🤖</span>
+                        <span>Екосистема Telegram-бота «iSторія Bot»</span>
+                    </h2>
+                    <span class="bot-hero-badge">⚡ EdTech Automation & Anti-Cheat</span>
+                </div>
+                <p class="about-p">
+                    Telegram-бот є сполучною ланкою між веб-грою, абітурієнтом та викладачем. Він вирішує ключову проблему онлайн-навчання: <strong>достовірність отриманих результатів без потреби фізичного нагляду викладача</strong>. Замість ненадійних скріншотів, які легко підробити в графічних редакторах, система використовує математично верифіковані сертифікати та щоденні мікротренування.
+                </p>
+
+                <!-- Покроковий цикл роботи бота -->
+                <div class="pipeline-grid">
+                    <div class="pipeline-step">
+                        <span class="step-num-badge">1</span>
+                        <span class="step-title">Фінал у грі</span>
+                        <span class="step-desc">Учень проходить усі 8 стадій та перемагає фінального боса у вебсистемі «iSторія».</span>
+                    </div>
+                    <div class="pipeline-step">
+                        <span class="step-num-badge">2</span>
+                        <span class="step-title">Генерація коду</span>
+                        <span class="step-desc">Система розраховує унікальний код <code>IST-XXXX-XXXX-XXXX</code> із захисною сіллю та timestamp.</span>
+                    </div>
+                    <div class="pipeline-step">
+                        <span class="step-num-badge">3</span>
+                        <span class="step-title">Відправка боту</span>
+                        <span class="step-desc">Учень або вчитель надсилає код у Telegram-бот для автоматичної перевірки автентичності.</span>
+                    </div>
+                    <div class="pipeline-step">
+                        <span class="step-num-badge">4</span>
+                        <span class="step-title">Видача сертифіката</span>
+                        <span class="step-desc">Бот розшифровує дані, перевіряє цілісність та видає фінальний звіт успішності випускника.</span>
+                    </div>
+                </div>
+
+                <!-- Візуалізація відповіді в чаті бота -->
+                <div class="bot-chat-preview">
+                    <div class="chat-bubble">
+                        <div class="chat-bubble-author">
+                            <span>💬 Користувач</span>
+                        </div>
+                        <div>/verify IST-8Y2M-9N4X-3K7P</div>
+                    </div>
+                    <div class="chat-bubble" style="border-left-color: var(--gui-color);">
+                        <div class="chat-bubble-author" style="color: var(--gui-color);">
+                            <span>🤖 iSторія Official Bot • Верифікація успішна</span>
+                        </div>
+                        <div>🎓 <strong>СЕРТИФІКАТ ПРОХОДЖЕННЯ КУРСУ НМТ ПІДТВЕРДЖЕНО!</strong></div>
+                        <div>• Статус курсу: <strong>Повний курс НМТ з Історії України (8 стадій)</strong></div>
+                        <div>• Результат фіналу: <strong>Перемога над усіма 8 босами</strong></div>
+                        <div>• Код валідації: <span class="chat-code-pill">IST-8Y2M-9N4X-3K7P</span></div>
+                        <div style="font-size: 11.5px; color: var(--text-muted);">🛡️ Підпис згенеровано за протоколом детермінованого гешування IST-v1. Фальсифікація виключена.</div>
+                    </div>
+                </div>
+
+                <!-- Функції бота для щоденного навчання -->
+                <div class="about-highlight-box">
+                    <strong>Корисний щоденний функціонал для абітурієнтів та викладачів:</strong>
+                    <div class="bot-cmd-list" style="margin-top: 8px;">
+                        <div class="bot-cmd-card">
+                            <span class="bot-cmd-name">/verify [код]</span>
+                            <span class="bot-cmd-desc">Миттєва перевірка проходження гри (працює case-insensitive, без урахування регістру та дефісів).</span>
+                        </div>
+                        <div class="bot-cmd-card">
+                            <span class="bot-cmd-name">/daily</span>
+                            <span class="bot-cmd-desc">Щоденне тестове питання з банку 248 завдань НМТ із докладним поясненням (методика Spaced Repetition).</span>
+                        </div>
+                        <div class="bot-cmd-card">
+                            <span class="bot-cmd-name">/dates</span>
+                            <span class="bot-cmd-desc">Швидкий довідник ключових історичних дат усіх 8 стадій для експрес-повторення перед тестом.</span>
+                        </div>
+                        <div class="bot-cmd-card">
+                            <span class="bot-cmd-name">/stats</span>
+                            <span class="bot-cmd-desc">Особиста статистика: кількість зароблених зірок, баланс бонусів та статус проходження.</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Джерела -->
+            <section class="sources-card">
+                <span class="sources-title">Джерела та література:</span>
+                <div>[1] Матеріали дослідження впровадження гейміфікації в освітній процес закладів вищої освіти при вивченні профільних дисциплін.</div>
+                <div style="margin-top: 4px;">[2] Офіційні програми Українського центру оцінювання якості освіти (УЦОЯО) для підготовки до НМТ з історії України.</div>
+                <div style="margin-top: 4px;">[3] Науково-практичні засади мікронавчання (Microlearning) та інтервального повторення (Spaced Repetition) в освітніх технологіях EdTech.</div>
+            </section>
+
+        </div>
+    </main>
+
+    <script type="module" src="../shared/main.js"></script>
+</body>
+</html>

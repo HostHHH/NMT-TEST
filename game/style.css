@@ -1,0 +1,3474 @@
+body {
+  background: #0f1614;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+
+
+.player {
+  border: 3px solid #2e7d32;
+  box-shadow: 0 0 12px rgba(46, 125, 50, 0.4);
+  left: 10%;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.enemy {
+  border: 3px solid #c62828;
+  box-shadow: 0 0 12px rgba(198, 40, 40, 0.4);
+  left: 75%;
+  transition: left 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.hp {
+  width: 200px;
+  height: 20px;
+  border: 2px solid white;
+}
+
+.hp-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff5252;
+  text-shadow: 1px 1px 2px #000;
+}
+
+#player .hp-text {
+  color: #69f0ae;
+}
+
+/* --- ХОТБАР / ПАНЕЛЬ ДІЙ (PIXEL-ART / RETRO RPG UI) --- */
+.hotbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #120e0b;
+  border: 2px solid #d4af37;
+  box-shadow: inset 0 0 0 2px #261d15, 0 4px 0 #000000;
+  border-radius: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+.attack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  height: 48px;
+  padding: 8px 14px;
+  background: #241c18;
+  color: #e6c875;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 2px solid #5a4628;
+  box-shadow: inset 1px 1px 0 #8d6e3f, inset -1px -1px 0 #0f0b07, 0 3px 0 #000000;
+  border-radius: 0;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  transition: background-color 0.1s, border-color 0.1s;
+}
+
+.attack:hover:not(:disabled) {
+  background: #342821;
+  color: #ffffff;
+  border-color: #ffd54f;
+  box-shadow: inset 1px 1px 0 #ffd54f, inset -1px -1px 0 #18110b, 0 3px 0 #000000;
+}
+
+.attack:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: inset 1px 1px 0 #0f0b07, inset -1px -1px 0 #5a4628, 0 1px 0 #000000;
+}
+
+.attack:disabled {
+  background: #181513;
+  color: #61564c;
+  border-color: #383028;
+  box-shadow: inset 1px 1px 0 #28211b, inset -1px -1px 0 #0d0b09;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- СЕКЦІЇ ХОТБАРУ: АТАКИ ТА БОЙОВИЙ МІШОК --- */
+.hotbar-attacks {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hotbar-divider {
+  width: 2px;
+  height: 48px;
+  background: #3d2714;
+  border-right: 1px solid #7a4f23;
+  margin: 0 4px;
+}
+
+.hotbar-bag-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.hotbar-bag-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hotbar-bag-title {
+  font-size: 10px;
+  font-weight: bold;
+  color: #f3d08c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.battle-bag-grid {
+  display: flex;
+  gap: 5px;
+}
+
+.battle-bag-slot {
+  width: 48px;
+  height: 48px;
+  background: #1e1207;
+  border-top: 2px solid #0c0702;
+  border-left: 2px solid #0c0702;
+  border-bottom: 2px solid #54371a;
+  border-right: 2px solid #54371a;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: default;
+  transition: background-color 0.1s, border-color 0.1s;
+}
+
+.battle-bag-slot .slot-key {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-size: 9px;
+  font-weight: bold;
+  color: #7a5c36;
+  line-height: 1;
+}
+
+.battle-bag-slot.empty {
+  opacity: 0.5;
+  background: #160d05;
+}
+
+.battle-bag-slot.empty .battle-item-empty-icon {
+  font-size: 12px;
+  color: #4a3622;
+  line-height: 1;
+}
+
+.battle-bag-slot.empty .battle-item-empty-label {
+  font-size: 7px;
+  color: #4a3622;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.battle-bag-slot.filled {
+  background: #28170c;
+  border-top: 2px solid #3d230e;
+  border-left: 2px solid #3d230e;
+  border-bottom: 2px solid #825325;
+  border-right: 2px solid #825325;
+  cursor: pointer;
+}
+
+.battle-bag-slot.filled:hover {
+  background: #3a2211;
+  border-color: #ffd54f;
+  box-shadow: 0 0 4px rgba(255, 213, 79, 0.4);
+}
+
+.battle-bag-slot.filled .slot-key {
+  color: #ffd54f;
+}
+
+.battle-item-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.battle-item-name {
+  font-size: 8px;
+  color: #fce1b6;
+  font-weight: bold;
+  max-width: 44px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Спливаючий тултіп для слотів бою */
+.battle-bag-slot .item-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #120e0b;
+  border: 1px solid #d4af37;
+  color: #fff;
+  padding: 5px 8px;
+  font-size: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 4px 8px #000000;
+}
+
+.battle-bag-slot:hover .item-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- МЕНЮ ПРИЦІЛЮВАННЯ ДЛЯ STRIKE (ПІДТРИМКА МИШКИ І ТАЧУ) --- */
+.strike-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 950;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.strike-panel {
+  background: #19120c;
+  border: 2px solid #54391e;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.9);
+  padding: 16px 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 440px;
+  max-width: 94vw;
+  box-sizing: border-box;
+  animation: strikePopIn 0.2s ease-out;
+  cursor: default;
+}
+
+.strike-panel-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.strike-panel-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: #ffd700;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes strikePopIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.bar {
+  position: relative;
+  width: 420px;
+  max-width: 100%;
+  height: 34px;
+  background: #0f0a07;
+  border: 2px solid #3d2916;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0;
+  top: auto;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.strike-aim-controls {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.strike-aim-btn {
+  flex: 1;
+  max-width: 160px;
+  height: 36px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #201712;
+  border: 1px solid #6b4d2c;
+  color: #eed69f;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.strike-aim-btn:active {
+  background: #3b2b1a;
+  border-color: #ffd54f;
+  transform: translateY(1px);
+}
+
+.strike-fire-btn {
+  width: 100%;
+  height: 44px;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  background: linear-gradient(180deg, #5c2016, #3b110b);
+  border: 2px solid #b84333;
+  color: #ffeedb;
+  box-shadow: inset 1px 1px 0 #d96252, inset -1px -1px 0 #1f0805, 0 3px 0 #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  transition: all 0.1s ease;
+}
+
+.strike-fire-btn:hover {
+  background: linear-gradient(180deg, #78291c, #4a150e);
+  border-color: #ff6f59;
+  color: #ffffff;
+}
+
+.strike-fire-btn:active {
+  transform: translateY(2px);
+  box-shadow: inset 1px 1px 0 #1f0805, inset -1px -1px 0 #d96252, 0 1px 0 #000000;
+}
+
+/* Центральна відмітка ідеального пострілу */
+.strike-center-mark {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: rgba(180, 140, 60, 0.15);
+  border-left: 1px dashed rgba(180, 140, 60, 0.4);
+  border-right: 1px dashed rgba(180, 140, 60, 0.4);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Слайдер цілі (червоний бігунок - стриманий, не ядовитий) */
+.slider {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 48px;
+  height: calc(100% - 4px);
+  background: linear-gradient(180deg, #6b2121, #451212);
+  border: 1.5px solid #853333;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 2px 4px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* Слайдер прицілу гравця (зелений бігунок - спокійний оливковий/моховий, без неона) */
+.playerSl {
+  top: 1px;
+  width: 52px;
+  height: calc(100% - 2px);
+  background: linear-gradient(180deg, #2d4f34, #1b3322);
+  border: 1.5px solid #47704f;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 2px 4px rgba(0, 0, 0, 0.6);
+  z-index: 3;
+  box-sizing: border-box;
+}
+
+.playerSl::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 1px;
+}
+
+.strike-instructions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: monospace;
+  font-size: 11px;
+  color: #a89f91;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.strike-instructions kbd {
+  background: #251b14;
+  border: 1px solid #5e462c;
+  border-bottom: 2px solid #3d2b18;
+  border-radius: 3px;
+  padding: 2px 5px;
+  color: #d6b468;
+  font-weight: bold;
+}
+
+.strike-space-hint kbd {
+  background: #2e1d17;
+  border-color: #8c5d33;
+  color: #e8c882;
+}
+
+.strike-feedback {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.feedback-perfect {
+  background: rgba(184, 134, 11, 0.2);
+  color: #d4af37;
+  border: 1px solid #8c6d1d;
+}
+
+.feedback-good {
+  background: rgba(46, 125, 50, 0.2);
+  color: #72a878;
+  border: 1px solid #3c6e43;
+}
+
+.feedback-miss {
+  background: rgba(139, 0, 0, 0.2);
+  color: #b85c5c;
+  border: 1px solid #6b2626;
+}
+
+.damage-popup {
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 32px;
+  font-weight: 900;
+  font-family: Arial, sans-serif;
+  color: #ff3333;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.9), 2px 2px 4px #000;
+  pointer-events: none;
+  z-index: 999;
+  user-select: none;
+  white-space: nowrap;
+  animation: floatUp 0.85s ease-out forwards;
+}
+
+.damage-popup.miss {
+  color: #ffd700;
+  font-size: 26px;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 15px) scale(0.7);
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1.25);
+  }
+
+  65% {
+    opacity: 1;
+    transform: translate(-50%, -35px) scale(1.05);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -65px) scale(0.8);
+  }
+}
+
+.hit-anim {
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-6px);
+  }
+
+  50% {
+    transform: translateX(6px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+.hotbar.disabled-state {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}
+
+
+
+#enemy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#enemyHp {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+#enemyName {
+  font-size: 14px;
+  color: #ffd54f;
+  text-align: center;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+.charBtn {
+  width: 200px;
+  height: 50px;
+  background: white
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+/* ========================================================
+   ГОЛОВНЕ МЕНЮ ТА МОДАЛЬНІ ВІКНА (ОНОВЛЕНО)
+   ======================================================== */
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background: radial-gradient(circle at center, rgba(35, 20, 15, 0.94) 0%, rgba(10, 6, 6, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  user-select: none;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Центральна панель головного меню */
+.menu-main-panel {
+  position: relative;
+  background: linear-gradient(180deg, rgba(38, 26, 20, 0.95), rgba(20, 14, 12, 0.98));
+  border: 3px solid #d4af37;
+  border-radius: 14px;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.9), 0 0 25px rgba(212, 175, 55, 0.25), inset 0 0 30px rgba(0, 0, 0, 0.6);
+  padding: 35px 50px;
+  max-width: 580px;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: menuPanelFadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 1010;
+}
+
+@keyframes menuPanelFadeIn {
+  from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.menu-heraldic-header {
+  margin-bottom: 20px;
+}
+
+.menu-crest {
+  font-size: 26px;
+  letter-spacing: 8px;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+  margin-bottom: 8px;
+}
+
+.main-title {
+  margin: 0;
+  font-size: 3.4rem;
+  font-family: 'Times New Roman', serif;
+  color: #ffcc00;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(255, 204, 0, 0.8), 0 0 35px rgba(255, 80, 0, 0.4);
+}
+
+.main-subtitle {
+  margin: 8px 0 0 0;
+  font-size: 1.15rem;
+  color: #d6c4a8;
+  letter-spacing: 2px;
+  font-style: italic;
+  font-family: sans-serif;
+}
+
+/* Картка обраного лицаря у меню */
+.selected-hero-card {
+  display: flex;
+  align-items: center;
+  background: rgba(14, 10, 8, 0.85);
+  border: 1.5px solid #8d6e3f;
+  border-radius: 10px;
+  padding: 10px 18px;
+  margin-bottom: 22px;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+.selected-hero-card:hover {
+  border-color: #ffd700;
+  background: rgba(26, 18, 14, 0.95);
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.selected-hero-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #ffd700;
+  background-size: cover;
+  background-position: center;
+  margin-right: 14px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+  flex-shrink: 0;
+  background-image: url('https://lh3.googleusercontent.com/d/1GZtuUiAZ7RML6HIC12HXH35ZfjUOafzG');
+}
+
+.selected-hero-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.selected-hero-label {
+  font-size: 11px;
+  color: #a8947b;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.selected-hero-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffe082;
+  font-family: 'Times New Roman', serif;
+}
+
+.selected-hero-btn {
+  font-size: 13px;
+  color: #ffd700;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: transform 0.2s;
+}
+
+.selected-hero-card:hover .selected-hero-btn {
+  transform: translateX(4px);
+}
+
+/* Стек кнопок меню */
+.menu-actions-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.menu-btn {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.25rem;
+  padding: 12px 24px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.menu-btn.primary-start {
+  background: linear-gradient(135deg, #a71d1d 0%, #6e0d0d 100%);
+  border: 2px solid #ffd700;
+  color: #ffeb3b;
+  font-size: 1.45rem;
+  padding: 15px 30px;
+  box-shadow: 0 4px 18px rgba(167, 29, 29, 0.6);
+}
+
+.menu-btn.primary-start:hover {
+  background: linear-gradient(135deg, #c62828 0%, #8e1515 100%);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 25px rgba(255, 60, 60, 0.7);
+}
+
+.menu-btn:not(.primary-start) {
+  background: #251b17;
+  border: 1.5px solid #8d6e3f;
+  color: #e6c875;
+}
+
+.menu-btn:not(.primary-start):hover {
+  background: #362822;
+  border-color: #ffd700;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.menu-btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* ========================================================
+   МОДАЛЬНЕ ВІКНО ВИБОРУ ГЕРОЇВ (CHARACTERS MODAL)
+   ======================================================== */
+
+.characters-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 780px;
+  max-width: 95vw;
+  max-height: 90vh;
+  background: linear-gradient(180deg, #1f1713 0%, #120e0c 100%);
+  border: 2px solid #d4af37;
+  border-radius: 12px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.3);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #140e0b;
+  border-bottom: 2px solid #8d6e3f;
+  padding: 12px 20px;
+}
+
+.modal-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.35rem;
+  color: #ffd700;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #d6c4a8;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.modal-close-btn:hover {
+  color: #ff5252;
+  background: rgba(255, 82, 82, 0.15);
+  transform: scale(1.15);
+}
+
+.char-modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.char-selector-list {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid #4a3828;
+  padding-bottom: 12px;
+}
+
+.hero-tab {
+  flex: 1;
+  padding: 10px 14px;
+  background: #1a120e;
+  color: #c7b89f;
+  border: 1px solid #5a422d;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Times New Roman', serif;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.hero-tab:hover {
+  background: #2b1f19;
+  border-color: #ffd700;
+  color: #fff;
+}
+
+.hero-tab.active {
+  background: #3d2b22;
+  border-color: #ffd700;
+  color: #ffd700;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+.char-details-area {
+  min-height: 270px;
+}
+
+.char-details {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.char-portrait-box {
+  position: relative;
+  width: 190px;
+  height: 250px;
+  flex-shrink: 0;
+  border: 2px solid #d4af37;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.char-portrait-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.char-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(18, 12, 10, 0.88);
+  color: #ffd700;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px 0;
+  border-top: 1px solid #8d6e3f;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.char-info-box {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.char-info-box h3 {
+  margin: 0 0 6px 0;
+  font-family: 'Times New Roman', serif;
+  font-size: 1.8rem;
+  color: #ffcc00;
+}
+
+.char-info-box .desc {
+  font-size: 0.95rem;
+  color: #d6c4a8;
+  font-style: italic;
+  margin: 0 0 14px 0;
+  line-height: 1.4;
+}
+
+.stats-list {
+  background: rgba(14, 10, 8, 0.7);
+  border: 1px solid #4a3828;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-item {
+  font-size: 0.9rem;
+  color: #e0d0b8;
+}
+
+.stat-item .stat-lbl {
+  color: #a8947b;
+  font-weight: bold;
+}
+
+.stat-item.highlight {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.select-hero-btn {
+  align-self: flex-start;
+  padding: 10px 24px;
+  font-size: 1.1rem;
+  background: linear-gradient(135deg, #a71d1d, #6e0d0d);
+  border: 1.5px solid #ffd700;
+  color: #ffeb3b;
+  border-radius: 6px;
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.select-hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 60, 60, 0.5);
+}
+
+/* ========================================================
+   МОДАЛЬНЕ ВІКНО ЛІТОПИСУ ТА ПРАВИЛ (README MODAL)
+   ======================================================== */
+
+.readme-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 740px;
+  max-width: 95vw;
+  max-height: 85vh;
+  background: linear-gradient(180deg, #231a15 0%, #15100d 100%);
+  border: 2px solid #c29b38;
+  border-radius: 12px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.95), 0 0 25px rgba(212, 175, 55, 0.25);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.readme-scroll-content {
+  padding: 24px 30px;
+  overflow-y: auto;
+  text-align: left;
+  color: #e2d1ab;
+  line-height: 1.5;
+}
+
+.readme-intro h2 {
+  font-family: 'Times New Roman', serif;
+  color: #ffd700;
+  margin-top: 0;
+  font-size: 1.6rem;
+}
+
+.readme-intro p {
+  color: #d6c4a8;
+  font-size: 1rem;
+}
+
+.readme-section-title {
+  font-family: 'Times New Roman', serif;
+  color: #ffcc00;
+  font-size: 1.35rem;
+  border-bottom: 1px solid #5a422d;
+  padding-bottom: 6px;
+  margin: 22px 0 12px 0;
+}
+
+.readme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.readme-card {
+  background: rgba(16, 12, 10, 0.85);
+  border: 1px solid #4a3828;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.readme-card .card-title {
+  font-weight: bold;
+  color: #ffe082;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.readme-card .card-damage {
+  font-size: 0.85rem;
+  color: #ff8a80;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.readme-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.readme-faction-box {
+  background: rgba(16, 12, 10, 0.85);
+  border: 1px solid #4a3828;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+}
+
+.readme-faction-box ul {
+  margin: 8px 0 0 18px;
+  padding: 0;
+}
+
+.readme-faction-box li {
+  margin-bottom: 6px;
+}
+
+.ent {
+  width: 200px;
+  height: 290px;
+  background: #141b17;
+  /* Темний атмосферний фон замість білого */
+  position: absolute;
+  top: 32%;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  font-family: monospace;
+}
+
+/* 2. Контейнер портрета */
+#enemyPortrait {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  border: 2px solid #3e2723;
+  box-shadow: inset 0 0 8px #000;
+  background-color: #050505;
+  box-sizing: border-box;
+}
+
+.faction-moscow,
+.faction-tatar,
+.faction-poland {
+  background-size: 310% 220%;
+  /* Більше масштабування прибирає рамки сусідів */
+  background-repeat: no-repeat;
+}
+
+.faction-poland {
+  background-image: url('https://lh3.googleusercontent.com/d/1RFrXjpaDMsub_2_-jd2C4VircCJZjsLc');
+}
+
+.faction-moscow {
+  background-image: url('https://lh3.googleusercontent.com/d/1x6XDhRx6JRkco_DApXFlNoUCDs3eBrRZ');
+}
+
+.faction-tatar {
+  background-image: url('https://lh3.googleusercontent.com/d/1VS-JqUfiQeNM0CDHZkZP6y7ZYCNTo6_c');
+}
+
+/* Точне фокусування чисто на портретах у рамці */
+.faction-moscow.p-1,
+.faction-tatar.p-1,
+.faction-poland.p-1 {
+  background-position: 30% 6%;
+}
+
+.faction-moscow.p-2,
+.faction-tatar.p-2,
+.faction-poland.p-2 {
+  background-position: 70% 6%;
+}
+
+.faction-moscow.p-3,
+.faction-tatar.p-3,
+.faction-poland.p-3 {
+  background-position: 30% 94%;
+}
+
+.faction-moscow.p-4,
+.faction-tatar.p-4,
+.faction-poland.p-4 {
+  background-position: 70% 94%;
+}
+
+/* --- БОСИ (ЧИСТА СІТКА 2Х2) --- */
+
+.boss-moscow,
+.boss-poland,
+.boss-tatar {
+  background-size: 200% 200%;
+  background-repeat: no-repeat;
+}
+
+.boss-moscow {
+  background-image: url('https://lh3.googleusercontent.com/d/1wa24VLIqqovzsyxZ5lgrz4Pfgly24kv6');
+}
+
+.boss-poland {
+  background-image: url('https://lh3.googleusercontent.com/d/1TT3aOT_uRITsw3NZGnSkuvb1Qkqm8jDr');
+}
+
+.boss-tatar {
+  background-image: url('https://lh3.googleusercontent.com/d/1rj13svhpfY9oboGVUa2iMj-oiNIQX4_H');
+}
+
+.boss-moscow.boss-p-1,
+.boss-poland.boss-p-1,
+.boss-tatar.boss-p-1 {
+  background-position: 0% 0%;
+}
+
+.boss-moscow.boss-p-2,
+.boss-poland.boss-p-2,
+.boss-tatar.boss-p-2 {
+  background-position: 100% 0%;
+}
+
+.boss-moscow.boss-p-3,
+.boss-poland.boss-p-3,
+.boss-tatar.boss-p-3 {
+  background-position: 0% 100%;
+}
+
+.boss-moscow.boss-p-4,
+.boss-poland.boss-p-4,
+.boss-tatar.boss-p-4 {
+  background-position: 100% 100%;
+}
+
+
+
+#playerPortrait {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  border: 2px solid #2e7d32;
+  box-shadow: inset 0 0 8px #000;
+  background-color: #050505;
+  box-sizing: border-box;
+  background-image: url('https://lh3.googleusercontent.com/d/1GZtuUiAZ7RML6HIC12HXH35ZfjUOafzG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#playerName {
+  font-size: 14px;
+  color: #81c784;
+  text-align: center;
+  margin-top: 4px;
+  font-weight: bold;
+}
+
+/* ========================================================
+   МАГАЗИН ТА ІНВЕНТАР
+   ======================================================== */
+
+.shop-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("https://lh3.googleusercontent.com/d/19X08c5w2Q0KsdXjhVdMO3_2wnRY5eU9o");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 9999;
+  font-family: monospace;
+  user-select: none;
+}
+
+.exit-shop-btn {
+  position: absolute;
+  top: 68px;
+  right: 25px;
+  z-index: 10001;
+}
+
+/* Дерев'яна кнопка у загальному стилі гри */
+.wood-btn {
+  background: #241c18;
+  color: #e6c875;
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 8px 16px;
+  border: 2px solid #5a4628;
+  box-shadow: inset 1px 1px 0 #8d6e3f, inset -1px -1px 0 #0f0b07, 0 3px 0 #000000;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 4px;
+  transition: background-color 0.1s, border-color 0.1s;
+}
+
+.wood-btn:hover {
+  background: #342821;
+  color: #ffffff;
+  border-color: #ffd54f;
+  box-shadow: inset 1px 1px 0 #ffd54f, inset -1px -1px 0 #18110b, 0 3px 0 #000000;
+}
+
+.wood-btn:active {
+  transform: translateY(2px);
+  box-shadow: inset 1px 1px 0 #0f0b07, inset -1px -1px 0 #5a4628, 0 1px 0 #000000;
+}
+
+/* Рамка золота (видима на будь-якому екрані, нижче за верхній топ-бар 56px) */
+.score {
+  position: fixed;
+  top: 68px;
+  right: 20px;
+  left: auto;
+  width: 165px;
+  height: 42px;
+  background: #241c18;
+  border: 2px solid #5a4628;
+  box-shadow: inset 1px 1px 0 #8d6e3f, inset -1px -1px 0 #0f0b07, 0 3px 0 #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffd54f;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 15px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  z-index: 500;
+}
+
+.shopVar {
+  position: absolute;
+  top: 68px;
+  left: 20px;
+  right: auto;
+  z-index: 10001;
+}
+
+/* Список товарів на сувої зліва */
+.scroll-shop-list {
+  position: absolute;
+  left: 8.5%;
+  top: 23%;
+  width: 18.5%;
+  height: 66%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 6px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.shop-item {
+  background: rgba(18, 14, 11, 0.85);
+  border: 2px solid #5a4628;
+  box-shadow: 0 2px 0 #000000;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #fbe3b5;
+  font-family: monospace;
+  box-sizing: border-box;
+}
+
+.shop-item:hover {
+  border-color: #ffd54f;
+  background: rgba(30, 22, 16, 0.95);
+}
+
+.item-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.item-icon {
+  font-size: 20px;
+  width: 28px;
+  height: 28px;
+  background: #120e0b;
+  border: 1px solid #5a4628;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.item-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: #ffd54f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-desc {
+  font-size: 10px;
+  color: #69f0ae;
+}
+
+.item-buy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #332617;
+  padding-top: 4px;
+  margin-top: 2px;
+}
+
+.item-price {
+  font-size: 11px;
+  font-weight: bold;
+  color: #e6c875;
+}
+
+.buy-btn {
+  background: #1b4d24;
+  color: #ffffff;
+  border: 1px solid #2e7d32;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.buy-btn:hover {
+  background: #2e7d32;
+  border-color: #69f0ae;
+}
+
+.buy-btn:active {
+  transform: translateY(1px);
+}
+
+/* Панель Інвентарю та Мішка (справа, відкриває продавця за лавкою) */
+.shop-inventory-panel {
+  position: absolute;
+  right: 5%;
+  top: 22%;
+  width: 232px;
+  background: #120e0b;
+  border: 2px solid #5a4628;
+  box-shadow: inset 1px 1px 0 #8d6e3f, inset -1px -1px 0 #0f0b07, 0 4px 0 #000000;
+  padding: 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: monospace;
+  z-index: 100;
+  border-radius: 0;
+}
+
+.panel-section {
+  background: #1c1611;
+  border: 1px solid #3d2f1b;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.bag-section {
+  border-color: #5a4628;
+  background: #241b14;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #3d2f1b;
+  padding-bottom: 3px;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: #e6c875;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.slot-count {
+  font-size: 10px;
+  color: #aaa;
+  background: #120e0b;
+  border: 1px solid #3d2f1b;
+  padding: 1px 4px;
+}
+
+.trash-zone {
+  background: #2e1414;
+  border: 1px solid #5a2828;
+  color: #ff8a80;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trash-zone:hover {
+  background: #4a1f1f;
+  border-color: #ff5252;
+}
+
+.trash-zone.drag-over {
+  background: #8b0000 !important;
+  border-color: #ff1744 !important;
+  transform: scale(1.15);
+}
+
+/* Сітка інвентарю 5x4 та мішка 5x1 */
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.bag-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+
+.inv-slot {
+  aspect-ratio: 1 / 1;
+  min-height: 36px;
+  background: #120e0b;
+  border: 1px solid #382a17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.inv-slot:hover {
+  border-color: #ffd54f;
+  background: #241c18;
+}
+
+.inv-slot.drag-over {
+  border-color: #00e676 !important;
+  background: #1b3815 !important;
+}
+
+.bag-section .inv-slot {
+  border-color: #5a4628;
+  background: #18120c;
+}
+
+.bag-section .inv-slot:hover {
+  border-color: #ffd54f;
+}
+
+.inv-item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+}
+
+.inv-item:active {
+  cursor: grabbing;
+}
+
+.inv-item-icon {
+  font-size: 18px;
+}
+
+/* Тултіп опису предмета */
+.item-tooltip {
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #120e0b;
+  border: 1px solid #d4af37;
+  color: #fff;
+  padding: 4px 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 2px 4px #000000;
+}
+
+.item-tooltip .tt-title {
+  font-weight: bold;
+  color: #ffd54f;
+}
+
+.item-tooltip .tt-desc {
+  color: #69f0ae;
+  font-size: 9px;
+}
+
+.item-tooltip .tt-hint {
+  color: #888;
+  font-size: 8px;
+  margin-top: 2px;
+  border-top: 1px solid #333;
+  padding-top: 1px;
+}
+
+.inv-slot:hover .item-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Сповіщення магазину */
+.shop-toast {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #120e0b;
+  border: 2px solid #5a4628;
+  color: #e6c875;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: monospace;
+  box-shadow: 0 4px 8px #000000;
+  z-index: 10005;
+  pointer-events: none;
+}
+
+.shop-toast.error {
+  border-color: #8b0000;
+  color: #ff8a80;
+}
+
+.shop-toast.success {
+  border-color: #2e7d32;
+  color: #69f0ae;
+}
+.death {
+  background-image: url('https://lh3.googleusercontent.com/d/1L0JyG8PnX5ux6Js2-snDzJ9ohBrFA62o') !important;
+  background-size: cover;
+  background-position: center;
+}
+.hook {
+  background-image: url('https://lh3.googleusercontent.com/d/1XGErjmRQEio0Lkd1fGBdO_Vv-f1vIK0G');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 45%;        /* Відступ зверху */
+  left: 20%;       /* Відступ зліва (одраз за зеленою карткою) */
+  width: 200px;    /* Приблизна ширина під розмір виділеної зони */
+  height: 100px;   /* Приблизна висота */
+  z-index: 10;
+  transition: left 0.3s ease-in-out;
+}
+
+/* ========================================================
+   МІНІГРА 1: ГНІВНИЙ ЗАМІС (Rage Brawl Minigame)
+   ======================================================== */
+.brawl-modal {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(12, 4, 4, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 960;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brawl-panel {
+  background: radial-gradient(circle, #241414 0%, #100808 100%);
+  border: 2px solid #8b2525;
+  box-shadow: 0 0 35px rgba(139, 37, 37, 0.45), 0 10px 40px rgba(0, 0, 0, 0.9);
+  padding: 16px 20px;
+  border-radius: 8px;
+  width: 380px;
+  text-align: center;
+  box-sizing: border-box;
+  animation: strikePopIn 0.2s ease-out;
+}
+
+.brawl-arena {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  position: relative;
+}
+
+.brawl-target {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3d1414 0%, #160707 100%);
+  border: 2px solid #8b2525;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.05s ease, border-color 0.1s ease;
+  position: relative;
+}
+
+.brawl-target::before {
+  content: '';
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 82, 82, 0.4);
+  pointer-events: none;
+}
+
+.brawl-target:hover {
+  border-color: #ff5252;
+  box-shadow: 0 0 20px rgba(255, 82, 82, 0.6);
+}
+
+.brawl-target.hit-pulse {
+  transform: scale(0.91) !important;
+  border-color: #ff5252 !important;
+  box-shadow: 0 0 35px rgba(255, 82, 82, 0.9) !important;
+}
+
+.brawl-target-text {
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: 900;
+  color: #ff8a80;
+  letter-spacing: 2px;
+  pointer-events: none;
+  text-shadow: 0 0 6px rgba(255, 82, 82, 0.5);
+}
+
+.brawl-float-text {
+  position: absolute;
+  font-family: 'Times New Roman', serif;
+  font-weight: 900;
+  font-size: 22px;
+  color: #ffeb3b;
+  text-shadow: 2px 2px 4px #000, 0 0 10px #ff1744;
+  pointer-events: none;
+  animation: brawlFloat 0.45s ease-out forwards;
+}
+
+@keyframes brawlFloat {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.6); }
+  30% { opacity: 1; transform: translate(-50%, -20px) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -45px) scale(1); }
+}
+
+.brawl-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid #3d2020;
+}
+
+.brawl-stat-val {
+  font-size: 26px;
+  font-weight: 900;
+  color: #ffcc00;
+  font-family: monospace;
+}
+
+.brawl-stat-lbl {
+  font-size: 11px;
+  color: #aaa;
+  margin-left: 6px;
+}
+
+.brawl-timer-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brawl-timer-bar {
+  width: 140px;
+  height: 10px;
+  background: #222;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #444;
+}
+
+.brawl-timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #ff1744, #ff9100);
+  transition: width 0.08s linear;
+}
+
+.brawl-timer-text {
+  font-size: 12px;
+  color: #ffcc00;
+  font-family: monospace;
+  font-weight: bold;
+  min-width: 32px;
+}
+
+.brawl-rank {
+  font-size: 13px;
+  font-weight: bold;
+  color: #ff9800;
+  font-family: monospace;
+  margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ========================================================
+   МІНІГРА 2: ГАРМАТНИЙ ЗАЛП ХОРТИЦІ (Artillery Volley)
+   ======================================================== */
+.cannon-modal {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 8, 5, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 960;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cannon-panel {
+  background: radial-gradient(circle, #241c14 0%, #110d08 100%);
+  border: 2px solid #8d6e3f;
+  box-shadow: 0 0 35px rgba(212, 175, 55, 0.35), 0 10px 40px rgba(0, 0, 0, 0.9);
+  padding: 16px 20px;
+  border-radius: 8px;
+  width: 440px;
+  text-align: center;
+  box-sizing: border-box;
+  animation: strikePopIn 0.2s ease-out;
+}
+
+.cannon-field {
+  width: 100%;
+  height: 200px;
+  background: #0c0805;
+  border: 2px solid #4a341e;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9);
+  cursor: crosshair;
+}
+
+/* Червоний приціл гвинтівки */
+.cannon-target {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #ff2222;
+  background: rgba(255, 34, 34, 0.12);
+  box-shadow: 0 0 10px rgba(255, 34, 34, 0.6), inset 0 0 8px rgba(255, 34, 34, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: crosshair;
+  transition: transform 0.05s ease;
+  user-select: none;
+}
+
+.cannon-target:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 14px rgba(255, 34, 34, 0.85);
+}
+
+.cannon-target::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  right: -5px;
+  height: 1.5px;
+  background: #ff3333;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.cannon-target::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  bottom: -5px;
+  width: 1.5px;
+  background: #ff3333;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.rifle-crosshair-dot {
+  width: 6px;
+  height: 6px;
+  background: #ff1744;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ff5252, 0 0 10px #ff1744;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cannon-hit-burst {
+  position: absolute;
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 900;
+  color: #ff5252;
+  pointer-events: none;
+  animation: cannonFloat 0.45s ease-out forwards;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+}
+
+@keyframes cannonFloat {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+  40% { opacity: 1; transform: translate(0, -18px) scale(1.2); }
+  100% { opacity: 0; transform: translate(0, -35px) scale(0.9); }
+}
+
+.cannon-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid #422e1b;
+}
+
+.cannon-ammo-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cannon-ammo-label {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.cannon-ammo-count {
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffd54f;
+  font-family: monospace;
+}
+
+.cannon-timer-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cannon-timer-bar {
+  width: 140px;
+  height: 10px;
+  background: #222;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #444;
+}
+
+.cannon-timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #ff9800, #ffeb3b);
+  transition: width 0.08s linear;
+}
+
+.cannon-timer-text {
+  font-size: 12px;
+  color: #ffd54f;
+  font-family: monospace;
+  font-weight: bold;
+  min-width: 32px;
+}
+
+/* Екран Смерті */
+
+/* ========================================================
+   ОНОВЛЕНИЙ ЕКРАН СМЕРТІ (DEATH OVERLAY)
+   ======================================================== */
+
+.death-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, rgba(60, 5, 5, 0.92) 0%, rgba(12, 2, 2, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+  user-select: none;
+}
+
+.death-vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
+  pointer-events: none;
+  animation: bloodPulse 4s ease-in-out infinite;
+}
+
+@keyframes bloodPulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 1; }
+}
+
+.death-modal-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(28, 10, 10, 0.96), rgba(14, 5, 5, 0.98));
+  border: 2px solid #8b1111;
+  border-radius: 12px;
+  box-shadow: 0 0 50px rgba(180, 0, 0, 0.5), inset 0 0 30px rgba(0, 0, 0, 0.9);
+  padding: 40px 55px;
+  max-width: 620px;
+  width: 90vw;
+  text-align: center;
+  animation: deathPopIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 1510;
+}
+
+@keyframes deathPopIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.death-emblem {
+  font-size: 28px;
+  letter-spacing: 8px;
+  color: #ff3333;
+  text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  margin-bottom: 10px;
+}
+
+.death-title {
+  color: #ff3b3b;
+  font-size: 3.8rem;
+  font-family: 'Times New Roman', serif;
+  text-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 50px rgba(255, 0, 0, 0.4);
+  margin: 0 0 10px 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.death-text {
+  color: #dcd0c5;
+  font-size: 1.15rem;
+  margin: 0 0 25px 0;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Картка полеглого лицаря */
+.death-hero-fallen {
+  display: flex;
+  align-items: center;
+  background: rgba(14, 4, 4, 0.8);
+  border: 1.5px solid #551111;
+  border-radius: 10px;
+  padding: 12px 20px;
+  margin-bottom: 30px;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+.death-hero-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid #8b1111;
+  background-size: cover;
+  background-position: center;
+  margin-right: 18px;
+  filter: grayscale(0.5) contrast(1.1);
+  box-shadow: 0 0 12px rgba(139, 0, 0, 0.8);
+  flex-shrink: 0;
+  background-image: url('https://lh3.googleusercontent.com/d/1GZtuUiAZ7RML6HIC12HXH35ZfjUOafzG');
+}
+
+.death-hero-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.death-hero-label {
+  font-size: 11px;
+  color: #a87777;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.death-hero-title {
+  font-size: 1.25rem;
+  color: #ffcdd2;
+  font-family: 'Times New Roman', serif;
+  font-weight: bold;
+}
+
+.death-hero-last-words {
+  margin: 4px 0 0 0;
+  font-size: 0.95rem;
+  color: #ffd54f;
+  font-style: italic;
+}
+
+/* Кнопки на екрані смерті */
+.death-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.death-btn {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.15rem;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.death-retry-btn {
+  background: linear-gradient(135deg, #8b0000, #4d0000);
+  border: 2px solid #ff3333;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+}
+
+.death-retry-btn:hover {
+  background: linear-gradient(135deg, #b71c1c, #7f0000);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 25px rgba(255, 0, 0, 0.7);
+}
+
+.death-menu-btn {
+  background: #1c1512;
+  border: 1.5px solid #8d6e3f;
+  color: #e6c875;
+}
+
+.death-menu-btn:hover {
+  background: #2b201a;
+  border-color: #ffd700;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+
+/* Катсцена */
+.cutscene-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.cutscene-content {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.cutscene-portrait {
+  width: 250px;
+  height: 350px;
+  border: 4px solid #b8860b;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(184, 134, 11, 0.5);
+  object-fit: cover;
+}
+
+.cutscene-dialog {
+  background: linear-gradient(135deg, #d2b48c, #8b4513);
+  padding: 30px;
+  border-radius: 10px;
+  border: 3px solid #6b4c1a;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);
+}
+
+.cutscene-dialog p {
+  font-size: 1.5rem;
+  color: #331a00;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  margin-bottom: 20px;
+}
+
+/* ========================================================
+   ВІЗУАЛЬНИЙ ВИГЛЯД АТАК ТА АНІМАЦІЇ БОЮ
+   ======================================================== */
+
+/* 1. Струс екрана (Screen Shake) */
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4px, 3px); }
+  40% { transform: translate(4px, -3px); }
+  60% { transform: translate(-3px, -2px); }
+  80% { transform: translate(2px, 3px); }
+}
+
+body.shake-screen {
+  animation: screenShake 0.25s ease-in-out;
+}
+
+/* 2. Анімації атак та ударів */
+@keyframes playerLunge {
+  0% { transform: translateX(0) scale(1); }
+  35% { transform: translateX(65px) scale(1.08) rotate(3deg); }
+  65% { transform: translateX(50px) scale(1.05) rotate(1deg); }
+  100% { transform: translateX(0) scale(1) rotate(0); }
+}
+
+.player-attacking {
+  animation: playerLunge 0.38s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+@keyframes enemyLunge {
+  0% { transform: translateX(0) scale(1); }
+  35% { transform: translateX(-65px) scale(1.08) rotate(-3deg); }
+  65% { transform: translateX(-50px) scale(1.05) rotate(-1deg); }
+  100% { transform: translateX(0) scale(1) rotate(0); }
+}
+
+.enemy-attacking {
+  animation: enemyLunge 0.38s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+@keyframes hitRecoil {
+  0% {
+    transform: translateX(0);
+    filter: brightness(1);
+  }
+  20% {
+    transform: translateX(20px) rotate(-4deg) scale(0.95);
+    filter: brightness(2.2) contrast(1.3) drop-shadow(0 0 20px rgba(255, 30, 30, 0.9));
+  }
+  50% {
+    transform: translateX(-8px) rotate(2deg);
+    filter: brightness(1.4);
+  }
+  100% {
+    transform: translateX(0) rotate(0) scale(1);
+    filter: brightness(1);
+  }
+}
+
+.hit-heavy-anim {
+  animation: hitRecoil 0.4s ease-out !important;
+}
+
+@keyframes healPulse {
+  0% { transform: scale(1); box-shadow: 0 0 12px rgba(46, 125, 50, 0.4); }
+  50% { transform: scale(1.06); box-shadow: 0 0 35px rgba(105, 240, 174, 0.9); }
+  100% { transform: scale(1); box-shadow: 0 0 12px rgba(46, 125, 50, 0.4); }
+}
+
+.hero-heal-pulse {
+  animation: healPulse 0.6s ease-out !important;
+}
+
+/* 3. Контейнер та елементи спецефектів (VFX) */
+.vfx-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 150;
+  overflow: hidden;
+}
+
+/* Шабельний розріз (Basic Attack) */
+.vfx-slash {
+  position: absolute;
+  width: 240px;
+  height: 10px;
+  background: linear-gradient(90deg, transparent, #ffffff, #ffd54f, #ff9800, transparent);
+  box-shadow: 0 0 20px #ffd700, 0 0 40px #ff5722;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: slashSwipe 0.32s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes slashSwipe {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-45deg) scaleX(0.1);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(-30deg) scaleX(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-15deg) scaleX(1.6);
+  }
+}
+
+/* Подвійний перехресний розріз (Random Attack / Flurry) */
+.vfx-cross-slash {
+  position: absolute;
+  width: 220px;
+  height: 8px;
+  background: linear-gradient(90deg, transparent, #ffffff, #ff1744, #ff9100, transparent);
+  box-shadow: 0 0 22px #ff1744, 0 0 40px #ff5252;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.vfx-cross-slash.slash-1 {
+  animation: crossSlash1 0.35s ease-out forwards;
+}
+
+.vfx-cross-slash.slash-2 {
+  animation: crossSlash2 0.35s ease-out 0.08s forwards;
+  opacity: 0;
+}
+
+@keyframes crossSlash1 {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-45deg) scaleX(0.1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) rotate(-45deg) scaleX(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(-45deg) scaleX(1.5); }
+}
+
+@keyframes crossSlash2 {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(45deg) scaleX(0.1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) rotate(45deg) scaleX(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(45deg) scaleX(1.5); }
+}
+
+/* Снаряд / Гарматне ядро (Strike Attack) */
+.vfx-projectile {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 20%, #ffeb3b 50%, #ff5722 80%, #d84315 100%);
+  box-shadow: 0 0 18px #ff9800, 0 0 35px #e65100;
+  pointer-events: none;
+  z-index: 160;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+/* Вибух від влучання залпу */
+.vfx-explosion {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 10%, #ffd54f 40%, #ff3d00 75%, transparent 100%);
+  box-shadow: 0 0 40px #ff6d00, 0 0 70px #ff3d00;
+  pointer-events: none;
+  animation: explodeBurst 0.35s ease-out forwards;
+}
+
+@keyframes explodeBurst {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.2); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.4); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8); }
+}
+
+/* Іскри влучання */
+.vfx-spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #fffb77;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff9800;
+  pointer-events: none;
+  animation: sparkFly 0.4s ease-out forwards;
+}
+
+@keyframes sparkFly {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); }
+}
+
+/* Цілюща Аура (Heal VFX) */
+.vfx-heal-aura {
+  position: absolute;
+  width: 240px;
+  height: 330px;
+  border-radius: 12px;
+  border: 3px solid rgba(105, 240, 174, 0.8);
+  box-shadow: 0 0 30px rgba(105, 240, 174, 0.7), inset 0 0 35px rgba(105, 240, 174, 0.35);
+  pointer-events: none;
+  animation: healAuraPulse 0.85s ease-out forwards;
+}
+
+@keyframes healAuraPulse {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+  35% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25); }
+}
+
+.vfx-heal-sparkle {
+  position: absolute;
+  color: #69f0ae;
+  font-size: 24px;
+  font-weight: bold;
+  pointer-events: none;
+  animation: healFloatUp 0.8s ease-out forwards;
+}
+
+@keyframes healFloatUp {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+  40% { opacity: 1; transform: translate(-50%, -35px) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -75px) scale(0.8); }
+}
+
+/* Критичний урон у спливаючому вікні */
+.damage-popup.crit {
+  color: #ffea00;
+  font-size: 40px;
+  text-shadow: 0 0 10px #ff0000, 0 0 25px #ff9100, 2px 2px 6px #000;
+  letter-spacing: 1.5px;
+}
+
+/* ========================================================
+   ФІНАЛЬНА КАТСЦЕНА: ТРИКУТНИК ГЕРОЇВ, ВІДДАЛЕННЯ, ТРЯСКА,
+   СПАЛАХ ТА ТИТРИ ПЕРЕМОГИ
+   ======================================================== */
+
+.finale-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  background: #080605;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Спалах (Вспишка) */
+.finale-flash {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle, #ffffff 40%, #fff7d6 100%);
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s ease-in;
+}
+
+.finale-flash.active {
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+.finale-flash.fade-out {
+  opacity: 0 !important;
+  transition: opacity 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.finale-cinematic {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, rgba(40, 20, 25, 0.6) 0%, rgba(5, 4, 4, 0.98) 100%);
+  overflow: hidden;
+}
+
+/* Шалена тряска кінематографічної сцени */
+.finale-cinematic.shaking-hard {
+  animation: cinematicShakeExtreme 0.06s infinite alternate !important;
+}
+
+@keyframes cinematicShakeExtreme {
+  0% { transform: translate(-8px, 6px) rotate(-0.5deg); }
+  25% { transform: translate(7px, -7px) rotate(0.4deg); }
+  50% { transform: translate(-6px, -5px) rotate(-0.3deg); }
+  75% { transform: translate(8px, 8px) rotate(0.6deg); }
+  100% { transform: translate(-7px, 5px) rotate(-0.4deg); }
+}
+
+.cinematic-bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #000;
+  z-index: 2010;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.95);
+}
+
+.cinematic-bar.top { top: 0; }
+.cinematic-bar.bottom { bottom: 0; }
+
+/* Камера, що плавно віддаляється */
+.finale-camera {
+  position: relative;
+  width: 1000px;
+  height: 850px;
+  max-width: 96vw;
+  max-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  transition: transform 3.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.finale-camera.zooming-out {
+  transform: scale(0.48) !important;
+}
+
+/* SVG Сяючого Трикутника Енергії */
+.triangle-energy-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.triangle-fill-glow {
+  fill: rgba(255, 215, 0, 0.06);
+  stroke: none;
+  transition: fill 0.5s;
+}
+
+.triangle-energy-svg.active-overcharge .triangle-fill-glow {
+  fill: rgba(255, 215, 0, 0.18);
+  animation: trianglePulse 0.4s infinite alternate;
+}
+
+@keyframes trianglePulse {
+  0% { fill: rgba(255, 215, 0, 0.12); }
+  100% { fill: rgba(255, 80, 0, 0.28); }
+}
+
+.energy-line {
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 12 6;
+  animation: energyDash 1s linear infinite;
+}
+
+.line-bohdan-oleg { stroke: #ffd700; }
+.line-oleg-baida { stroke: #29b6f6; }
+.line-baida-bohdan { stroke: #ff5722; }
+
+@keyframes energyDash {
+  to { stroke-dashoffset: -36; }
+}
+
+.center-ray {
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 8 4;
+  animation: energyRayFlow 0.6s linear infinite;
+}
+
+.ray-bohdan { stroke: #ffe082; }
+.ray-oleg { stroke: #4fc3f7; }
+.ray-baida { stroke: #ff8a65; }
+
+@keyframes energyRayFlow {
+  to { stroke-dashoffset: -24; }
+}
+
+.death-center-vortex {
+  fill: rgba(139, 0, 0, 0.25);
+  stroke: #ff1744;
+  stroke-width: 3;
+  stroke-dasharray: 10 5;
+  animation: vortexSpin 2s linear infinite;
+}
+
+@keyframes vortexSpin {
+  to { transform: rotate(360deg); transform-origin: 500px 460px; }
+}
+
+/* Сцена трикутника */
+.finale-stage.triangle-stage {
+  position: relative;
+  width: 1000px;
+  height: 850px;
+}
+
+/* Актори у трикутнику */
+.finale-actor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  z-index: 10;
+  transition: all 0.35s ease;
+}
+
+/* Вершина: Богдан Хмельницький (Top Center) */
+.actor-bohdan {
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Лівий кут: Олег Передбач (Bottom Left) */
+.actor-oleg {
+  bottom: 50px;
+  left: 90px;
+}
+
+/* Правий кут: Байда Вишнелюб (Bottom Right) */
+.actor-baida {
+  bottom: 50px;
+  right: 90px;
+}
+
+/* Центр трикутника: Смерть */
+.actor-death {
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+}
+
+/* Спрайти героїв */
+.actor-sprite {
+  width: 150px;
+  height: 195px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+  position: relative;
+}
+
+.bohdan-sprite {
+  background-image: url('https://lh3.googleusercontent.com/d/1GZtuUiAZ7RML6HIC12HXH35ZfjUOafzG');
+  border: 3.5px solid #ffd700;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+}
+
+.oleg-sprite {
+  background-image: url('https://lh3.googleusercontent.com/d/1s-crFw98YTLUCE8CryYUqP0xGSmf6cSZ');
+  border: 3.5px solid #29b6f6;
+  box-shadow: 0 0 25px rgba(41, 182, 246, 0.7);
+}
+
+.baida-sprite {
+  background-image: url('https://lh3.googleusercontent.com/d/1i8lX1vupJFUOkvU0qsd4r9lARJGUstbe');
+  border: 3.5px solid #ff5722;
+  box-shadow: 0 0 25px rgba(255, 87, 34, 0.7);
+}
+
+.death-sprite {
+  background-image: url('https://lh3.googleusercontent.com/d/1L0JyG8PnX5ux6Js2-snDzJ9ohBrFA62o');
+  width: 185px;
+  height: 240px;
+  border: 3.5px solid #b71c1c;
+  box-shadow: 0 0 35px rgba(183, 28, 28, 0.9);
+}
+
+/* Аури героїв */
+.actor-aura {
+  position: absolute;
+  inset: -12px;
+  border-radius: 12px;
+  pointer-events: none;
+  animation: auraPulse 1.2s infinite alternate ease-in-out;
+}
+
+.gold-aura {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.blue-aura {
+  box-shadow: 0 0 30px rgba(41, 182, 246, 0.6), inset 0 0 15px rgba(41, 182, 246, 0.4);
+}
+
+.red-aura {
+  box-shadow: 0 0 30px rgba(255, 87, 34, 0.6), inset 0 0 15px rgba(255, 87, 34, 0.4);
+}
+
+@keyframes auraPulse {
+  0% { transform: scale(0.96); opacity: 0.6; }
+  100% { transform: scale(1.06); opacity: 1; }
+}
+
+.actor-name {
+  font-family: 'Times New Roman', serif;
+  font-size: 15px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-top: 8px;
+  text-shadow: 0 2px 5px #000;
+  letter-spacing: 1px;
+}
+
+.actor-title-tag {
+  font-size: 11px;
+  color: #d6c4a8;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.death-name {
+  color: #ff5252;
+}
+
+.death-status-badge {
+  font-size: 11px;
+  color: #fff;
+  background: #b71c1c;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  font-weight: bold;
+  animation: blinkFast 0.5s infinite alternate;
+}
+
+@keyframes blinkFast {
+  from { opacity: 0.6; }
+  to { opacity: 1; }
+}
+
+/* Смерть тремтить у пастці */
+.actor-death.death-trapped-shake {
+  animation: deathTrappedRumble 0.1s infinite alternate !important;
+}
+
+@keyframes deathTrappedRumble {
+  0% { transform: translate(-50%, -50%) translate(-4px, 3px) rotate(-1deg); }
+  100% { transform: translate(-50%, -50%) translate(4px, -3px) rotate(1deg); }
+}
+
+/* Діалогова плашка фіналу */
+.finale-dialog-box {
+  position: absolute;
+  bottom: 80px;
+  background: rgba(18, 12, 10, 0.96);
+  border: 2px solid #8d6e3f;
+  border-radius: 10px;
+  padding: 14px 32px;
+  min-width: 540px;
+  max-width: 750px;
+  text-align: center;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.95), 0 0 20px rgba(212, 175, 55, 0.3);
+  z-index: 2020;
+}
+
+.dialog-speaker {
+  font-family: 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.dialog-line {
+  font-size: 17px;
+  color: #fff;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ========================================================
+   ЕКРАН ТРІУМФУ ТА ТИТРІВ (VICTORY BANNER & CREDITS)
+   ======================================================== */
+
+.finale-credits {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(30, 20, 14, 0.98) 0%, rgba(6, 4, 4, 0.99) 100%);
+  z-index: 2050;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 60px 20px 100px 20px;
+  box-sizing: border-box;
+}
+
+/* Урочистий банер перемоги */
+.victory-header-box {
+  max-width: 800px;
+  text-align: center;
+  margin-bottom: 45px;
+  animation: victoryHeaderPop 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes victoryHeaderPop {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.victory-heraldic-emblem {
+  font-size: 32px;
+  letter-spacing: 12px;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  margin-bottom: 12px;
+}
+
+.victory-heroic-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 4rem;
+  color: #ffeb3b;
+  text-shadow: 0 0 20px rgba(255, 235, 59, 0.8), 0 0 50px rgba(255, 152, 0, 0.6);
+  margin: 0;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+
+.victory-heroic-subtitle {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.8rem;
+  color: #ff7043;
+  letter-spacing: 4px;
+  margin: 10px 0 16px 0;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(255, 112, 67, 0.7);
+}
+
+.victory-heroic-story {
+  font-size: 1.15rem;
+  color: #e0d0b8;
+  line-height: 1.6;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.credits-scroll {
+  max-width: 700px;
+  text-align: center;
+  color: #ddd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.credits-game-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 46px;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+  margin: 0;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+
+.credits-game-subtitle {
+  font-size: 20px;
+  color: #ff8a80;
+  letter-spacing: 3px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.credits-divider {
+  color: #d4af37;
+  font-size: 20px;
+  margin: 8px 0;
+}
+
+.credits-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.credits-role {
+  font-size: 13px;
+  color: #b0a08d;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.credits-name {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  font-family: 'Times New Roman', serif;
+}
+
+.credits-name.highlight {
+  color: #ffd54f;
+  font-size: 24px;
+  text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+.credits-quote {
+  font-size: 22px;
+  color: #ffd700;
+  font-style: italic;
+  font-family: 'Times New Roman', serif;
+  margin: 20px 0 10px 0;
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.credits-actions {
+  margin-top: 15px;
+}
+
+.credits-btn {
+  background: linear-gradient(135deg, #a71d1d, #6e0d0d);
+  border: 2px solid #ffd700;
+  color: #ffeb3b;
+  padding: 14px 40px;
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transition: all 0.2s;
+  font-family: 'Times New Roman', serif;
+  box-shadow: 0 4px 20px rgba(167, 29, 29, 0.6);
+}
+
+.credits-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 30px rgba(255, 60, 60, 0.8);
+}
+
+/* ── Інтеграція верхньої панелі навігації ── */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: rgba(14, 17, 23, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 999999;
+}
+
+/* ========================================================
+   МОБІЛЬНА АДАПТИВНІСТЬ ТА PHONE-FRIENDLY СТИЛІ
+   ======================================================== */
+
+@media (max-width: 768px) {
+  /* Верхня навігація */
+  .top-nav {
+    padding: 0 12px;
+    height: 52px;
+  }
+  .nav-brand-title {
+    font-size: 14px;
+  }
+  .nav-link {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+  .nav-link span {
+    display: none;
+  }
+
+  /* Лічильник золота / монет */
+  .score {
+    top: 58px;
+    right: 12px;
+    width: 135px;
+    height: 36px;
+    font-size: 13px;
+  }
+  .shopVar {
+    top: 58px;
+    left: 12px;
+    width: 130px;
+    height: 36px;
+  }
+  .exit-shop-btn {
+    top: 58px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* Бійці арени (Player та Enemy) */
+  .ent {
+    width: 155px;
+    height: 220px;
+    top: 17%;
+    padding: 8px;
+  }
+  .player {
+    left: 4%;
+  }
+  .enemy {
+    left: auto;
+    right: 4%;
+  }
+  #playerPortrait,
+  #enemyPortrait {
+    width: 95px;
+    height: 95px;
+  }
+  .hp-text {
+    font-size: 18px;
+  }
+  #playerName,
+  #enemyName {
+    font-size: 11px;
+    text-align: center;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Хотбар (панель дій та бойовий мішок) */
+  .hotbar {
+    bottom: 6px;
+    width: 96vw;
+    max-width: 460px;
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+  .hotbar-attacks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 6px;
+  }
+  .attack {
+    min-width: 0;
+    width: 100%;
+    height: 38px;
+    font-size: 11px;
+    padding: 4px 6px;
+    letter-spacing: 0;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .hotbar-divider {
+    display: none;
+  }
+  .hotbar-bag-container {
+    width: 100%;
+    align-items: center;
+    gap: 2px;
+  }
+  .hotbar-bag-title {
+    font-size: 9px;
+  }
+  .battle-bag-grid {
+    justify-content: center;
+    gap: 4px;
+  }
+  .battle-bag-slot {
+    width: 38px;
+    height: 38px;
+  }
+  .battle-item-icon {
+    font-size: 15px;
+  }
+  .battle-item-name {
+    font-size: 7px;
+    max-width: 34px;
+  }
+
+  /* Головне меню гри */
+  .menu-main-panel {
+    padding: 20px 16px;
+    width: 92vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    margin-top: 36px;
+  }
+  .menu-crest {
+    font-size: 20px;
+    letter-spacing: 5px;
+    margin-bottom: 4px;
+  }
+  .main-title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+  .main-subtitle {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+  .selected-hero-card {
+    padding: 8px 12px;
+    margin-bottom: 14px;
+  }
+  .selected-hero-thumb {
+    width: 44px;
+    height: 44px;
+    margin-right: 10px;
+  }
+  .selected-hero-name {
+    font-size: 14px;
+  }
+  .selected-hero-btn {
+    font-size: 11px;
+  }
+  .menu-actions-stack {
+    gap: 8px;
+    width: 100%;
+  }
+  .menu-btn {
+    height: 44px;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  /* Екран магазину */
+  .shop-screen {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 104px;
+    padding-bottom: 30px;
+    background-size: cover;
+    box-sizing: border-box;
+  }
+  .scroll-shop-list {
+    position: static;
+    width: 92%;
+    max-width: 380px;
+    max-height: 220px;
+    margin-bottom: 14px;
+    left: auto;
+    top: auto;
+    height: auto;
+  }
+  .shop-inventory-panel {
+    position: static;
+    width: 92%;
+    max-width: 380px;
+    right: auto;
+    top: auto;
+  }
+
+  /* Модальне вікно вибору лицаря */
+  .characters-modal {
+    width: 95vw;
+    max-height: 88vh;
+    top: 54%;
+  }
+  .modal-header {
+    padding: 10px 14px;
+  }
+  .modal-title {
+    font-size: 1.1rem;
+  }
+  .char-modal-body {
+    padding: 12px;
+    gap: 12px;
+  }
+  .char-selector-list {
+    flex-direction: row;
+    gap: 6px;
+    padding-bottom: 8px;
+  }
+  .hero-tab {
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+  .char-details {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+  .char-portrait-box {
+    width: 120px;
+    height: 160px;
+    margin: 0 auto;
+  }
+  .char-info-box {
+    width: 100%;
+  }
+  .char-info-box h3 {
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+  }
+  .char-info-box .desc {
+    font-size: 12px;
+  }
+  .stats-list {
+    font-size: 11px;
+    text-align: left;
+  }
+  .select-hero-btn {
+    width: 100%;
+    height: 42px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  /* Літопис та правила */
+  .readme-modal {
+    width: 95vw;
+    max-height: 88vh;
+    top: 54%;
+  }
+  .readme-scroll-content {
+    padding: 14px 16px;
+  }
+  .readme-intro h2 {
+    font-size: 1.3rem;
+  }
+  .readme-section-title {
+    font-size: 1.15rem;
+  }
+  .readme-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* Мінігра: Залп із Засідки */
+  .strike-panel {
+    min-width: 0;
+    width: 94vw;
+    max-width: 420px;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .bar {
+    width: 100%;
+    height: 32px;
+  }
+  .strike-panel-title {
+    font-size: 1rem;
+  }
+  .strike-instructions {
+    font-size: 10px;
+  }
+  .strike-fire-btn {
+    height: 42px;
+    font-size: 13px;
+  }
+  .strike-aim-btn {
+    height: 34px;
+    font-size: 12px;
+  }
+
+  /* Мінігра: Гнівний Заміс */
+  .brawl-panel {
+    width: 94vw;
+    max-width: 360px;
+    padding: 12px 14px;
+  }
+  .brawl-arena {
+    height: 130px;
+  }
+  .brawl-target {
+    width: 110px;
+    height: 110px;
+  }
+
+  /* Мінігра: Гарматний Залп */
+  .cannon-panel {
+    width: 94vw;
+    max-width: 420px;
+    padding: 12px 14px;
+  }
+  .cannon-field {
+    height: 170px;
+  }
+
+  /* Екран смерті */
+  .death-modal-card {
+    width: 92vw;
+    padding: 20px 14px;
+  }
+  .death-title {
+    font-size: 1.8rem;
+  }
+  .death-hero-fallen {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+  .death-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  .death-btn {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  /* Катсцени */
+  .cutscene-content {
+    flex-direction: column;
+    width: 92vw;
+    text-align: center;
+    align-items: center;
+  }
+  .cutscene-portrait {
+    width: 100px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 480px) {
+  .score {
+    top: 56px;
+    right: 8px;
+    width: 115px;
+    height: 32px;
+    font-size: 12px;
+  }
+  .shopVar {
+    top: 56px;
+    left: 8px;
+    width: 115px;
+    height: 32px;
+    font-size: 12px;
+  }
+  .exit-shop-btn {
+    top: 56px;
+    right: 8px;
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+  .ent {
+    width: 136px;
+    height: 195px;
+    top: 15%;
+    padding: 6px;
+  }
+  .player {
+    left: 2%;
+  }
+  .enemy {
+    left: auto;
+    right: 2%;
+  }
+  #playerPortrait,
+  #enemyPortrait {
+    width: 80px;
+    height: 80px;
+  }
+  .hp-text {
+    font-size: 16px;
+  }
+  #playerName,
+  #enemyName {
+    font-size: 10px;
+    max-width: 120px;
+  }
+  .hotbar {
+    padding: 4px 6px;
+    bottom: 4px;
+    gap: 4px;
+  }
+  .attack {
+    height: 34px;
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+  .battle-bag-slot {
+    width: 34px;
+    height: 34px;
+  }
+  .battle-item-icon {
+    font-size: 13px;
+  }
+  .battle-item-name {
+    display: none;
+  }
+  .main-title {
+    font-size: 1.5rem;
+  }
+  .main-subtitle {
+    font-size: 0.78rem;
+  }
+  .menu-main-panel {
+    padding: 14px 10px;
+  }
+  .menu-btn {
+    height: 40px;
+    font-size: 12px;
+  }
+}

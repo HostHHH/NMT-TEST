@@ -118,8 +118,8 @@ export const SHUFFLE = Object.freeze({
 // переписуватиме код вручну, регістр не має значення.
 export const CERTIFICATE = Object.freeze({
     VERSION: 'v1',
-    PREFIX: 'LMB',
-    SALT: 'limbo-nmt-2026',
+    PREFIX: 'IST',
+    SALT: 'istoriya-nmt-2026',
     SEGMENTS: 3,
     SEGMENT_LENGTH: 4,
     // Без літер I, O, 1, 0 — щоб гравець не плутав їх при переписуванні.
@@ -135,5 +135,6 @@ export const ROUTES = Object.freeze({
     STAGE: 'stage/stage.html',
     TEST: 'test/test.html',
     BOSS: 'boss-test/index.html',
-    GAME: 'game/game.html'
+    GAME: 'game/game.html',
+    ABOUT: 'about/about.html'
 });

@@ -99,6 +99,7 @@ export function lobbyUrl(pathname = '') { return buildUrl(ROUTES.LOBBY, {}, path
 export function homeUrl(pathname = '') { return buildUrl(ROUTES.HOME, {}, pathname); }
 export function mapUrl(pathname = '') { return buildUrl(ROUTES.MAP, {}, pathname); }
 export function gameUrl(pathname = '') { return buildUrl(ROUTES.GAME, {}, pathname); }
+export function aboutUrl(pathname = '') { return buildUrl(ROUTES.ABOUT, {}, pathname); }
 
 export function stageUrl(stage, pathname = '') {
     return buildUrl(ROUTES.STAGE, { stage }, pathname);

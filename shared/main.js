@@ -3,8 +3,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signO
 import { getFirestore, doc, setDoc, onSnapshot, getDoc, collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 import { initProgressStore, ensureProgress } from "../core/progressStore.js";
-// Імпортується заради побічного ефекту: nav.js реєструє goToMap/goToDef/
-// goToGame у window для інлайнових onclick у наявній розмітці.
+// nav.js реєструє goToMap/goToDef/goToGame у window
 import "../core/nav.js";
 
 const firebaseConfig = {
@@ -22,28 +21,21 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// Сховище прогресу не створює власного Firebase — отримує вже готовий
-// екземпляр, щоб у застосунку не з'явився другий initializeApp.
+// Сховище прогресу
 initProgressStore(db);
 
-// Сторінки Етапу 2+ (рівень, стадія, бос) чекають на цей промис замість
-// того, щоб самим стежити за станом автентифікації.
 let currentProgress = null;
 let resolveLimboReady;
 window.limboReady = new Promise((resolve) => { resolveLimboReady = resolve; });
+window.istoriyaReady = window.limboReady;
 window.limboGetProgress = () => currentProgress;
+window.istoriyaGetProgress = () => currentProgress;
 
-// Коли сторінку відновлено з bfcache (кнопки «назад/вперед»), скрипти НЕ
-// перезапускаються — а отже window.limboReady тримає застарілий прогрес.
-// Через це один екран міг показувати «бос переможений», а сусідній —
-// «стадія закрита». Перезавантаження гарантує свіжі дані.
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) window.location.reload();
 });
 
-// stage і boss-test додані: без них редирект неавторизованого користувача
-// з цих сторінок будував би шлях до lobby від кореня замість '../'.
-const isSubfolder = /\/(home|game|lobby|test|map|stage|boss-test)\//.test(window.location.pathname);
+const isSubfolder = /\/(home|game|lobby|test|map|stage|boss-test|about)\//.test(window.location.pathname);
 const isLobbyPage = window.location.pathname.includes('lobby.html');
 const loader = document.getElementById('loader');
 
@@ -52,68 +44,109 @@ let saveTimeout = null;
 let unsubListener = null;
 
 let h = 0, o = 0, s = 0, h2 = 0, o2 = 0, s2 = 0;
+let bgColor = '#0e1117';
+let guiColor = '#c5a47e';
+let voiceMiniGame = false;
+let cossackLang = false;
 let fontState = false, backState = false, thingsState = false;
 
-// goToMap / goToDef / goToGame більше не оголошуються тут — вони живуть
-// у core/nav.js, який реєструє їх у window самостійно (див. блок
-// сумісності наприкінці того файлу).
-window.other = function() {
-    const color1 = document.querySelector('.color1');
-    const color2 = document.querySelector('.color2');
-    if(color1 && color2) {
-        color1.classList.toggle('hidden');
-        color2.classList.toggle('hidden');
-    }
-}
+// Встановлення теми з пресетів (фон + акцентний колір GUI)
+window.setThemePreset = function(newBg, newGui) {
+    bgColor = newBg;
+    guiColor = newGui;
+    updateUI();
+    scheduleSave();
+};
+
+// Зворотна сумісність для старих викликів
+window.setPreset = function(nH, nO, nS, nH2, nO2, nS2) {
+    h = nH; o = nO; s = nS;
+    h2 = nH2; o2 = nO2; s2 = nS2;
+    bgColor = `hsl(${h}, ${o}%, ${s}%)`;
+    updateUI();
+    scheduleSave();
+};
 
 window.randomBackground = function() {
     h = Math.trunc(Math.random() * 360);
-    o = Math.trunc(Math.random() * 100);
-    s = Math.trunc(Math.random() * 100);
-    
-    h2 = Math.trunc(Math.random() * 360);
-    o2 = Math.trunc(Math.random() * 100);
-    s2 = Math.trunc(Math.random() * 100);
-
+    o = Math.trunc(40 + Math.random() * 55);
+    s = Math.trunc(15 + Math.random() * 35);
+    bgColor = `hsl(${h}, ${o}%, ${s}%)`;
     updateUI();
     scheduleSave();
-}
-
-const inputH = document.querySelector('.aa');
-const inputO = document.querySelector('.bb');
-const inputS = document.querySelector('.cc');
-const inputH2 = document.querySelector('.aa2');
-const inputO2 = document.querySelector('.bb2');
-const inputS2 = document.querySelector('.cc2');
-
-const fontCheckbox = document.querySelector('.switch.font input');
-const backCheckbox = document.querySelector('.switch.back input');
-const thingsCheckbox = document.querySelector('.SwitcherIn.things input');
+};
 
 function applyColors() {
-    document.body.style.background = `linear-gradient(45deg, hsl(${h}, ${o}%, ${s}%), hsl(${h2}, ${o2}%, ${s2}%))`;
+    // Встановлюємо фон сторінки
+    document.body.style.backgroundColor = bgColor;
+
+    // Встановлюємо акцентні змінні для інтерфейсу
+    document.documentElement.style.setProperty('--gui-color', guiColor);
+    document.documentElement.style.setProperty('--accent-gold', guiColor);
+    document.documentElement.style.setProperty('--border-active', guiColor);
+
+    // Оновлення елементів сторінки налаштувань (два квадрати: Фон та GUI)
+    const bgSquare = document.getElementById('bg-square-preview');
+    if (bgSquare) bgSquare.style.backgroundColor = bgColor;
+    const bgHex = document.getElementById('bg-hex-val');
+    if (bgHex) bgHex.textContent = bgColor.toUpperCase();
+    const bgPicker = document.getElementById('bg-color-picker');
+    if (bgPicker && bgPicker.value !== bgColor && bgColor.startsWith('#')) {
+        bgPicker.value = bgColor;
+    }
+
+    const guiSquare = document.getElementById('gui-square-preview');
+    if (guiSquare) guiSquare.style.backgroundColor = guiColor;
+    const guiHex = document.getElementById('gui-hex-val');
+    if (guiHex) guiHex.textContent = guiColor.toUpperCase();
+    const guiPicker = document.getElementById('gui-color-picker');
+    if (guiPicker && guiPicker.value !== guiColor && guiColor.startsWith('#')) {
+        guiPicker.value = guiColor;
+    }
+
+    // Класи шрифту, текстури та стилізації
+    document.body.classList.toggle('custom-font', fontState);
+    document.body.classList.toggle('pattern-back', backState);
+    document.body.classList.toggle('glow-effects', thingsState);
+    document.body.classList.toggle('cossack-mode', cossackLang);
 }
 
 function updateUI() {
-    if (inputH && inputO && inputS && inputH2 && inputO2 && inputS2) {
-        inputH.value = h;
-        inputO.value = o;
-        inputS.value = s;
-        inputH2.value = h2;
-        inputO2.value = o2;
-        inputS2.value = s2;
-    }
-    
-    if (fontCheckbox) fontCheckbox.checked = fontState;
-    if (backCheckbox) backCheckbox.checked = backState;
-    if (thingsCheckbox) thingsCheckbox.checked = thingsState;
-    
+    const bgPicker = document.getElementById('bg-color-picker');
+    if (bgPicker && bgColor.startsWith('#')) bgPicker.value = bgColor;
+    const guiPicker = document.getElementById('gui-color-picker');
+    if (guiPicker && guiColor.startsWith('#')) guiPicker.value = guiColor;
+
+    const tVoice = document.getElementById('toggle-voice-minigame');
+    if (tVoice) tVoice.checked = voiceMiniGame;
+
+    const tCossack = document.getElementById('toggle-cossack-lang');
+    if (tCossack) tCossack.checked = cossackLang;
+
+    const tFonts = document.getElementById('toggle-fonts');
+    if (tFonts) tFonts.checked = fontState;
+
+    const tBack = document.getElementById('toggle-back');
+    if (tBack) tBack.checked = backState;
+
+    const tThings = document.getElementById('toggle-things');
+    if (tThings) tThings.checked = thingsState;
+
     applyColors();
 }
 
 async function saveToFirebase() {
     if (!currentUserUid) return;
-    const settings = { h, o, s, h2, o2, s2, fontState, backState, thingsState };
+    const settings = {
+        h, o, s, h2, o2, s2,
+        bgColor,
+        guiColor,
+        voiceMiniGame,
+        cossackLang,
+        fontState,
+        backState,
+        thingsState
+    };
     await setDoc(doc(db, "users", currentUserUid), { settings }, { merge: true });
 }
 
@@ -122,34 +155,38 @@ function scheduleSave() {
     saveTimeout = setTimeout(saveToFirebase, 1000);
 }
 
-if (inputH) {
-    [inputH, inputO, inputS, inputH2, inputO2, inputS2].forEach(input => {
-        input.addEventListener('input', (e) => {
-            if(e.target === inputH) h = e.target.value;
-            if(e.target === inputO) o = e.target.value;
-            if(e.target === inputS) s = e.target.value;
-            if(e.target === inputH2) h2 = e.target.value;
-            if(e.target === inputO2) o2 = e.target.value;
-            if(e.target === inputS2) s2 = e.target.value;
-            
-            applyColors();
-            scheduleSave();
-        });
+// Слухачі для кольорових квадратів
+const inputBgColor = document.getElementById('bg-color-picker');
+if (inputBgColor) {
+    inputBgColor.addEventListener('input', (e) => {
+        bgColor = e.target.value;
+        applyColors();
+        scheduleSave();
     });
 }
 
-const toggles = [
-    { el: fontCheckbox, key: 'fontState' },
-    { el: backCheckbox, key: 'backState' },
-    { el: thingsCheckbox, key: 'thingsState' }
-];
+const inputGuiColor = document.getElementById('gui-color-picker');
+if (inputGuiColor) {
+    inputGuiColor.addEventListener('input', (e) => {
+        guiColor = e.target.value;
+        applyColors();
+        scheduleSave();
+    });
+}
 
-toggles.forEach(item => {
-    if (item.el) {
-        item.el.addEventListener('change', function() {
-            if(item.key === 'fontState') fontState = this.checked;
-            if(item.key === 'backState') backState = this.checked;
-            if(item.key === 'thingsState') thingsState = this.checked;
+// Слухачі для перемикачів розділу "Інше"
+[
+    { id: 'toggle-voice-minigame', setter: (v) => { voiceMiniGame = v; } },
+    { id: 'toggle-cossack-lang', setter: (v) => { cossackLang = v; } },
+    { id: 'toggle-fonts', setter: (v) => { fontState = v; } },
+    { id: 'toggle-back', setter: (v) => { backState = v; } },
+    { id: 'toggle-things', setter: (v) => { thingsState = v; } }
+].forEach(({ id, setter }) => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('change', function() {
+            setter(this.checked);
+            applyColors();
             scheduleSave();
         });
     }
@@ -174,10 +211,13 @@ if (isLobbyPage) {
 }
 
 function handleFirstLogin() {
-    h = 200;
-    o = 50;
-    s = 50;
-    
+    bgColor = '#0e1117';
+    guiColor = '#c5a47e';
+    voiceMiniGame = false;
+    cossackLang = false;
+    fontState = false;
+    backState = false;
+    thingsState = false;
     updateUI();
 }
 
@@ -202,34 +242,47 @@ window.loadTopPlayers = async function() {
         const q = query(collection(db, "users"), orderBy("highScore", "desc"), limit(10));
         const querySnapshot = await getDocs(q);
         
-        let html = '';
+        leaderboardEl.innerHTML = '';
         let count = 0;
         
         querySnapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const name = data.displayName || "user";
             const score = data.highScore || 0;
-            html += `<li><span>${name}</span><span>${score}</span></li>`;
+            
+            const li = document.createElement('li');
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            const scoreSpan = document.createElement('span');
+            scoreSpan.textContent = String(score);
+            li.appendChild(nameSpan);
+            li.appendChild(scoreSpan);
+            leaderboardEl.appendChild(li);
             count++;
         });
 
         for (let i = count; i < 10; i++) {
-            html += `<li><span>user</span><span>0</span></li>`;
+            const li = document.createElement('li');
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = "user";
+            const scoreSpan = document.createElement('span');
+            scoreSpan.textContent = "0";
+            li.appendChild(nameSpan);
+            li.appendChild(scoreSpan);
+            leaderboardEl.appendChild(li);
         }
-
-        leaderboardEl.innerHTML = html;
     } catch (error) {
         console.error(error);
     }
 };
 
 window.showLeaderboard = function() {
-    document.getElementById('leaderboard-modal').classList.remove('hidden');
+    document.getElementById('leaderboard-modal')?.classList.remove('hidden');
     window.loadTopPlayers();
 };
 
 window.hideLeaderboard = function() {
-    document.getElementById('leaderboard-modal').classList.add('hidden');
+    document.getElementById('leaderboard-modal')?.classList.add('hidden');
 };
 
 onAuthStateChanged(auth, async (user) => {
@@ -245,7 +298,11 @@ onAuthStateChanged(auth, async (user) => {
             if (!docSnap.exists()) {
                 handleFirstLogin();
                 
-                const initialSettings = { h, o, s, h2, o2, s2, fontState, backState, thingsState };
+                const initialSettings = { 
+                    h, o, s, h2, o2, s2, 
+                    bgColor, guiColor, voiceMiniGame, cossackLang,
+                    fontState, backState, thingsState 
+                };
                 await setDoc(docRef, { 
                     settings: initialSettings,
                     displayName: user.displayName || "user",
@@ -260,12 +317,6 @@ onAuthStateChanged(auth, async (user) => {
                 }
             }
 
-            // Створює progress для нового акаунта або доповнює наявний
-            // (акаунти, створені до Етапу 1, мають лише settings і highScore).
-            //
-            // Помилку навмисно не прокидаємо далі: якщо Firestore Rules
-            // відхилять запис, гра має лишитись робочою в частині входу
-            // й налаштувань, а не впасти повністю.
             try {
                 currentProgress = await ensureProgress(currentUserUid);
             } catch (error) {
@@ -282,6 +333,11 @@ onAuthStateChanged(auth, async (user) => {
                     h = data.h ?? 0; o = data.o ?? 0; s = data.s ?? 0;
                     h2 = data.h2 ?? 0; o2 = data.o2 ?? 0; s2 = data.s2 ?? 0;
                     
+                    bgColor = data.bgColor || (data.h !== undefined && data.o && data.s ? `hsl(${data.h}, ${data.o}%, ${data.s}%)` : '#0e1117');
+                    guiColor = data.guiColor || '#c5a47e';
+                    voiceMiniGame = !!data.voiceMiniGame;
+                    cossackLang = !!data.cossackLang;
+
                     fontState = !!data.fontState; 
                     backState = !!data.backState; 
                     thingsState = !!data.thingsState;

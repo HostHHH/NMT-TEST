@@ -1,0 +1,322 @@
+/* about/about.css */
+/* Охайне оформлення наукового опису проєкту «iSторія» */
+
+.about-container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 40px;
+}
+
+.about-hero-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 3px solid var(--gui-color);
+    border-radius: 14px;
+    padding: 26px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+.about-hero-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.about-main-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--gui-color);
+    margin: 0;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.about-subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Секції та картки */
+.about-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 3px solid var(--gui-color);
+    border-radius: 14px;
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.about-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.32);
+}
+
+.about-card-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--gui-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+}
+
+.about-p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    margin: 0;
+    text-align: justify;
+}
+
+.about-highlight-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--gui-color);
+    border-radius: 8px;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+/* Модулі платформи у вигляді охайної сітки */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 4px;
+}
+
+.module-item {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color var(--transition), transform var(--transition);
+}
+
+.module-item:hover {
+    border-color: var(--gui-color);
+    transform: translateY(-2px);
+}
+
+.module-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gui-color);
+}
+
+.module-icon {
+    font-size: 18px;
+}
+
+.module-desc {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* Джерела */
+.sources-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed var(--border-subtle);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.sources-title {
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   РОЗДІЛ: ТЕЛЕГРАМ-БОТ ТА СИСТЕМА ВЕРИФІКАЦІЇ
+   ══════════════════════════════════════════════════════════════ */
+.bot-hero-badge {
+    background: rgba(41, 169, 235, 0.15);
+    border: 1px solid rgba(41, 169, 235, 0.35);
+    color: #29a9eb;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Покроковий пайплайн роботи бота */
+.pipeline-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+    margin: 8px 0;
+}
+
+.pipeline-step {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    transition: all var(--transition);
+}
+
+.pipeline-step:hover {
+    border-color: #29a9eb;
+    transform: translateY(-2px);
+}
+
+.step-num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gui-color);
+    color: #0e1117;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.step-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.step-desc {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+/* Макет чату Telegram */
+.bot-chat-preview {
+    background: #0f1822;
+    border: 1px solid rgba(41, 169, 235, 0.25);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 6px 0;
+}
+
+.chat-bubble {
+    background: rgba(255, 255, 255, 0.04);
+    border-left: 3px solid #29a9eb;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #e1e8ed;
+}
+
+.chat-bubble-author {
+    font-size: 11px;
+    font-weight: 700;
+    color: #29a9eb;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chat-code-pill {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px dashed var(--gui-color);
+    color: var(--gui-color);
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    margin: 4px 0;
+    user-select: all;
+}
+
+/* Команди бота */
+.bot-cmd-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+.bot-cmd-card {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bot-cmd-name {
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #29a9eb;
+}
+
+.bot-cmd-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .about-hero-card,
+    .about-card {
+        padding: 18px 16px;
+    }
+    .about-main-title {
+        font-size: 20px;
+    }
+    .about-p {
+        font-size: 13.5px;
+        text-align: left;
+    }
+    .modules-grid {
+        grid-template-columns: 1fr;
+    }
+}

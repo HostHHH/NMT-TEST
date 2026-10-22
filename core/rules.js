@@ -342,7 +342,7 @@ function certificatePayload(uid, completedAtMs) {
     return `${CERTIFICATE.VERSION}|${uid}|${Math.floor(completedAtMs)}|${CERTIFICATE.SALT}`;
 }
 
-// Детермінований код виду LMB-A3K9-QW2M-7XPT.
+// Детермінований код виду IST-A3K9-QW2M-7XPT.
 // Однакові (uid, completedAtMs) завжди дають однаковий результат.
 export function generateCertificateCode(uid, completedAtMs) {
     if (typeof uid !== 'string' || uid.length === 0) {

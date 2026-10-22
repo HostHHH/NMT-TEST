@@ -1,218 +1,17 @@
-
-* {
-  box-sizing: border-box;
-  margin: 0; 
-  padding: 0;
-   font-family: 'Tektur', sans-serif;
-}
-
-body {
-    background: black;
-
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-justify-content: center;
-  margin: 0;
-  padding: 0;
-
-}
-
-
-
-div{
-  transition: 1s;
-}
-p{
-  transition: 1s;
-}
-.menu {
-  width: 200px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-  position: absolute;
-  left: 0;
-  top: 0;
-  gap:20px
-}
-
-
-.block {
-  background: #707070;
-  border: 10px solid #707070;
-  width: 180px;
-  height: 80px;
-  border-radius: 5%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  transition: 1s
-}
-
-
-
-
-.block:hover {
-  border: 10px solid #ffffff55;
-
-  font-size: 25px;
-}
-
-.hidden {
-    display: none;
-}
-.selected{
-  border: 10px solid #7c7c7c;
-
-  font-size: 25px;
-}
-.styled{
-    background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  border-radius: 15px;
-  transition:1s;
-font-family: 'KyivType', serif;
-}
-.introducing{
-  width: 70vh;
-  height: 50vh;
-    border: 8px solid rgba(255, 255, 255, 0.432);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.coloring{
-
-  width: 80%;
-  height: 20%;
- align-self: center;
- 
-}
-
-.abs{
-    position: absolute;
-}
-.onIt{
-  width: 50px;
-  height: 20%;
-  align-self: center;
-  font-size: 10px;
-}
-.colorInside {
-
-height: 50%;
-width: 100%;
-gap: 10px;
-display: flex;
-}
-
-.down {
-    margin-top: 90px; 
-    height: 30%;
-}
-.settings{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 40%;
-  height: 60%;
-  align-self: end;
- gap:20%
-}
-
-.test{
-  border: 5px solid red;
-}
-.colorsIns{
-  display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-align-self: center;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 30px;
-  height: 17px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 17px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 13px;
-  width: 13px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(13px);
-}
-.SwitcherIn{
-  display: flex;
-  gap: 20px
-}
-@font-face {
-    font-family: 'B52';
-    src: url('../shared/fonts/B52.ttf') format('truetype');
-}
-.B52 * {
-  font-family: 'B52';
-}
-@font-face {
-    font-family: 'Kobzar KS';
-    src: url('../shared/fonts/KobzarKS_v1-020.otf') format('opentype');
-}
-
+/* ── Автентичні шрифти ── */
 @font-face {
     font-family: 'KyivType Sans';
     src: url('../shared/fonts/KyivTypeSans-VarGX.ttf') format('truetype');
 }
-
 @font-face {
     font-family: 'Mariupol';
     font-weight: bold;
     src: url('../shared/fonts/Mariupol-Bold.ttf') format('truetype');
 }
-
+@font-face {
+    font-family: 'Kobzar KS';
+    src: url('../shared/fonts/KobzarKS_v1-020.otf') format('opentype');
+}
 @font-face {
     font-family: 'Rutenia';
     src: url('../shared/fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
@@ -220,62 +19,1169 @@ input:checked + .slider:before {
 @font-face {
     font-family: 'Tektur';
     src: url('../shared/fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
-    font-weight: 500 900; 
-    font-style: normal;
-}
-.info{
-  height: 80vh;
-  width: 40%;
-  font-size: 30px;
-}
-.hidden{
-  display: none;
-}
-.set {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-
-  background-color: rgba(0, 0, 0, 0);
-  border: 0px solid red;
-  background-size: 50%;
+    font-weight: 400 900;
 }
 
-.home {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-
-  background-color: rgba(0, 0, 0, 0);
-  border: 0px solid red;
-  background-size: 50%;
+:root {
+    --bg-dark: #0e1117;
+    --gui-color: #c5a47e;
+    --accent-gold: var(--gui-color);
+    --text-primary: #f0f3f6;
+    --text-secondary: #8b949e;
+    --text-muted: #6e7681;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-active: var(--gui-color);
+    --card-bg: rgba(22, 27, 34, 0.88);
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.gameIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-
-  background-color: rgba(0, 0, 0, 0);
-  border: 0px solid red;
-  background-size: 50%;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Tektur', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.gameIcon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-
-  background-color: rgba(0, 0, 0, 0);
-  border: 0px solid red;
-  background-size: 50%;
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+    transition: background-color 0.25s ease;
 }
 
+body.custom-font * {
+    font-family: 'Mariupol', 'KyivType Sans', sans-serif !important;
+}
+
+body.glow-effects .ctrl-play,
+body.glow-effects .color-square {
+    box-shadow: 0 0 16px var(--gui-color);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ══════════════════════════════════════════
+   ФАКТУРА ФОНУ: АНІМОВАНІ ГЕОМЕТРИЧНІ ФІГУРИ
+   (Вмикаються та вимикаються перемикачем)
+   ══════════════════════════════════════════ */
+.bg-shapes-container,
+.floating-shapes-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Коли перемикач "Фактура фону" увімкнений */
+body.pattern-back .bg-shapes-container,
+body.pattern-back .floating-shapes-backdrop {
+    opacity: 1;
+    visibility: visible;
+}
+
+body.pattern-back {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.floating-shape {
+    position: absolute;
+    bottom: -90px;
+    will-change: transform, opacity;
+    pointer-events: none;
+    animation: floatRotateUp linear infinite;
+}
+
+/* Квадрати із заокругленими кутами */
+.shape-sq-1 {
+    left: 8%;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    border: 2px solid var(--gui-color);
+    --shape-op: 0.22;
+    animation-duration: 21s;
+    animation-delay: -3s;
+    animation-name: floatRotateUp;
+}
+
+.shape-sq-2 {
+    left: 28%;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--gui-color);
+    --shape-op: 0.13;
+    animation-duration: 27s;
+    animation-delay: -14s;
+    animation-name: floatRotateUpAlt;
+}
+
+.shape-sq-3 {
+    left: 52%;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1.5px solid var(--gui-color);
+    --shape-op: 0.22;
+    animation-duration: 17s;
+    animation-delay: -7s;
+    animation-name: floatRotateUp;
+}
+
+.shape-sq-4 {
+    left: 74%;
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    border: 2px solid var(--gui-color);
+    --shape-op: 0.17;
+    animation-duration: 24s;
+    animation-delay: -18s;
+    animation-name: floatRotateUpAlt;
+}
+
+.shape-sq-5 {
+    left: 92%;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--gui-color);
+    --shape-op: 0.14;
+    animation-duration: 19s;
+    animation-delay: -9s;
+    animation-name: floatRotateUp;
+}
+
+/* Кружальця */
+.shape-ci-1 {
+    left: 18%;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid var(--gui-color);
+    --shape-op: 0.2;
+    animation-duration: 25s;
+    animation-delay: -8s;
+    animation-name: floatRotateUpAlt;
+}
+
+.shape-ci-2 {
+    left: 40%;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--gui-color);
+    --shape-op: 0.15;
+    animation-duration: 18s;
+    animation-delay: -2s;
+    animation-name: floatRotateUp;
+}
+
+.shape-ci-3 {
+    left: 64%;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 2px solid var(--gui-color);
+    --shape-op: 0.18;
+    animation-duration: 30s;
+    animation-delay: -21s;
+    animation-name: floatRotateUp;
+}
+
+.shape-ci-4 {
+    left: 84%;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--gui-color);
+    --shape-op: 0.15;
+    animation-duration: 16s;
+    animation-delay: -5s;
+    animation-name: floatRotateUpAlt;
+}
+
+.shape-ci-5 {
+    left: 3%;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gui-color);
+    --shape-op: 0.2;
+    animation-duration: 22s;
+    animation-delay: -13s;
+    animation-name: floatRotateUp;
+}
+
+/* Повноцінний рух знизу через увесь екран вгору */
+@keyframes floatRotateUp {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg) scale(0.9);
+        opacity: 0;
+    }
+    10% {
+        opacity: var(--shape-op, 0.2);
+    }
+    50% {
+        transform: translateY(calc(-55vh - 50px)) translateX(22px) rotate(180deg) scale(1);
+    }
+    85% {
+        opacity: var(--shape-op, 0.2);
+    }
+    100% {
+        transform: translateY(calc(-105vh - 120px)) translateX(38px) rotate(360deg) scale(1.05);
+        opacity: 0;
+    }
+}
+
+/* Альтернативна траєкторія з легким зміщенням ліворуч і зворотним обертанням */
+@keyframes floatRotateUpAlt {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg) scale(0.85);
+        opacity: 0;
+    }
+    10% {
+        opacity: var(--shape-op, 0.18);
+    }
+    50% {
+        transform: translateY(calc(-55vh - 50px)) translateX(-24px) rotate(-180deg) scale(1);
+    }
+    85% {
+        opacity: var(--shape-op, 0.18);
+    }
+    100% {
+        transform: translateY(calc(-105vh - 120px)) translateX(-40px) rotate(-360deg) scale(1.05);
+        opacity: 0;
+    }
+}
+
+/* ── Верхня навігаційна панель ── */
+.top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(14, 17, 23, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 1000;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.nav-brand-tag {
+    font-size: 11px;
+    font-weight: 800;
+    background: var(--gui-color);
+    color: #0e1117;
+    padding: 2px 7px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.nav-brand-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all var(--transition);
+}
+
+.nav-link svg {
+    opacity: 0.8;
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link.active {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--gui-color);
+}
+
+.nav-link.active svg {
+    opacity: 1;
+    color: var(--gui-color);
+}
+
+.nav-logout {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e06c75;
+}
+
+.nav-logout:hover {
+    background: rgba(224, 108, 117, 0.12);
+    color: #ff7b85;
+}
+
+/* ── Контейнер сторінки ── */
+.page-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 76px 16px 36px;
+    position: relative;
+    z-index: 1;
+}
+
+.settings-grid {
+    width: 100%;
+    max-width: 920px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+/* ══════════════════════════════════════════
+   ВАРІАНТ 4: ПОДВІЙНИЙ АКЦЕНТ ДЕТАЛЕЙ НА БЛОКАХ
+   (Рамки + Заголовки + Бейджі + Кнопки)
+   ══════════════════════════════════════════ */
+.settings-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 3px solid var(--gui-color); /* Акцентна верхня лінія */
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.settings-card:hover {
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Позиціонування: Музика зліва, Кольори справа, Інше знизу */
+.music-section {
+    grid-column: 1;
+}
+
+.style-section {
+    grid-column: 2;
+}
+
+.other-section {
+    grid-column: 1 / -1;
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Заголовок блоку у кольорі GUI */
+.card-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--gui-color);
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Бейдж блоку у стилістиці GUI */
+.card-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gui-color);
+    border: 1px solid var(--gui-color);
+    background: rgba(0, 0, 0, 0.35);
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.4px;
+}
+
+/* ══════════════════════════════════════════
+   1. БЛОК МУЗИКИ ТА ПЛЕЙЛИСТИ
+   ══════════════════════════════════════════ */
+
+/* Чіпи вибору плейлистів */
+.playlists-nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.playlist-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition);
+    user-select: none;
+}
+
+.playlist-chip:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--gui-color);
+    color: var(--text-primary);
+}
+
+.playlist-chip.active {
+    background: rgba(0, 0, 0, 0.45);
+    border-color: var(--gui-color);
+    color: var(--gui-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.chip-icon {
+    font-size: 13px;
+}
+
+/* Банер активного плейлиста */
+.playlist-banner {
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--gui-color);
+    border-radius: 8px;
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pl-banner-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.pl-banner-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+/* Основний блок плеєра */
+.music-player-box {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.track-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.track-icon {
+    width: 42px;
+    height: 42px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--gui-color);
+    color: var(--gui-color);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.track-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.track-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-group {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playing-state-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.playing-state-badge.playing {
+    background: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border-color: rgba(46, 204, 113, 0.35);
+}
+
+/* Смуга відтворення */
+.timeline-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    min-width: 32px;
+    font-variant-numeric: tabular-nums;
+}
+
+.timeline-bar {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.12);
+    outline: none;
+    cursor: pointer;
+}
+
+.timeline-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gui-color);
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    border: 2px solid #0e1117;
+}
+
+/* Кнопки плеєра */
+.controls-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.ctrl-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    color: var(--text-primary);
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--gui-color);
+    color: var(--gui-color);
+}
+
+.ctrl-btn.ctrl-play {
+    width: 44px;
+    height: 44px;
+    background: var(--gui-color);
+    border-color: var(--gui-color);
+    color: #0e1117;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.ctrl-btn.ctrl-play:hover {
+    filter: brightness(1.1);
+    transform: scale(1.03);
+    color: #000;
+}
+
+/* Регулятор гучності */
+.volume-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 4px 0 4px;
+}
+
+.vol-btn {
+    background: transparent;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0;
+    line-height: 1;
+    transition: transform var(--transition);
+}
+
+.vol-btn:hover {
+    transform: scale(1.15);
+}
+
+.volume-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    outline: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gui-color);
+    cursor: pointer;
+}
+
+.vol-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    min-width: 30px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+/* Список треків поточного плейлиста */
+.tracklist-box {
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tracklist-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tracklist-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.live-radio-pill {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all var(--transition);
+}
+
+.live-radio-pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+    border-color: var(--gui-color);
+}
+
+.live-radio-pill.active {
+    background: rgba(231, 76, 60, 0.18);
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.live-radio-pill.active::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #e74c3c;
+    box-shadow: 0 0 6px #e74c3c;
+    display: inline-block;
+    animation: livePulse 1.4s infinite ease-in-out;
+}
+
+@keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.75); }
+}
+
+.tracklist-count {
+    color: var(--gui-color);
+}
+
+.tracklist-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 175px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.tracklist-items::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tracklist-items::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 2px;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.02);
+    user-select: none;
+}
+
+.track-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.track-item.active {
+    background: rgba(0, 0, 0, 0.45);
+    border-color: var(--gui-color);
+}
+
+.track-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 18px;
+    font-variant-numeric: tabular-nums;
+}
+
+.track-item.active .track-num {
+    color: var(--gui-color);
+}
+
+.track-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.track-row-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-row-artist {
+    font-size: 10px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track-row-duration {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    margin-right: 4px;
+}
+
+.track-row-icon {
+    font-size: 11px;
+    color: var(--gui-color);
+    opacity: 0.5;
+    transition: opacity 0.15s;
+    width: 12px;
+    text-align: center;
+}
+
+.track-item:hover .track-row-icon,
+.track-item.active .track-row-icon {
+    opacity: 1;
+}
+
+/* Спливаюче повідомлення плеєра */
+.player-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(14, 17, 23, 0.95);
+    border: 1px solid var(--gui-color);
+    color: var(--text-primary);
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 10000;
+}
+
+.player-toast.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ══════════════════════════════════════════
+   2. БЛОК СТИЛЬ ТА КОЛЬОРИ (2 КВАДРАТИ)
+   ══════════════════════════════════════════ */
+.color-squares-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.color-picker-card {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color var(--transition);
+}
+
+.color-picker-card:hover {
+    border-color: var(--gui-color);
+}
+
+/* Квадрат-прев'ю */
+.color-square {
+    position: relative;
+    width: 68px;
+    height: 68px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.22);
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+    transition: transform var(--transition), border-color var(--transition);
+}
+
+.color-square:hover {
+    transform: scale(1.04);
+    border-color: var(--gui-color);
+}
+
+.square-badge {
+    font-size: 10px;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+.hidden-native-picker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.color-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.color-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.color-code {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gui-color);
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+/* Пресети кольорів (квадратики в рядок) */
+.presets-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.presets-heading {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.presets-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.preset-square-btn {
+    flex: 1;
+    min-width: 58px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 8px 6px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition);
+}
+
+.preset-square-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--gui-color);
+    transform: translateY(-2px);
+}
+
+.preset-fill {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: block;
+}
+
+.preset-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+/* ══════════════════════════════════════════
+   3. БЛОК ІНШЕ (OTHER)
+   ══════════════════════════════════════════ */
+.toggles-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+}
+
+.toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toggle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.toggle-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.toggle-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Перемикач Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
+    transition: 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+input:checked + .slider {
+    background-color: var(--gui-color);
+    border-color: var(--gui-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(18px);
+}
+
+/* Сповіщення (Toast) */
+/* ── Адаптивність ── */
+@media (max-width: 780px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+    .music-section {
+        grid-column: 1;
+    }
+    .style-section {
+        grid-column: 1;
+    }
+    .other-section {
+        grid-column: 1;
+    }
+    .toggles-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .color-squares-row {
+        grid-template-columns: 1fr;
+    }
+    .top-nav {
+        padding: 0 14px;
+    }
+    .nav-link span {
+        display: none;
+    }
+    .settings-card {
+        padding: 16px;
+    }
+}

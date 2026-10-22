@@ -1,53 +1,562 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
-    <link rel="stylesheet" href="game.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iSторія — Козацький Шлях: Битва за Волю</title>
+  <link rel="stylesheet" href="../home/style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-          <div class="menu ">
-    <button onclick="goToDef()" class="set">⚙️</button>
+  <!-- Верхня панель навігації -->
+  <header class="top-nav">
+      <a href="../map/map.html" class="nav-brand">
+          <span class="nav-brand-tag">iS</span>
+          <span class="nav-brand-title">iSторія</span>
+      </a>
 
-    <button onclick="goToMap()" class="home">🏠</button>
-<button onclick="goToGame()" class="gameIcon">🎮</button>
+      <nav class="nav-menu">
+          <a href="../map/map.html" class="nav-link" title="3D Карта стадій">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"></polygon><line x1="9" y1="3" x2="9" y2="18"></line><line x1="15" y1="6" x2="15" y2="21"></line></svg>
+              <span>Карта</span>
+          </a>
+          <a href="../game/game.html" class="nav-link active" title="Козацький Шлях">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="11" x2="15.01" y2="11"></line><line x1="18" y1="13" x2="18.01" y2="13"></line></svg>
+              <span>Гра</span>
+          </a>
+          <a href="../about/about.html" class="nav-link" title="Про науковий проєкт">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+              <span>Про проєкт</span>
+          </a>
+          <a href="../home/index.html" class="nav-link" title="Налаштування теми">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+              <span>Налаштування</span>
+          </a>
+          <button id="logout-btn" class="nav-link nav-logout" title="Вийти з акаунту">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <span>Вийти</span>
+          </button>
+      </nav>
+  </header>
 
+  <!-- Екран Смерті -->
+  <div id="deathOverlay" class="death-overlay hidden">
+    <div class="death-vignette"></div>
+    <div class="death-modal-card">
+      <div class="death-emblem">☠️ ⚔️ ☠️</div>
+      <h1 class="death-title" id="deathTitle">ВИ ЗАГИНУЛИ</h1>
+      <p class="death-text" id="deathSubtitle">Ваше хоробре військо було розбите, але дух козацький не зламати...</p>
+
+      <!-- Картка полеглого командира -->
+      <div class="death-hero-fallen" id="deathHeroFallen">
+        <div class="death-hero-avatar" id="deathHeroAvatar"></div>
+        <div class="death-hero-details">
+          <span class="death-hero-label">Полеглий лицар:</span>
+          <span class="death-hero-title" id="deathHeroTitle">Бодька Хмельницький</span>
+          <p class="death-hero-last-words" id="deathHeroLastWords">«Нехай інший гетьман підніме мою булаву!»</p>
+        </div>
       </div>
 
-    <button class="btn show-leaderboard" onclick="showLeaderboard()">Top 10</button>
+      <div class="death-actions">
+        <button id="deathRetryBtn" class="wood-btn death-btn death-retry-btn" onclick="retryGame()">⚔️ Спробувати Знову</button>
+        <button id="deathRestartBtn" class="wood-btn death-btn death-menu-btn" onclick="restartGame()">🏛️ До Головного Меню</button>
+      </div>
+    </div>
+  </div>
 
-    <div id="leaderboard-modal" class="leaderboard-container hidden">
-        <h2>Топ 10 Гравців</h2>
-        <ul id="leaderboard-list"></ul>
-        <button class="btn close-leaderboard" onclick="hideLeaderboard()">Закрити</button>
+  <!-- Катсцена -->
+  <div id="cutsceneOverlay" class="cutscene-overlay hidden">
+    <div class="cutscene-content">
+      <img src="https://lh3.googleusercontent.com/d/1GZtuUiAZ7RML6HIC12HXH35ZfjUOafzG" alt="Богдан" class="cutscene-portrait">
+      <div class="cutscene-dialog">
+        <p id="cutsceneText"></p>
+        <button id="cutsceneNextBtn" class="wood-btn" onclick="nextCutsceneDialog()">Далі ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Головне Меню -->
+  <div id="gameMenu" class="menu-overlay">
+
+    <!-- Модальне вікно Магазину -->
+    <div class="shop-screen hidden" id="shop">
+      <div class="score shopVar" id="ShopScore"></div>
+      <button class="wood-btn exit-shop-btn" onclick="showShop()">
+        ✖ Вийти
+      </button>
+
+      <!-- Список товарів на сувої -->
+      <div class="scroll-shop-list" id="shopGoodsList"></div>
+
+      <!-- Панель Інвентарю та Мішка -->
+      <div class="shop-inventory-panel">
+        <!-- Склад (Інвентар 5x4 = 20 слотів) -->
+        <div class="panel-section">
+          <div class="section-header">
+            <span class="section-title">Склад</span>
+            <div class="header-tools">
+              <span class="slot-count" id="invCount">0/20</span>
+              <div class="trash-zone" id="trashZone" title="Смітник: перетягніть сюди предмет для видалення">
+                <span class="trash-icon">🗑️</span>
+              </div>
+            </div>
+          </div>
+          <div class="inventory-grid" id="inventoryGrid"></div>
+        </div>
+
+        <div class="panel-section bag-section">
+          <div class="section-header">
+            <span class="section-title">Бойовий мішок</span>
+            <span class="slot-count" id="bagCount">0/5</span>
+          </div>
+          <div class="bag-grid" id="bagGrid"></div>
+        </div>
+      </div>
+
+      <div id="shopToast" class="shop-toast hidden"></div>
     </div>
 
-    <div class="invisible-line hidden"></div>
-    <div class="def">:)</div>
-    <div class="scored hidden">Score: 0</div>
-    
-    <div class="hearts hidden">Hearts: 3</div>
-    <button class="bonus hidden" onclick="RandomEvent()">bonus</button>
-    
-    <div class="mobile-controls">
-        <button class="left-btn btnMove" onclick="moveLeft()"></button>
-        <button class="right-btn btnMove" onclick="moveRight()"></button>
+    <!-- Модальне вікно Літопису та Правил -->
+    <div class="readme-modal hidden" id="readmeModal">
+      <div class="modal-header">
+        <span class="modal-title">📜 Літопис та Бойові Правила</span>
+        <button class="modal-close-btn" onclick="toggleReadme()">✖</button>
+      </div>
+      <div class="readme-scroll-content">
+        <div class="readme-intro">
+          <h2>Усім здоров, славні лицарі!</h2>
+          <p>Це тактична козацька битва, де кожен хід вимагає мудрості, розрахунку та козацького хитрощу. Виступайте в ролі одного з великих правителів України!</p>
+        </div>
+
+        <h3 class="readme-section-title">⚔️ Бойові Маневри та Атаки</h3>
+        <div class="readme-grid">
+          <div class="readme-card">
+            <div class="card-title">Задум Молодого Джури</div>
+            <div class="card-damage">Шкода: 40 - 120 HP</div>
+            <p>Молодий джура радить несподівану ідею для атаки ворога з флангу або незручної позиції.</p>
+          </div>
+
+          <div class="readme-card">
+            <div class="card-title">Залп із Засідки</div>
+            <div class="card-damage">Шкода: 0 - 80 HP (Залежить від прицілу)</div>
+            <p>Ви із загоном ховаєтесь у засідці. Керування прицілом: <kbd>A</kbd> / <kbd>D</kbd> або повзунок, точний залп: клік мишкою, дотик до екрана або <kbd>ПРОБІЛ</kbd>.</p>
+          </div>
+
+          <div class="readme-card">
+            <div class="card-title">Штабний Удар</div>
+            <div class="card-damage">Шкода: 50 HP</div>
+            <p>Пряма надійна атака козацького війська без хитрощів. Стабільне нанесення базової шкоди.</p>
+          </div>
+
+          <div class="readme-card">
+            <div class="card-title">Гетьманське Натхнення</div>
+            <div class="card-damage">Лікування: +50 HP | Баф: x1.25 шкоди</div>
+            <p>Рішуча промова гетьмана, що підіймає бойовий дух! Лікує військо та посилює наступний удар.</p>
+          </div>
+        </div>
+
+        <h3 class="readme-section-title">🛡️ Фракційні Особливості та Вороги</h3>
+        <div class="readme-faction-box">
+          <p>Кожен ворог належить до однієї з трьох фракцій: <strong>Московит</strong>, <strong>Татар</strong> або <strong>Поляк</strong>.</p>
+          <p>В залежності від обраного лицаря змінюється ефективність у бою:</p>
+          <ul>
+            <li><strong>Богдан Хмельницький:</strong> +15% проти Ляхів, -15% проти Татар, постійний баф x1.25.</li>
+            <li><strong>Олежко Передбач:</strong> +15% проти Московитів, -15% проти Татар, +50% золота за кожен бій.</li>
+            <li><strong>Байда Вишнелюб:</strong> +15% проти Татар, -15% проти Поляків, висока стійкість.</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    
-    <input class="color" type="color" id="nativeColorPicker" value="#0000ff">
-    <button class="btn start" onclick="start()">start</button>
-    
-    <div class="blocks-container">
-        <div class="LookBonus reverse hidden">Reversed Controls!</div> 
-        <div class="LookBonus lucky hidden">70% Luck!</div>
-        <div class="LookBonus slow hidden">Slow down!</div>
-        <div class="LookBonus shield hidden">Shield!</div>
+
+    <!-- Модальне вікно Вибору Героїв -->
+    <div class="characters-modal hidden" id="charactersModal">
+      <div class="modal-header">
+        <span class="modal-title">🛡️ Вибір Великого Лицаря</span>
+        <button class="modal-close-btn" onclick="pickChar()">✖</button>
+      </div>
+
+      <div class="char-modal-body">
+        <div class="char-selector-list">
+          <button class="hero-tab active" onclick="pickingHero(0)">Бодька Хмельницький</button>
+          <button class="hero-tab" onclick="pickingHero(1)">Олежко Передбач</button>
+          <button class="hero-tab" onclick="pickingHero(2)">Байда Вишнелюб</button>
+        </div>
+
+        <div class="char-details-area">
+          <!-- Богдан -->
+          <div class="char-details">
+            <div class="char-portrait-box">
+              <img src="https://lh3.googleusercontent.com/d/1GZtuUiAZ7RML6HIC12HXH35ZfjUOafzG" alt="Бодька">
+              <span class="char-badge">Військо Запорозьке</span>
+            </div>
+            <div class="char-info-box">
+              <h3>Бодька Хмельницький</h3>
+              <p class="desc">Проміняв спокій на люльку та гетьманство. Замість сімейних сварок пішов розносити ляхів під Жовтими Водами.</p>
+              <div class="stats-list">
+                <div class="stat-item"><span class="stat-lbl">Перевага:</span> +15% проти Ляхів</div>
+                <div class="stat-item"><span class="stat-lbl">Вразливість:</span> -15% проти Татар</div>
+                <div class="stat-item highlight"><span class="stat-lbl">Особливість:</span> Базовий множник шкоди x1.25</div>
+              </div>
+              <button class="select-hero-btn wood-btn" onclick="selectHero('bodka'); pickChar();">⚔️ Обрати Гетьмана</button>
+            </div>
+          </div>
+
+          <!-- Олег -->
+          <div class="char-details hidden">
+            <div class="char-portrait-box">
+              <img src="https://lh3.googleusercontent.com/d/1s-crFw98YTLUCE8CryYUqP0xGSmf6cSZ" alt="Олежко">
+              <span class="char-badge">Київська Русь</span>
+            </div>
+            <div class="char-info-box">
+              <h3>Олежко Передбач</h3>
+              <p class="desc">Прибив щит на ворота Царгорода й залутав купу золота. Помер від власного коня, але встиг навести страху на візантійців.</p>
+              <div class="stats-list">
+                <div class="stat-item"><span class="stat-lbl">Перевага:</span> +15% проти Московитів</div>
+                <div class="stat-item"><span class="stat-lbl">Вразливість:</span> -15% проти Татар</div>
+                <div class="stat-item highlight"><span class="stat-lbl">Особливість:</span> +50% більше золота за битви</div>
+              </div>
+              <button class="select-hero-btn wood-btn" onclick="selectHero('olezhko'); pickChar();">⚔️ Обрати Князя</button>
+            </div>
+          </div>
+
+          <!-- Байда -->
+          <div class="char-details hidden">
+            <div class="char-portrait-box">
+              <img src="https://lh3.googleusercontent.com/d/1i8lX1vupJFUOkvU0qsd4r9lARJGUstbe" alt="Байда">
+              <span class="char-badge">Запорозька Січ</span>
+            </div>
+            <div class="char-info-box">
+              <h3>Байда Вишнелюб</h3>
+              <p class="desc">Збудував першу Запорозьку Січ на Хортиці. Замість того, щоб слухати султана, висів на ребрі й плював на турків.</p>
+              <div class="stats-list">
+                <div class="stat-item"><span class="stat-lbl">Перевага:</span> +15% проти Татар</div>
+                <div class="stat-item"><span class="stat-lbl">Вразливість:</span> -15% проти Поляків</div>
+                <div class="stat-item highlight"><span class="stat-lbl">Особливість:</span> Незламна козацька лють та шабельний шквал</div>
+              </div>
+              <button class="select-hero-btn wood-btn" onclick="selectHero('baida'); pickChar();">⚔️ Обрати Отамана</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <script src="../shared/defFunc.js"></script>
-    <script type="module" src="../shared/main.js"></script>
-    <script src="game.js"></script>
-    <script type="module" src="bonus.js"></script>
+
+    <!-- Центральна Панель Головного Меню -->
+    <div class="menu-main-panel">
+      <div class="menu-heraldic-header">
+        <div class="menu-crest">⚔️ ⚜️ ⚔️</div>
+        <h1 id="menuTitle" class="main-title">КОЗАЦЬКИЙ ШЛЯХ</h1>
+        <p id="menuSubtitle" class="main-subtitle">Тактична битва великих лицарів України</p>
+      </div>
+
+      <!-- Картка обраного героя -->
+      <div class="selected-hero-card" onclick="pickChar()" title="Натисніть щоб обрати іншого лицаря">
+        <div class="selected-hero-thumb" id="selectedHeroThumb"></div>
+        <div class="selected-hero-info">
+          <span class="selected-hero-label">Обраний Лицар:</span>
+          <span class="selected-hero-name" id="selectedHeroName">Бодька Хмельницький</span>
+        </div>
+        <span class="selected-hero-btn">Змінити ➔</span>
+      </div>
+
+      <div id="menuButtons" class="menu-actions-stack">
+        <button id="startBtn" class="wood-btn menu-btn primary-start">⚔️ Розпочати Бій</button>
+        <button id="charBtn" class="wood-btn menu-btn" onclick="pickChar()">🛡️ Вибір Героя</button>
+        <button id="shopBtn" class="wood-btn menu-btn" onclick="showShop()">💰 Магазин і Склад</button>
+        <button id="rulesBtn" class="wood-btn menu-btn" onclick="toggleReadme()">📜 Літопис та Правила</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="vfxContainer" class="vfx-container"></div>
+  <div class="score" id="score"></div>
+  <div id="player" class="player ent">
+    <div id="playerPortrait"></div>
+    <div id="playerHp" class="hp-text">200</div>
+    <div id="playerName">Бодька Хмельницький</div>
+  </div>
+  <div class="hook hidden" id="hook"></div>
+
+  <div id="enemy" class="enemy ent">
+    <div id="enemyPortrait"></div>
+    <div id="enemyHp" class="hp-text">150</div>
+    <div id="enemyName">Московит</div>
+  </div>
+
+  <div class="hotbar" id="battleHotbar">
+    <div class="hotbar-attacks">
+      <button onclick="randomAttack()" class="attack" id="randomBtn">Задум Молодого Джури</button>
+      <button onclick="summonStrike()" class="attack" id="strikeBtn">Залп із Засідки</button>
+      <button onclick="basicAttack()" class="attack" id="basicBtn">Штабний Удар</button>
+      <button onclick="NewHeal()" class="attack" id="healBtn">Гетьманське Натхнення</button>
+    </div>
+    <div class="hotbar-divider"></div>
+    <div class="hotbar-bag-container">
+      <div class="hotbar-bag-header">
+        <span class="hotbar-bag-title">Бойовий мішок</span>
+      </div>
+      <div class="battle-bag-grid" id="battleBagGrid"></div>
+    </div>
+  </div>
+
+  <!-- Меню Прицілювання для атаки Strike -->
+  <div class="strike-modal hidden" id="strikeModal">
+    <div class="strike-panel">
+      <div class="strike-panel-header">
+        <span class="strike-panel-title">🎯 Залп із Засідки</span>
+      </div>
+      <div class="bar" id="strikeBar" title="Торкніться або перетягніть для наведення прицілу">
+        <div class="strike-center-mark"></div>
+        <div class="slider" id="slider"></div>
+        <div class="slider playerSl" id="playerSl"></div>
+      </div>
+      <div class="strike-aim-controls">
+        <button type="button" class="wood-btn strike-aim-btn" id="aimLeftBtn" title="Приціл ліворуч">◀ Вліво</button>
+        <button type="button" class="wood-btn strike-aim-btn" id="aimRightBtn" title="Приціл праворуч">Вправо ▶</button>
+      </div>
+      <div class="strike-instructions">
+        <div class="strike-controls-hint">Приціл: <kbd>A</kbd>/<kbd>D</kbd> або смуга</div>
+        <div class="strike-space-hint">Залп: клік або <kbd>ПРОБІЛ</kbd></div>
+      </div>
+      <button type="button" class="wood-btn strike-fire-btn" id="strikeFireBtn">🔥 ЗРОБИТИ ЗАЛП!</button>
+      <div class="strike-feedback hidden" id="strikeFeedback"></div>
+    </div>
+  </div>
+
+  <!-- Мінігра: Гнівний Заміс -->
+  <div class="brawl-modal hidden" id="brawlModal">
+    <div class="brawl-panel">
+      <div class="brawl-arena" id="brawlArena">
+        <div class="brawl-target" id="brawlTarget" onclick="brawlHit(event)">
+          <div class="brawl-target-text">БИЙ!</div>
+        </div>
+      </div>
+      <div class="brawl-stats">
+        <div class="brawl-stat-box">
+          <span class="brawl-stat-val" id="brawlHits">0</span>
+          <span class="brawl-stat-lbl">УДАРІВ</span>
+        </div>
+        <div class="brawl-timer-box">
+          <div class="brawl-timer-fill" id="brawlTimerFill"></div>
+          <span class="brawl-timer-text" id="brawlTimerText">4.5с</span>
+        </div>
+      </div>
+      <div class="brawl-rank" id="brawlRank">Розігрів...</div>
+    </div>
+  </div>
+
+  <!-- Мінігра: Гарматний Залп Хортиці -->
+  <div class="cannon-modal hidden" id="cannonModal">
+    <div class="cannon-panel">
+      <div class="cannon-field" id="cannonField">
+        <div class="cannon-target" id="cannonTarget" onclick="cannonHit(event)">
+          <div class="rifle-crosshair-dot"></div>
+        </div>
+      </div>
+      <div class="cannon-stats">
+        <div class="cannon-ammo-box">
+          <span class="cannon-ammo-label">Заряджено ядер:</span>
+          <span class="cannon-ammo-count" id="cannonAmmoCount">0</span>
+        </div>
+        <div class="cannon-timer-box">
+          <div class="cannon-timer-fill" id="cannonTimerFill"></div>
+          <span class="cannon-timer-text" id="cannonTimerText">5.0с</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Фінальна катсцена та титри після вбивства Смерті -->
+  <div id="finaleOverlay" class="finale-overlay hidden">
+    <!-- Сліпучий спалах наприкінці анімації -->
+    <div id="finaleFlash" class="finale-flash"></div>
+
+    <div class="finale-cinematic" id="finaleCinematic">
+      <div class="cinematic-bar top"></div>
+      <div class="cinematic-bar bottom"></div>
+
+      <!-- Камера з масштабуванням і тряскою -->
+      <div class="finale-camera" id="finaleCamera">
+        <!-- Магічний сяючий трикутник сил між трьома лицарями навколо Смерті -->
+        <svg class="triangle-energy-svg" id="triangleEnergySvg" viewBox="0 0 1000 850">
+          <defs>
+            <filter id="glowFilter" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <linearGradient id="beamGradBohdan" x1="50%" y1="0%" x2="15%" y2="100%">
+              <stop offset="0%" stop-color="#ffd700" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#29b6f6" stop-opacity="0.9" />
+            </linearGradient>
+            <linearGradient id="beamGradOleg" x1="15%" y1="100%" x2="85%" y2="100%">
+              <stop offset="0%" stop-color="#29b6f6" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#ff5722" stop-opacity="0.9" />
+            </linearGradient>
+            <linearGradient id="beamGradBaida" x1="85%" y1="100%" x2="50%" y2="0%">
+              <stop offset="0%" stop-color="#ff5722" stop-opacity="0.9" />
+              <stop offset="100%" stop-color="#ffd700" stop-opacity="0.9" />
+            </linearGradient>
+          </defs>
+
+          <!-- Периметр трикутника: Богдан (500, 110), Олег (180, 680), Байда (820, 680) -->
+          <polygon points="500,110 180,680 820,680" class="triangle-fill-glow" />
+          <line x1="500" y1="110" x2="180" y2="680" class="energy-line line-bohdan-oleg" filter="url(#glowFilter)" />
+          <line x1="180" y1="680" x2="820" y2="680" class="energy-line line-oleg-baida" filter="url(#glowFilter)" />
+          <line x1="820" y1="680" x2="500" y2="110" class="energy-line line-baida-bohdan" filter="url(#glowFilter)" />
+
+          <!-- Промені від кожного кута в центр (500, 460) де Смерть -->
+          <line x1="500" y1="110" x2="500" y2="460" class="center-ray ray-bohdan" filter="url(#glowFilter)" />
+          <line x1="180" y1="680" x2="500" y2="460" class="center-ray ray-oleg" filter="url(#glowFilter)" />
+          <line x1="820" y1="680" x2="500" y2="460" class="center-ray ray-baida" filter="url(#glowFilter)" />
+          <circle cx="500" cy="460" r="80" class="death-center-vortex" />
+        </svg>
+
+        <!-- Сцена трикутника: Богдан вгорі, Олег ліворуч, Байда праворуч, Смерть по центру -->
+        <div class="finale-stage triangle-stage" id="finaleStage">
+          <!-- 1. ВЕРХІВКА ТРИКУТНИКА: БОГДАН ХМЕЛЬНИЦЬКИЙ (Top Center) -->
+          <div class="finale-actor actor-triangle-node actor-bohdan" id="actorBohdan">
+            <div class="actor-sprite bohdan-sprite"></div>
+            <div class="actor-aura gold-aura"></div>
+            <div class="actor-name">Богдан Хмельницький</div>
+            <div class="actor-title-tag">Гетьманська Булава</div>
+          </div>
+
+          <!-- 2. ЛІВИЙ КУТ ТРИКУТНИКА: ОЛЕГ ПЕРЕДБАЧ (Bottom Left) -->
+          <div class="finale-actor actor-triangle-node actor-oleg" id="actorOleg">
+            <div class="actor-sprite oleg-sprite"></div>
+            <div class="actor-aura blue-aura"></div>
+            <div class="actor-name">Олег Передбач</div>
+            <div class="actor-title-tag">Київський Щит</div>
+          </div>
+
+          <!-- 3. ПРАВИЙ КУТ ТРИКУТНИКА: БАЙДА ВИШНЕЛЮБ (Bottom Right) -->
+          <div class="finale-actor actor-triangle-node actor-baida" id="actorBaida">
+            <div class="actor-sprite baida-sprite"></div>
+            <div class="actor-aura red-aura"></div>
+            <div class="actor-name">Байда Вишнелюб</div>
+            <div class="actor-title-tag">Хортицька Сталь</div>
+          </div>
+
+          <!-- 4. ЦЕНТР ТРИКУТНИКА: СМЕРТЬ (МІЖ НИМИ) -->
+          <div class="finale-actor actor-triangle-center actor-death" id="actorDeath">
+            <div class="actor-sprite death-sprite"></div>
+            <div class="death-prison-rune"></div>
+            <div class="actor-name death-name">Смерть з косою</div>
+            <div class="death-status-badge">У ПАСТЦІ ТРИКУТНИКА</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Діалог катсцени -->
+      <div class="finale-dialog-box hidden" id="finaleDialogBox">
+        <div class="dialog-speaker" id="finaleSpeaker">Богдан</div>
+        <div class="dialog-line" id="finaleLine">«...»</div>
+      </div>
+    </div>
+
+    <!-- Екран Тріумфу та Фінальних Титрів -->
+    <div class="finale-credits hidden" id="finaleCredits">
+      <!-- Урочистий банер перемоги -->
+      <div class="victory-header-box" id="victoryHeaderBox">
+        <div class="victory-heraldic-emblem">👑 ⚔️ ⚜️ ⚔️ 👑</div>
+        <h1 class="victory-heroic-title">ТИ ПЕРЕМІГ! МОЛОДЕЦЬ!</h1>
+        <h2 class="victory-heroic-subtitle">СМЕРТЬ З КОСОЮ ЗНИЩЕНА НАВІКИ</h2>
+        <p class="victory-heroic-story">
+          Троє великих лицарів — <strong>Богдан Хмельницький</strong>, <strong>Олег Передбач</strong> та <strong>Байда Вишнелюб</strong> — стали у непохитний трикутник сили й назавжди очистили українську землю від вічної темряви!
+        </p>
+      </div>
+
+      <div class="credits-scroll" id="creditsScroll">
+        <h1 class="credits-game-title">КОЗАЦЬКИЙ ШЛЯХ</h1>
+        <p class="credits-game-subtitle">ПЕРЕМОГА НАД СМЕРТЮ</p>
+
+        <div class="credits-divider">❖ ❖ ❖</div>
+
+        <div class="credits-section">
+          <div class="credits-role">Автор ідеї, сюжету та фіналу</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Головний творець та продюсер гри</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Програмування та розробка коду</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Бойова система та баланс битв</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Режисура катсцени та фінальної битви</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Мініігри «Гнівний заміс» та «Гарматний залп»</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-divider">✦</div>
+
+        <div class="credits-section">
+          <div class="credits-role">ШІ-асистент програмування та розвитку ідей</div>
+          <div class="credits-name highlight">Antigravity AI Agent</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Фото та художній концепт</div>
+          <div class="credits-name">Google Ai Nano banana</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Аудіо та озвучення</div>
+          <div class="credits-name">Eleven labs</div>
+        </div>
+
+        <div class="credits-divider">✦</div>
+
+        <div class="credits-section">
+          <div class="credits-role">Тексти реплік та козацький колорит</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Звуковий дизайн та монтаж ефектів</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-section">
+          <div class="credits-role">Усі інші елементи та складові гри</div>
+          <div class="credits-name highlight">HostHHH</div>
+        </div>
+
+        <div class="credits-divider">❖ ❖ ❖</div>
+
+        <div class="credits-quote">
+          «Козацькому роду нема переводу!»
+        </div>
+
+        <div class="credits-actions">
+          <button class="wood-btn credits-btn" onclick="restartFromCredits()">⚔️ Грати знову</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+  <script type="module" src="../shared/main.js"></script>
+  <script type="module" src="bonus.js"></script>
 </body>
+
 </html>

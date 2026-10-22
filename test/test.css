@@ -205,20 +205,36 @@ body {
 
 .result-actions {
     display: flex;
-    gap: 14px;
-    margin-top: 10px;
+    gap: 12px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .action-btn {
-    padding: 12px 24px;
-    font-size: 16px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
     color: white;
     cursor: pointer;
     transition: 0.2s;
+    border-radius: 10px;
+}
+
+#stage-btn {
+    background: rgba(70, 130, 240, 0.35);
+    border-color: rgba(100, 160, 255, 0.6);
+}
+
+#stage-btn:hover {
+    background: rgba(70, 130, 240, 0.55);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(70, 130, 240, 0.4);
 }
 
 .action-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
 .hidden {

@@ -232,8 +232,8 @@ describe('Код підтвердження — генерація', () => {
     const ts = 1784000000000;
     const code = R.generateCertificateCode(uid, ts);
 
-    it('формат LMB-XXXX-XXXX-XXXX', () =>
-        assert.match(code, /^LMB(-[A-Z0-9]{4}){3}$/));
+    it('формат IST-XXXX-XXXX-XXXX', () =>
+        assert.match(code, new RegExp(`^${CERTIFICATE.PREFIX}(-[A-Z0-9]{4}){3}$`)));
     it('детермінований для тих самих аргументів', () =>
         assert.equal(R.generateCertificateCode(uid, ts), code));
     it('інший timestamp → інший код', () =>
@@ -241,9 +241,9 @@ describe('Код підтвердження — генерація', () => {
     it('інший uid → інший код', () =>
         assert.notEqual(R.generateCertificateCode(uid + 'x', ts), code));
     it('не містить плутаних символів I, O, 1, 0', () =>
-        assert.ok(!/[IO10]/.test(code.replace(/^LMB/, '').replaceAll('-', ''))));
+        assert.ok(!/[IO10]/.test(code.replace(new RegExp(`^${CERTIFICATE.PREFIX}`), '').replaceAll('-', ''))));
     it('усі символи з дозволеного алфавіту', () =>
-        assert.ok(code.replace(/^LMB-/, '').replaceAll('-', '')
+        assert.ok(code.replace(new RegExp(`^${CERTIFICATE.PREFIX}-`), '').replaceAll('-', '')
             .split('').every(c => CERTIFICATE.ALPHABET.includes(c))));
 });
 
@@ -264,7 +264,7 @@ describe('Код підтвердження — звірка (case-insensitive)'
     it('інший час не проходить', () =>
         assert.ok(!R.verifyCertificateCode(code, uid, ts + 1)));
     it('вигаданий код не проходить', () =>
-        assert.ok(!R.verifyCertificateCode('LMB-AAAA-BBBB-CCCC', uid, ts)));
+        assert.ok(!R.verifyCertificateCode('IST-AAAA-BBBB-CCCC', uid, ts)));
     it('порожній код не проходить', () =>
         assert.ok(!R.verifyCertificateCode('', uid, ts)));
 });

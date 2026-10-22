@@ -9,7 +9,7 @@
 import { getLevelQuestions, getStageMeta } from '../core/questions.js';
 import { calculateStars, isLevelPassed } from '../core/rules.js';
 import { saveLevelResult } from '../core/progressStore.js';
-import { getStageParam, getLevelParam, goToMap, isNormalLevel } from '../core/nav.js';
+import { getStageParam, getLevelParam, goToMap, goToStage, isNormalLevel } from '../core/nav.js';
 import { STARS_MAX_PER_LEVEL } from '../core/config.js';
 
 // ── Що саме граємо ───────────────────────────────────────────────────
@@ -43,6 +43,7 @@ const el = {
     verdict: document.getElementById('verdict'),
     saveState: document.getElementById('save-state'),
     retry: document.getElementById('retry-btn'),
+    stage: document.getElementById('stage-btn'),
     map: document.getElementById('map-btn'),
     back: document.getElementById('back-btn')
 };
@@ -155,8 +156,9 @@ async function save() {
 // ── Обробники ────────────────────────────────────────────────────────
 
 el.next.addEventListener('click', next);
-el.back.addEventListener('click', () => goToMap());
-el.map.addEventListener('click', () => goToMap());
+el.back.addEventListener('click', () => goToStage(stage));
+el.stage?.addEventListener('click', () => goToStage(stage));
+el.map?.addEventListener('click', () => goToMap());
 el.retry.addEventListener('click', () => window.location.reload());
 
 render();

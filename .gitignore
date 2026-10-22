@@ -1,0 +1,32 @@
+# Corrupted/backup git
+.git_corrupted/
+.git_old/
+
+# Node & Dependencies
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & Secrets
+.env
+.env.local
+*.env
+*.session
+*.token
+
+# Telegram bot / standalone tools (bot moved to Desktop/istoriya_bot)
+bot/
+istoriya_bot/
+*.db
+*.sqlite
+*.sqlite3
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.tmp

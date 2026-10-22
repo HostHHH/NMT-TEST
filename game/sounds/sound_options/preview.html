@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Прослуховування звуків урону</title>
+  <style>
+    body {
+      background: #120e0b;
+      color: #e6c875;
+      font-family: monospace, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+      margin: 0;
+    }
+    h1 {
+      color: #ffcc00;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: #a89f91;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+    .sound-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      width: 100%;
+      max-width: 860px;
+    }
+    .sound-card {
+      background: #1d1612;
+      border: 2px solid #5a4628;
+      border-radius: 6px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+    .sound-card h2 {
+      margin-top: 0;
+      color: #ffd54f;
+      font-size: 18px;
+      border-bottom: 1px solid #3d2714;
+      padding-bottom: 8px;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 0;
+      padding: 10px;
+      background: #261c16;
+      border: 1px solid #3d2714;
+      border-radius: 4px;
+    }
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .item-title {
+      font-weight: bold;
+      color: #ffffff;
+      font-size: 14px;
+    }
+    .item-desc {
+      color: #a89f91;
+      font-size: 12px;
+    }
+    button.play-btn {
+      background: linear-gradient(180deg, #d4af37, #8d6e3f);
+      border: 2px solid #ffecb3;
+      color: #000;
+      font-weight: bold;
+      font-family: monospace;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+    button.play-btn:hover {
+      background: linear-gradient(180deg, #ffd54f, #d4af37);
+      transform: scale(1.05);
+      box-shadow: 0 0 10px #ffd54f;
+    }
+    button.play-btn:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <h1>⚔️ Варіанти звуків для бою</h1>
+  <p class="subtitle">Натисніть кнопку біля кожного варіанту, щоб прослухати його звучання:</p>
+
+  <div class="sound-grid">
+    <!-- Секція 1: Дача урона -->
+    <div class="sound-card">
+      <h2>💥 1. Дача урона (Удар по ворогу)</h2>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Варіант А: Шабельний розріз</span>
+          <span class="item-desc">Металевий свист і гострий розтин клинка</span>
+        </div>
+        <button class="play-btn" onclick="playSound('deal_damage_1_sword_slash.wav')">▶ СЛУХАТИ</button>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Варіант Б: Важкий м'ясистий удар</span>
+          <span class="item-desc">Глухий щільний удар по тілу / броні</span>
+        </div>
+        <button class="play-btn" onclick="playSound('deal_damage_2_heavy_impact.wav')">▶ СЛУХАТИ</button>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Варіант В: Різкий бойовий удар</span>
+          <span class="item-desc">Хльосткий швидкий удар рукопашного / шабельного бою</span>
+        </div>
+        <button class="play-btn" onclick="playSound('deal_damage_3_sharp_strike.wav')">▶ СЛУХАТИ</button>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Бонус 1: Рублячий розсік (Kenney)</span>
+          <span class="item-desc">Глибокий рубаючий звук сокири / шаблі</span>
+        </div>
+        <button class="play-btn" onclick="playSound('deal_damage_kenney_chop.ogg')">▶ СЛУХАТИ</button>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Бонус 2: Козацький ніж (Kenney)</span>
+          <span class="item-desc">Гострий свистячий поріз</span>
+        </div>
+        <button class="play-btn" onclick="playSound('deal_damage_kenney_knifeSlice.ogg')">▶ СЛУХАТИ</button>
+      </div>
+    </div>
+
+    <!-- Секція 2: Отримання урона -->
+    <div class="sound-card">
+      <h2>🩸 2. Отримання урона (Поранення героя)</h2>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Варіант 1: Короткий хрип</span>
+          <span class="item-desc">Швидкий болісний хрип/стогін при попаданні</span>
+        </div>
+        <button class="play-btn" onclick="playSound('take_damage_1_grunt.wav')">▶ СЛУХАТИ</button>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Варіант 2: Важке поранення</span>
+          <span class="item-desc">Глухий важкий стогін від сильного удару</span>
+        </div>
+        <button class="play-btn" onclick="playSound('take_damage_2_heavy_hurt.wav')">▶ СЛУХАТИ</button>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <span class="item-title">Варіант 3: Різкий біль</span>
+          <span class="item-desc">Різкий стогін від розсікання ворогом</span>
+        </div>
+        <button class="play-btn" onclick="playSound('take_damage_3_sharp_pain.wav')">▶ СЛУХАТИ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentAudio = null;
+    function playSound(filename) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      currentAudio = new Audio(filename);
+      currentAudio.play().catch(e => console.error(e));
+    }
+  </script>
+</body>
+</html>
