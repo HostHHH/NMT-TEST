@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iSторія — Анкета тестувальника (МАН)</title>
+    <link rel="stylesheet" href="../shared/style.css">
+    <style>
+        :root {
+            --bg-dark: #0f111a;
+            --card-bg: rgba(26, 30, 46, 0.85);
+            --border-color: rgba(255, 255, 255, 0.12);
+            --accent-gold: #f59e0b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        body {
+            background: linear-gradient(135deg, #090a10 0%, #171926 50%, #0d0f17 100%);
+            color: var(--text-main);
+            font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 30px 16px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 680px;
+        }
+        .header-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--accent-gold);
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .header-card h1 {
+            margin: 0 0 10px;
+            font-size: 24px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .nav-actions {
+            margin-top: 16px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+        .btn-link:hover {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .q-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 22px 20px;
+            margin-bottom: 18px;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.2s;
+        }
+        .q-card:focus-within {
+            border-color: var(--accent-blue);
+        }
+        .q-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #fff;
+            display: flex;
+            gap: 8px;
+        }
+        .q-title .num {
+            color: var(--accent-gold);
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            font-size: 14px;
+            color: #cbd5e1;
+            transition: all 0.15s;
+        }
+        .option-label:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .option-label input[type="radio"] {
+            accent-color: var(--accent-gold);
+            width: 17px;
+            height: 17px;
+        }
+        .scale-grid {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+        }
+        .scale-btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .scale-btn:hover {
+            border-color: var(--accent-gold);
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .scale-btn input {
+            display: none;
+        }
+        .scale-btn.active {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--accent-blue);
+        }
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: #000;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(245, 158, 11, 0.5);
+        }
+        .success-box {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--accent-green);
+        }
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="surveyContainer">
+        <div class="header-card">
+            <h1>🏛️ iSторія: Анкета тестувальника</h1>
+            <p>Дякуємо за тестування освітньої гейміфікованої системи підготовки до НМТ з історії України! Твої відповіді будуть використані в науковому дослідженні МАН для оцінки ефективності навчання.</p>
+            <div class="nav-actions">
+                <a href="../game/game.html" class="btn-link">🎮 Гра «Козацький шлях»</a>
+                <a href="../map/map.html" class="btn-link">🌍 3D Мапа</a>
+                <a href="results.html" class="btn-link" style="color: var(--accent-gold); border-color: rgba(245,158,11,0.3);">📊 Результати та статистика (МАН)</a>
+            </div>
+        </div>
+
+        <form id="surveyForm">
+            <div class="q-card">
+                <div class="q-title"><span class="num">0.</span> Твоє ім'я або клас / заклад (за бажанням):</div>
+                <input type="text" id="respName" placeholder="Наприклад: Орест (11 клас, РОНЛІ)">
+            </div>
+
+            <div class="q-card">
+                <div class="q-title"><span class="num">1.</span> Як ви оцінюєте формат вивчення історії у вигляді гри з босами порівняно зі звичайними тестами?</div>
+                <label class="option-label"><input type="radio" name="q1" value="Набагато цікавіше та менше втомлює" required> Набагато цікавіше та менше втомлює</label>
+                <label class="option-label"><input type="radio" name="q1" value="Дещо краще за звичайні тести"> Дещо краще за звичайні тести</label>
+                <label class="option-label"><input type="radio" name="q1" value="Однаково"> Однаково</label>
+                <label class="option-label"><input type="radio" name="q1" value="Віддаю перевагу звичайним паперовим/PDF тестам"> Віддаю перевагу звичайним паперовим/PDF тестам</label>
+            </div>
+
+            <div class="q-card">
+                <div class="q-title"><span class="num">2.</span> Чи допомагає фонова музика (плейлисти на сайті) зосередитися на розв'язанні питань?</div>
+                <label class="option-label"><input type="radio" name="q2" value="Так, допомагає тримати темп і не відволікатися" required> Так, допомагає тримати темп і не відволікатися</label>
+                <label class="option-label"><input type="radio" name="q2" value="Не звертаю уваги, нейтрально"> Не звертаю уваги, нейтрально</label>
+                <label class="option-label"><input type="radio" name="q2" value="Ні, краще займатися в повній тиші"> Ні, краще займатися в повній тиші</label>
+            </div>
+
+            <div class="q-card">
+                <div class="q-title"><span class="num">3.</span> Оцініть зручність керування та інтерфейсу платформи (зокрема на смартфонах):</div>
+                <div class="scale-grid">
+                    <label class="scale-btn" onclick="selectScale(this)">1<input type="radio" name="q3" value="1" required></label>
+                    <label class="scale-btn" onclick="selectScale(this)">2<input type="radio" name="q3" value="2"></label>
+                    <label class="scale-btn" onclick="selectScale(this)">3<input type="radio" name="q3" value="3"></label>
+                    <label class="scale-btn" onclick="selectScale(this)">4<input type="radio" name="q3" value="4"></label>
+                    <label class="scale-btn active" onclick="selectScale(this)">5<input type="radio" name="q3" value="5" checked></label>
+                </div>
+            </div>
+
+            <div class="q-card">
+                <div class="q-title"><span class="num">4.</span> Чи полегшує бойовий процес запам'ятовування обов'язкових дат та історичних діячів?</div>
+                <label class="option-label"><input type="radio" name="q4" value="Так, через емоцію перемоги над босом дати запам'ятовуються міцніше" required> Так, через емоцію перемоги над босом дати запам'ятовуються міцніше</label>
+                <label class="option-label"><input type="radio" name="q4" value="Частково полегшує"> Частково полегшує</label>
+                <label class="option-label"><input type="radio" name="q4" value="Складно сказати"> Складно сказати</label>
+            </div>
+
+            <div class="q-card">
+                <div class="q-title"><span class="num">5.</span> Який елемент сайту вам сподобався найбільше?</div>
+                <label class="option-label"><input type="radio" name="q5" value="Інтерактивна 3D-модель планети з вибором епох" required> Інтерактивна 3D-модель планети з вибором епох</label>
+                <label class="option-label"><input type="radio" name="q5" value="Бойова система «Козацький шлях» та озвучка босів (ElevenLabs)"> Бойова система «Козацький шлях» та озвучка босів (ElevenLabs)</label>
+                <label class="option-label"><input type="radio" name="q5" value="Музичний плеєр із різними плейлистами"> Музичний плеєр із різними плейлистами</label>
+                <label class="option-label"><input type="radio" name="q5" value="Можливість отримати код-сертифікат про проходження"> Можливість отримати код-сертифікат про проходження</label>
+            </div>
+
+            <div class="q-card">
+                <div class="q-title"><span class="num">6.</span> Ваші побажання або зауваження для покращення платформи:</div>
+                <textarea id="respFeedback" rows="3" placeholder="Що сподобалося найбільше або що варто додати?"></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">🚀 Надіслати відповідь</button>
+        </form>
+
+        <div class="success-box" id="successBox">
+            <div class="success-icon">✅</div>
+            <h2>Відповідь успішно збережено!</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Твій відгук внесено в аналітичну базу дослідження МАН.</p>
+            <a href="results.html" class="btn-link" style="background: var(--accent-green); color: #000; font-weight: 700; padding: 12px 20px;">Переглянути статистику опитування 📊</a>
+        </div>
+    </div>
+
+    <script>
+        function selectScale(el) {
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('respName').value || 'Анонімний респондент',
+                q1: document.querySelector('input[name="q1"]:checked')?.value || '',
+                q2: document.querySelector('input[name="q2"]:checked')?.value || '',
+                q3: parseInt(document.querySelector('input[name="q3"]:checked')?.value || '5'),
+                q4: document.querySelector('input[name="q4"]:checked')?.value || '',
+                q5: document.querySelector('input[name="q5"]:checked')?.value || '',
+                feedback: document.getElementById('respFeedback').value || ''
+            };
+
+            try {
+                await fetch('/api/survey', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+            } catch (_) {}
+
+            document.getElementById('surveyForm').style.display = 'none';
+            document.getElementById('successBox').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
