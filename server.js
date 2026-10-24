@@ -29,41 +29,6 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-    // API: Опитування тестувальників для МАН (Розділ 3)
-    if (req.url === '/api/survey') {
-        const dataFile = path.join(__dirname, 'survey_responses.json');
-        if (req.method === 'POST') {
-            let body = '';
-            req.on('data', chunk => { body += chunk.toString(); });
-            req.on('end', () => {
-                try {
-                    const parsed = JSON.parse(body || '{}');
-                    parsed.timestamp = new Date().toISOString();
-                    let list = [];
-                    if (fs.existsSync(dataFile)) {
-                        try { list = JSON.parse(fs.readFileSync(dataFile, 'utf-8')); } catch (_) { list = []; }
-                    }
-                    list.push(parsed);
-                    fs.writeFileSync(dataFile, JSON.stringify(list, null, 2), 'utf-8');
-                    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-                    res.end(JSON.stringify({ success: true, count: list.length }));
-                } catch (e) {
-                    res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
-                    res.end(JSON.stringify({ error: e.message }));
-                }
-            });
-            return;
-        } else if (req.method === 'GET') {
-            let list = [];
-            if (fs.existsSync(dataFile)) {
-                try { list = JSON.parse(fs.readFileSync(dataFile, 'utf-8')); } catch (_) { list = []; }
-            }
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-            res.end(JSON.stringify(list));
-            return;
-        }
-    }
-
     let reqUrl = decodeURI(req.url.split('?')[0]);
     if (reqUrl === '/' || reqUrl === '') {
         reqUrl = '/index.html';
