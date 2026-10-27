@@ -421,7 +421,7 @@ export function createFullProgress(uid = 'IW5LKzQM5jQJergx42elqvQv28V2', complet
     for (let stage = 1; stage <= TOTAL_STAGES; stage++) {
         const levels = {};
         for (let lvl = 1; lvl <= NORMAL_LEVELS_PER_STAGE; lvl++) {
-            levels[lvl] = { stars: 3, bestScore: 5, passedAt: completedAt };
+            levels[lvl] = { stars: 3, bestCorrect: 5, attempts: 1, lastPlayedAt: completedAt };
         }
         stages[stage] = {
             bossDefeated: true,

@@ -9,7 +9,7 @@
 // їх ніхто не писав, тож фон на карті просто не працював.
 
 import { summarizeAllStages } from '../core/rules.js';
-import { subscribeProgress } from '../core/progressStore.js';
+import { subscribeProgress, getLocalProgress } from '../core/progressStore.js';
 
 // Точки на поверхні глобуса (формат model-viewer: меш, приміт., 3 вершини
 // трикутника + барицентричні ваги). Задані вручну в редакторі model-viewer;
@@ -64,16 +64,18 @@ function renderHotspots(progress) {
     });
 }
 
-// Одразу малюємо з порожнім прогресом (щоб глобус не був голим), а далі
+// Одразу малюємо з наявним кешованим прогресом, а далі
 // підписуємось на живий прогрес — точки на глобусі завжди відображають
 // поточний стан і оновлюються самі (як і екран стадії).
-renderHotspots(null);
+const cachedUid = (typeof localStorage !== 'undefined' && localStorage.getItem('istoriya_last_uid')) || null;
+const initialProgress = getLocalProgress(cachedUid) || getLocalProgress('guest') || null;
+renderHotspots(initialProgress);
 
 if (window.limboReady) {
     window.limboReady.then((r) => {
-        const uid = r?.uid ?? null;
+        const uid = r?.uid ?? cachedUid;
         if (!uid) {
-            renderHotspots(r?.progress ?? null);
+            renderHotspots(r?.progress ?? initialProgress);
             return;
         }
         subscribeProgress(uid, (progress) => renderHotspots(progress));

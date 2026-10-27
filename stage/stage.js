@@ -8,11 +8,12 @@
 // Тут лишається намалювати це на екрані.
 
 import { summarizeStage } from '../core/rules.js';
-import { spendBonusStars, subscribeProgress } from '../core/progressStore.js';
+import { spendBonusStars, subscribeProgress, getLocalProgress } from '../core/progressStore.js';
 import { getStageParam, goToMap, goToLevel, goToBoss } from '../core/nav.js';
 import { STARS_MAX_PER_LEVEL, TOTAL_STAGES } from '../core/config.js';
 import { COSSACK_TEXTS } from '../core/cossack.js';
 
+const DEV_UID = 'IW5LKzQM5jQJergx42elqvQv28V2';
 const stage = getStageParam() ?? 1;
 
 const el = {
@@ -35,8 +36,9 @@ const el = {
 
 // Зберігаємо між перемальовуваннями: після витрати бонусів прогрес
 // оновлюється, і треба перемалювати з новими даними.
-let uid = null;
-let currentProgress = null;
+const cachedUid = (typeof localStorage !== 'undefined' && localStorage.getItem('istoriya_last_uid')) || null;
+let uid = cachedUid;
+let currentProgress = getLocalProgress(uid) || getLocalProgress('guest') || null;
 
 let lastInfo = null;
 const isCossack = () => !!window.istoriyaSettings?.cossackLang;
@@ -133,7 +135,7 @@ function render(info) {
         el.bossCard.classList.add('defeated');
         el.bossCard.disabled = false;
         el.bossCard.title = 'Перепройти битву з босом';
-    } else if (info.bossUnlocked) {
+    } else if (info.bossUnlocked || uid === DEV_UID) {
         el.hint.textContent = cossack ? stTexts.bossReadyHint.cossack : stTexts.bossReadyHint.normal;
         el.bossIcon.textContent = '⚔';
         el.bossSub.textContent = cossack ? stTexts.bossReadySub.cossack : stTexts.bossReadySub.normal;
@@ -261,7 +263,8 @@ function showGuestStageModal(title, text) {
 
 el.back.addEventListener('click', () => goToMap());
 el.bossCard.addEventListener('click', () => {
-    if (!uid) {
+    const canFight = lastInfo?.bossUnlocked || lastInfo?.bossDefeated || uid === DEV_UID;
+    if (!uid && !canFight) {
         const cossack = isCossack();
         showGuestStageModal(
             cossack ? 'Супостат чекає на козака з реєстру' : 'Бос закритий у демо-режимі',

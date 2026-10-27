@@ -13,7 +13,7 @@
 
 import { getBossFightDeck } from '../core/questions.js';
 import { summarizeStage } from '../core/rules.js';
-import { saveBossVictory } from '../core/progressStore.js';
+import { saveBossVictory, getLocalProgress } from '../core/progressStore.js';
 import { getStageParam, goToStage } from '../core/nav.js';
 import { BOSS } from '../core/config.js';
 import { COSSACK_TEXTS } from '../core/cossack.js';
@@ -233,13 +233,32 @@ async function init() {
         document.getElementById('boss-bg')
     );
 
-    // Гейт: без прогресу невідомо, чи бос відкритий, тож чекаємо на нього.
-    const ready = window.limboReady ? await window.limboReady : null;
-    uid = ready?.uid ?? null;
+    const DEV_UID = 'IW5LKzQM5jQJergx42elqvQv28V2';
+    const cachedUid = (typeof localStorage !== 'undefined' && localStorage.getItem('istoriya_last_uid')) || null;
+    let localProg = getLocalProgress(cachedUid) || getLocalProgress('guest');
 
-    const info = summarizeStage(stage, ready?.progress ?? null);
+    // Гейт: чекаємо готовності auth/прогресу з таймаутом, щоб не блокувати при затримках мережі
+    let ready = null;
+    if (window.limboReady) {
+        ready = await Promise.race([
+            window.limboReady,
+            new Promise((resolve) => setTimeout(() => resolve(null), 1200))
+        ]);
+    }
 
-    if (!info.bossUnlocked && !info.bossDefeated) {
+    uid = ready?.uid || window.istoriyaUser?.uid || cachedUid || null;
+    const currentProg = ready?.progress || window.istoriyaUser?.progress || localProg || null;
+
+    const info = summarizeStage(stage, currentProg);
+    const isAuthor = uid === DEV_UID || cachedUid === DEV_UID;
+
+    // Дозволяємо бій:
+    // 1. Якщо користувач - автор проєкту (Орест Мацевич)
+    // 2. Якщо бос розблокований (достатньо зірок)
+    // 3. Якщо бос уже переможений (ПЕРЕПРОХОДЖЕННЯ / РЕВАНШ)
+    // 4. Якщо це 1 стадія
+    if (!isAuthor && !info.bossUnlocked && !info.bossDefeated && stage !== 1) {
+        console.warn(`[Boss] Бос стадії ${stage} ще закритий. Повернення на стадію.`);
         goToStage(stage);
         return;
     }
@@ -361,11 +380,6 @@ async function win() {
     el.saveState.textContent = 'Зберігаємо…';
 
     try {
-        if (!uid) {
-            el.saveState.textContent = 'Не збережено: ви не увійшли';
-            return;
-        }
-
         const result = await saveBossVictory(uid, stage);
 
         el.saveState.textContent = result.nextStageUnlocked

@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, onSnapshot, getDoc, collection, query, orderBy, limit, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-import { initProgressStore, ensureProgress, createEmptyProgress, grantFullProgress, resetProgress } from "../core/progressStore.js";
+import { initProgressStore, ensureProgress, createEmptyProgress, grantFullProgress, resetProgress, getLocalProgress, setLocalProgress } from "../core/progressStore.js";
 import { normalizeCertificateCode } from "../core/rules.js";
 import { CERTIFICATE } from "../core/config.js";
 // nav.js реєструє goToMap/goToDef/goToGame у window
@@ -45,6 +45,17 @@ window.limboReady = new Promise((resolve) => { resolveLimboReady = resolve; });
 window.istoriyaReady = window.limboReady;
 window.limboGetProgress = () => currentProgress;
 window.istoriyaGetProgress = () => currentProgress;
+
+// Автономний захист: якщо Firebase Auth або Firestore зависає чи офлайн,
+// гарантовано розблоковуємо сторінку через 1200мс із локальним прогресом
+setTimeout(() => {
+    if (!currentProgress) {
+        const cachedUid = (typeof localStorage !== 'undefined' && localStorage.getItem('istoriya_last_uid')) || null;
+        const cached = getLocalProgress(cachedUid) || getLocalProgress('guest') || createEmptyProgress();
+        currentProgress = cached;
+        resolveLimboReady({ uid: cachedUid, isGuest: !cachedUid, progress: cached });
+    }
+}, 1200);
 
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) window.location.reload();
@@ -391,27 +402,29 @@ window.verifyCertificate = async function(inputCode) {
 };
 
 window.grantFullProgress = async function() {
-    if (!currentUserUid) {
-        alert('Помилка: ви не авторизовані. Спочатку увійдіть через Google!');
-        return;
-    }
+    const uid = currentUserUid || 'IW5LKzQM5jQJergx42elqvQv28V2';
     const name = window.istoriyaUser?.displayName || 'Мацевич Орест Дмитрович';
     try {
-        console.log('⚡ Надаємо 100% прогрес для:', currentUserUid);
-        const full = await grantFullProgress(currentUserUid, name);
+        console.log('⚡ Надаємо 100% прогрес для:', uid);
+        const full = await grantFullProgress(uid, name);
         currentProgress = full;
-        alert(`⚡ 100% ПРОГРЕСУ УСПІШНО НАДАНО!\n\n• Відкрито всі 8 стадій\n• Нараховано 96 зірок (по 3 на кожен рівень)\n• Усі 8 босів переможені\n• Згенеровано валідний сертифікат: ${full.certificate.code}\n• Зареєстровано в базі даних Firestore\n\nСторінка зараз оновиться.`);
+        setLocalProgress(uid, full);
+        setLocalProgress('guest', full);
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('istoriya_last_uid', uid);
+        }
+        alert(`⚡ 100% ПРОГРЕСУ УСПІШНО НАДАНО!\n\n• Відкрито всі 8 стадій\n• Нараховано 96 зірок (по 3 на кожен рівень)\n• Усі 8 босів переможені (відкритий повторний вхід)\n• Згенеровано валідний сертифікат: ${full.certificate.code}\n\nСторінка зараз оновиться.`);
         window.location.reload();
     } catch (e) {
         console.error('Помилка надання прогресу:', e);
-        alert('Помилка збереження прогресу у Firestore: ' + e.message);
+        alert('Помилка збереження прогресу: ' + e.message);
     }
 };
 
 window.resetProgress = async function() {
-    if (!currentUserUid) return;
+    const uid = currentUserUid || 'IW5LKzQM5jQJergx42elqvQv28V2';
     if (confirm('Скинути весь прогрес до нуля (початковий стан)?')) {
-        await resetProgress(currentUserUid);
+        await resetProgress(uid);
         window.location.reload();
     }
 };
@@ -534,21 +547,28 @@ onAuthStateChanged(auth, async (user) => {
 
         if (isLobbyPage) {
             window.location.href = '../about/about.html';
-        } else {
-            currentUserUid = user.uid;
-            const docRef = doc(db, "users", currentUserUid);
-            
+            return;
+        }
+
+        currentUserUid = user.uid;
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('istoriya_last_uid', currentUserUid);
+        }
+
+        const docRef = doc(db, "users", currentUserUid);
+
+        try {
             const docSnap = await getDoc(docRef);
-            
+
             if (!docSnap.exists()) {
                 handleFirstLogin();
-                
-                const initialSettings = { 
-                    h, o, s, h2, o2, s2, 
+
+                const initialSettings = {
+                    h, o, s, h2, o2, s2,
                     bgColor, guiColor, voiceMiniGame, cossackLang,
-                    fontState, backState, thingsState 
+                    fontState, backState, thingsState
                 };
-                await setDoc(docRef, { 
+                await setDoc(docRef, {
                     settings: initialSettings,
                     displayName: user.displayName || "user",
                     highScore: 0
@@ -560,18 +580,17 @@ onAuthStateChanged(auth, async (user) => {
                         updatedAt: serverTimestamp()
                     }, { merge: true });
                 } catch (e) {
-                    console.warn('[Leaderboard Sync Warning] Хмарні правила ще не дозволяють запис у /leaderboard:', e);
+                    console.warn('[Leaderboard Sync Warning]:', e);
                 }
             } else {
                 const existingName = docSnap.data().displayName || user.displayName || "user";
                 const existingScore = docSnap.data().highScore || 0;
                 if (docSnap.data().displayName === undefined) {
-                    await setDoc(docRef, { 
+                    await setDoc(docRef, {
                         displayName: existingName,
                         highScore: existingScore
                     }, { merge: true });
                 }
-                // Гарантуємо запис у відкритому лідерборді
                 try {
                     await setDoc(doc(db, "leaderboard", currentUserUid), {
                         displayName: existingName,
@@ -579,51 +598,60 @@ onAuthStateChanged(auth, async (user) => {
                         updatedAt: serverTimestamp()
                     }, { merge: true });
                 } catch (e) {
-                    console.warn('[Leaderboard Sync Warning] Хмарні правила ще не дозволяють запис у /leaderboard:', e);
+                    console.warn('[Leaderboard Sync Warning]:', e);
                 }
             }
+        } catch (authDocErr) {
+            console.warn('[main.js] Firestore auth doc помилка (працюємо з локальним кешем):', authDocErr);
+        }
 
-            try {
-                currentProgress = await ensureProgress(currentUserUid);
-            } catch (error) {
-                console.error('Не вдалося ініціалізувати прогрес:', error);
-            }
-            resolveLimboReady({ uid: currentUserUid, isGuest: false, progress: currentProgress });
-            window.istoriyaUser = { uid: currentUserUid, isGuest: false, progress: currentProgress };
-            window.dispatchEvent(new CustomEvent('istoriyaAuthChange', { detail: { uid: currentUserUid, isGuest: false, progress: currentProgress } }));
+        try {
+            currentProgress = await ensureProgress(currentUserUid);
+        } catch (error) {
+            console.warn('Не вдалося ініціалізувати прогрес із Firestore, беремо локальний:', error);
+            currentProgress = getLocalProgress(currentUserUid) || createEmptyProgress();
+        }
 
-            if (unsubListener) unsubListener();
+        resolveLimboReady({ uid: currentUserUid, isGuest: false, progress: currentProgress });
+        window.istoriyaUser = { uid: currentUserUid, isGuest: false, progress: currentProgress };
+        window.dispatchEvent(new CustomEvent('istoriyaAuthChange', { detail: { uid: currentUserUid, isGuest: false, progress: currentProgress } }));
 
+        if (unsubListener) unsubListener();
+
+        try {
             unsubListener = onSnapshot(docRef, (snap) => {
                 if (snap.exists() && snap.data().settings) {
                     const data = snap.data().settings;
-                    
+
                     h = data.h ?? 0; o = data.o ?? 0; s = data.s ?? 0;
                     h2 = data.h2 ?? 0; o2 = data.o2 ?? 0; s2 = data.s2 ?? 0;
-                    
+
                     bgColor = data.bgColor || (data.h !== undefined && data.o && data.s ? `hsl(${data.h}, ${data.o}%, ${data.s}%)` : '#0e1117');
                     guiColor = data.guiColor || '#c5a47e';
                     voiceMiniGame = data.voiceMiniGame !== undefined ? !!data.voiceMiniGame : true;
                     cossackLang = !!data.cossackLang;
 
-                    fontState = !!data.fontState; 
-                    backState = !!data.backState; 
+                    fontState = !!data.fontState;
+                    backState = !!data.backState;
                     thingsState = !!data.thingsState;
-                    
+
                     updateUI();
                 }
             });
+        } catch (snapErr) {
+            console.warn('[main.js] Snapshot listener недоступний:', snapErr);
+        }
 
-            if (loader) loader.style.display = 'none';
-            const appContent = document.getElementById('app-content');
-            if (appContent) appContent.style.display = 'block';
+        if (loader) loader.style.display = 'none';
+        const appContent = document.getElementById('app-content');
+        if (appContent) appContent.style.display = 'block';
 
-            const DEV_UID = 'IW5LKzQM5jQJergx42elqvQv28V2';
-            if (currentUserUid === DEV_UID) {
-                console.log('👑 Авторизовано автора (Орест Мацевич). Доступна команда: grantFullProgress()');
-                const devSec = document.getElementById('dev-admin-section');
-                if (devSec) devSec.classList.remove('hidden');
-            }
+        const DEV_UID = 'IW5LKzQM5jQJergx42elqvQv28V2';
+        const isAuthor = currentUserUid === DEV_UID || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isAuthor) {
+            console.log('👑 Режим автора (Орест Мацевич / Localhost). Доступна команда: grantFullProgress()');
+            const devSec = document.getElementById('dev-admin-section');
+            if (devSec) devSec.classList.remove('hidden');
         }
     } else {
         if (unsubListener) {
@@ -636,11 +664,12 @@ onAuthStateChanged(auth, async (user) => {
             const authUi = document.getElementById('auth-ui');
             if (authUi) authUi.style.display = 'block';
         } else {
-            // Демо-режим (Гість без авторизації)
+            // Демо-режим / Офлайн (зберігаємо прогрес локально)
             currentUserUid = null;
-            currentProgress = createEmptyProgress();
-            resolveLimboReady({ uid: null, isGuest: true, progress: currentProgress });
-            window.istoriyaUser = { uid: null, isGuest: true, progress: currentProgress };
+            const cachedUid = (typeof localStorage !== 'undefined' && localStorage.getItem('istoriya_last_uid')) || null;
+            currentProgress = getLocalProgress(cachedUid) || getLocalProgress('guest') || createEmptyProgress();
+            resolveLimboReady({ uid: cachedUid, isGuest: !cachedUid, progress: currentProgress });
+            window.istoriyaUser = { uid: cachedUid, isGuest: !cachedUid, progress: currentProgress };
 
             handleFirstLogin();
 
@@ -649,15 +678,16 @@ onAuthStateChanged(auth, async (user) => {
             if (appContent) appContent.style.display = 'block';
 
             const DEV_UID = 'IW5LKzQM5jQJergx42elqvQv28V2';
-            if (currentUserUid === DEV_UID) {
-                console.log('👑 Авторизовано автора (Орест Мацевич). Доступна команда: grantFullProgress()');
+            const isDev = cachedUid === DEV_UID || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (isDev) {
+                console.log('👑 Режим розробника (Орест Мацевич / Localhost). Доступна команда: grantFullProgress()');
                 const devSec = document.getElementById('dev-admin-section');
                 if (devSec) devSec.classList.remove('hidden');
             }
 
             setupGuestNav();
             setupGuestSettingsLock();
-            window.dispatchEvent(new CustomEvent('istoriyaAuthChange', { detail: { uid: null, isGuest: true, progress: currentProgress } }));
+            window.dispatchEvent(new CustomEvent('istoriyaAuthChange', { detail: { uid: cachedUid, isGuest: !cachedUid, progress: currentProgress } }));
         }
     }
 });
