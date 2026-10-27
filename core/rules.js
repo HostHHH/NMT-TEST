@@ -115,11 +115,13 @@ export function getBossUnlockThreshold(stage) {
 }
 
 export function isBossUnlocked(stage, stageProgress) {
+    if (stageProgress && stageProgress.bossDefeated) return true;
     return getStageEffectiveStars(stageProgress) >= getBossUnlockThreshold(stage);
 }
 
-// Скільки зірок ще бракує до відкриття боса. 0 — якщо вже відкритий.
+// Скільки зірок ще бракує до відкриття боса. 0 — якщо вже відкритий або переможений.
 export function getStarsNeededForBoss(stage, stageProgress) {
+    if (stageProgress && stageProgress.bossDefeated) return 0;
     const need = getBossUnlockThreshold(stage) - getStageEffectiveStars(stageProgress);
     return Math.max(0, need);
 }

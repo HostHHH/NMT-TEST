@@ -239,7 +239,7 @@ async function init() {
 
     const info = summarizeStage(stage, ready?.progress ?? null);
 
-    if (!info.bossUnlocked) {
+    if (!info.bossUnlocked && !info.bossDefeated) {
         goToStage(stage);
         return;
     }
@@ -328,7 +328,12 @@ function answer(chosen) {
 
 function next() {
     index++;
-    if (index < deck.length) render();
+    if (index < deck.length) {
+        render();
+    } else {
+        // Якщо питання в колоді вичерпано, а бос не здоланий — зараховуємо поразку
+        lose();
+    }
 }
 
 // ── Кінець бою ───────────────────────────────────────────────────────

@@ -100,6 +100,10 @@ describe('Розблокування боса', () => {
         assert.ok(R.isBossUnlocked(6, stageWith([3, 3, 3, 2]))));
     it('бонусні зірки відкривають боса', () =>
         assert.ok(R.isBossUnlocked(6, stageWith([3, 3, 3, 0], { bonusApplied: 2 }))));
+    it('переможений бос завжди залишається відкритим для реваншу', () => {
+        assert.ok(R.isBossUnlocked(1, { bossDefeated: true, levels: {} }));
+        assert.equal(R.getStarsNeededForBoss(1, { bossDefeated: true, levels: {} }), 0);
+    });
 });
 
 describe('Розблокування стадій', () => {

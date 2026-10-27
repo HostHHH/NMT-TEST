@@ -124,19 +124,22 @@ function render(info) {
     });
 
     // ── Бос ──
+    el.bossCard.classList.remove('defeated', 'unlocked', 'locked');
     if (info.bossDefeated) {
         const isFinal = info.stage >= TOTAL_STAGES;
         el.hint.textContent = cossack ? stTexts.bossDefeatedHint(isFinal).cossack : stTexts.bossDefeatedHint(isFinal).normal;
         el.bossIcon.textContent = '🏆';
-        el.bossSub.textContent = cossack ? stTexts.bossDefeatedSub.cossack : stTexts.bossDefeatedSub.normal;
+        el.bossSub.textContent = cossack ? `${stTexts.bossDefeatedSub.cossack} (натисни для реваншу)` : `${stTexts.bossDefeatedSub.normal} (натисніть, щоб перепройти)`;
         el.bossCard.classList.add('defeated');
         el.bossCard.disabled = false;
+        el.bossCard.title = 'Перепройти битву з босом';
     } else if (info.bossUnlocked) {
         el.hint.textContent = cossack ? stTexts.bossReadyHint.cossack : stTexts.bossReadyHint.normal;
         el.bossIcon.textContent = '⚔';
         el.bossSub.textContent = cossack ? stTexts.bossReadySub.cossack : stTexts.bossReadySub.normal;
         el.bossCard.classList.add('unlocked');
         el.bossCard.disabled = false;
+        el.bossCard.title = 'Вийти на бій з босом';
     } else {
         el.hint.textContent = cossack
             ? stTexts.bossLockedHint(info.starsNeeded, info.threshold, info.maxStars).cossack
@@ -145,7 +148,9 @@ function render(info) {
         el.bossSub.textContent = cossack
             ? stTexts.bossLockedSub(info.threshold).cossack
             : stTexts.bossLockedSub(info.threshold).normal;
+        el.bossCard.classList.add('locked');
         el.bossCard.disabled = true;
+        el.bossCard.title = 'Бос заблокований';
     }
 }
 
