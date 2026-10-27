@@ -290,3 +290,27 @@ describe('Захист аргументів', () => {
     it('timestamp не число → TypeError', () =>
         assert.throws(() => R.generateCertificateCode('uid', 'вчора'), TypeError));
 });
+
+describe('createFullProgress — 100% стан для автора', () => {
+    it('містить 96 зірок, усі 8 босів переможені та валідний сертифікат', () => {
+        const uid = 'IW5LKzQM5jQJergx42elqvQv28V2';
+        const ts = 1784000000000;
+        const full = R.createFullProgress(uid, ts);
+
+        assert.equal(full.totalStars, 96);
+        assert.equal(R.getTotalStars(full), 96);
+        assert.equal(R.isGameCompleted(full), true);
+
+        for (let s = 1; s <= 8; s++) {
+            assert.equal(full.stages[s].bossDefeated, true);
+            assert.equal(R.isStageUnlocked(s, full), true);
+            assert.equal(R.isBossUnlocked(s, full.stages[s]), true);
+            for (let l = 1; l <= 4; l++) {
+                assert.equal(full.stages[s].levels[l].stars, 3);
+            }
+        }
+
+        assert.ok(full.certificate);
+        assert.equal(R.verifyCertificateCode(full.certificate.code, uid, ts), true);
+    });
+});

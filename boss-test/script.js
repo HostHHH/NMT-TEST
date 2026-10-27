@@ -16,6 +16,10 @@ import { summarizeStage } from '../core/rules.js';
 import { saveBossVictory } from '../core/progressStore.js';
 import { getStageParam, goToStage } from '../core/nav.js';
 import { BOSS } from '../core/config.js';
+import { COSSACK_TEXTS } from '../core/cossack.js';
+import { generateUniversal, downloadUniversal } from './certificate.js';
+
+const isCossack = () => !!window.istoriyaSettings?.cossackLang;
 
 // ── Фоновий рушій (без змін) ─────────────────────────────────────────
 
@@ -212,6 +216,10 @@ const el = {
     overlayTitle: document.getElementById('overlay-title'),
     overlayText: document.getElementById('overlay-text'),
     cert: document.getElementById('cert'),
+    certHint: document.getElementById('cert-hint'),
+    universalBlock: document.getElementById('universal-block'),
+    universalCanvas: document.getElementById('universal-canvas'),
+    universalDownloadBtn: document.getElementById('universal-download-btn'),
     saveState: document.getElementById('save-state'),
     retry: document.getElementById('retry-btn'),
     toStage: document.getElementById('stage-btn')
@@ -253,7 +261,9 @@ function updateHud() {
 
     el.hpFill.style.width = `${ratio * 100}%`;
     el.hpFill.classList.toggle('low', ratio <= BOSS.CRITICAL_HP_RATIO);
-    el.hpText.textContent = `HP ${bossHp} / ${BOSS.HP}`;
+    el.hpText.textContent = isCossack()
+        ? COSSACK_TEXTS.boss.hpText(bossHp, BOSS.HP).cossack
+        : `HP ${bossHp} / ${BOSS.HP}`;
     el.lives.textContent = '❤️'.repeat(lives) + '🖤'.repeat(BOSS.PLAYER_LIVES - lives);
 
     // Фон стає «критичним», коли бос уже сильно поранений.
@@ -333,12 +343,14 @@ function showOverlay(icon, title, text) {
 
 async function win() {
     background.setState('victory');
-    showOverlay('🏆', 'Перемога!', `${boss.name} переможений`);
+    const winTitle = isCossack() ? COSSACK_TEXTS.boss.winTitle.cossack : 'Перемога!';
+    const winText = isCossack() ? COSSACK_TEXTS.boss.winText(boss.name).cossack : `${boss.name} переможений`;
+    showOverlay('🏆', winTitle, winText);
 
-    // Блокуємо кнопки навігації, поки триває запис. Перехід на іншу
-    // сторінку обірвав би незавершену транзакцію Firestore (Chrome скасовує
-    // мережеві запити при вивантаженні), і bossDefeated не зберігся б,
-    // хоча гравець уже побачив «Перемога».
+    if (el.retry) el.retry.textContent = isCossack() ? COSSACK_TEXTS.boss.btnRetry.cossack : 'Ще раз';
+    if (el.toStage) el.toStage.textContent = isCossack() ? COSSACK_TEXTS.boss.btnToStage.cossack : 'До стадії';
+
+    // Блокуємо кнопки навігації, поки триває запис.
     el.toStage.disabled = true;
     el.retry.disabled = true;
     el.saveState.textContent = 'Зберігаємо…';
@@ -355,11 +367,29 @@ async function win() {
             ? `Відкрито наступну стадію (${result.nextStageUnlocked})`
             : 'Прогрес збережено';
 
-        // Фінал гри — показуємо код підтвердження.
+        // Фінал гри — показуємо код підтвердження та рендеримо Гетьманський Універсал.
         if (result.gameCompleted && result.certificate) {
-            el.overlayText.textContent = 'Ти пройшов усі 8 стадій!';
-            el.cert.textContent = `Код підтвердження: ${result.certificate.code}`;
+            el.overlayText.textContent = isCossack() ? COSSACK_TEXTS.boss.gameComplete.cossack : 'Ти пройшов усі 8 стадій!';
+            el.cert.textContent = isCossack() ? COSSACK_TEXTS.boss.certCode(result.certificate.code).cossack : `Код підтвердження: ${result.certificate.code}`;
             el.cert.classList.remove('hidden');
+            if (el.certHint) el.certHint.classList.remove('hidden');
+
+            if (el.universalBlock && el.universalCanvas) {
+                el.universalBlock.classList.remove('hidden');
+                const studentName = window.istoriyaUser?.displayName || 'Мацевич Орест Дмитрович';
+                
+                generateUniversal(el.universalCanvas, {
+                    name: studentName,
+                    code: result.certificate.code,
+                    date: new Date(result.certificate.completedAt || Date.now()).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' })
+                }).catch(err => console.error('Помилка рендерингу універсалу:', err));
+
+                if (el.universalDownloadBtn) {
+                    el.universalDownloadBtn.onclick = () => {
+                        downloadUniversal(el.universalCanvas, `Hetmanskyi_Universal_${result.certificate.code}.png`);
+                    };
+                }
+            }
         }
     } catch (error) {
         console.error('Не вдалося зберегти перемогу:', error);
@@ -372,7 +402,14 @@ async function win() {
 }
 
 function lose() {
-    showOverlay('💀', 'Поразка', `${boss.name} виявився сильнішим. Спробуй ще раз.`);
+    if (el.universalBlock) el.universalBlock.classList.add('hidden');
+    if (el.cert) el.cert.classList.add('hidden');
+    if (el.certHint) el.certHint.classList.add('hidden');
+    const loseTitle = isCossack() ? COSSACK_TEXTS.boss.loseTitle.cossack : 'Поразка';
+    const loseText = isCossack() ? COSSACK_TEXTS.boss.loseText(boss.name).cossack : `${boss.name} виявився сильнішим. Спробуй ще раз.`;
+    showOverlay('💀', loseTitle, loseText);
+    if (el.retry) el.retry.textContent = isCossack() ? COSSACK_TEXTS.boss.btnRetry.cossack : 'Ще раз';
+    if (el.toStage) el.toStage.textContent = isCossack() ? COSSACK_TEXTS.boss.btnToStage.cossack : 'До стадії';
     el.saveState.textContent = '';
 }
 

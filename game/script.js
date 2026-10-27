@@ -74,6 +74,7 @@ const HERO_VOICES = {
 
 let currentVoice = null;
 function playHeroVoice(action) {
+  if (typeof window.isVoiceMiniGameEnabled === 'function' && !window.isVoiceMiniGameEnabled()) return;
   const heroVoiceSet = HERO_VOICES[hero] || HERO_VOICES['bodka'];
   const soundPath = heroVoiceSet[action];
   if (!soundPath) return;
@@ -105,6 +106,7 @@ function stopVoice() {
 // ЗВУКОВІ ЕФЕКТИ УРОНУ (ДАЧА ТА ОТРИМАННЯ УРОНУ)
 // ========================================================
 function playHitSound(attackType) {
+  if (typeof window.isVoiceMiniGameEnabled === 'function' && !window.isVoiceMiniGameEnabled()) return;
   try {
     let soundFile = 'sounds/hit_slash.wav';
     if (attackType === 'basic') {
@@ -127,6 +129,7 @@ function playHitSound(attackType) {
 }
 
 function playHurtSound() {
+  if (typeof window.isVoiceMiniGameEnabled === 'function' && !window.isVoiceMiniGameEnabled()) return;
   try {
     const hurtAudio = new Audio('sounds/player_hurt.wav');
     hurtAudio.volume = 0.9;

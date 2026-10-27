@@ -11,6 +11,7 @@ import { summarizeStage } from '../core/rules.js';
 import { spendBonusStars, subscribeProgress } from '../core/progressStore.js';
 import { getStageParam, goToMap, goToLevel, goToBoss } from '../core/nav.js';
 import { STARS_MAX_PER_LEVEL, TOTAL_STAGES } from '../core/config.js';
+import { COSSACK_TEXTS } from '../core/cossack.js';
 
 const stage = getStageParam() ?? 1;
 
@@ -37,19 +38,29 @@ const el = {
 let uid = null;
 let currentProgress = null;
 
+let lastInfo = null;
+const isCossack = () => !!window.istoriyaSettings?.cossackLang;
+
 // Три зірки: здобуті заповнені, решта порожні.
 function starsText(count) {
     return '★'.repeat(count) + '☆'.repeat(STARS_MAX_PER_LEVEL - count);
 }
 
 function render(info) {
+    lastInfo = info;
+    const cossack = isCossack();
+    const stTexts = COSSACK_TEXTS.stage;
+
     el.name.textContent = info.name;
-    el.tag.textContent = `стадія ${info.stage} з 8`;
+    el.tag.textContent = cossack ? stTexts.stageTag(info.stage).cossack : stTexts.stageTag(info.stage).normal;
 
     // ── Лічильник і смуга до порогу ──
-    el.starsCount.textContent = `⭐ ${info.effectiveStars} / ${info.maxStars}`;
+    el.starsCount.textContent = cossack
+        ? stTexts.starsCount(info.effectiveStars, info.maxStars).cossack
+        : stTexts.starsCount(info.effectiveStars, info.maxStars).normal;
+
     el.bonusNote.textContent = info.bonusApplied > 0
-        ? `(з них ${info.bonusApplied} бонусних)`
+        ? (cossack ? stTexts.bonusNote(info.bonusApplied).cossack : stTexts.bonusNote(info.bonusApplied).normal)
         : '';
 
     // Смуга показує шлях саме до боса, а не до 12 зірок — гравцеві
@@ -58,17 +69,19 @@ function render(info) {
     el.barFill.style.width = `${ratio * 100}%`;
     el.barFill.classList.toggle('full', info.bossUnlocked);
 
-    // Скидаємо видимість до базового стану на КОЖНОМУ рендері. Без цього
-    // перехід «закрита → відкрита» (коли підписка приносить свіжі дані)
-    // лишав би рівні схованими, а напис «закрита» — видимим, хоча дані
-    // вже кажуть unlocked=true. render() має повністю задавати вигляд із
-    // info, а не залежати від попереднього стану DOM.
+    // Скидаємо видимість до базового стану на КОЖНОМУ рендері.
     el.lockedMsg.classList.add('hidden');
     el.levels.classList.remove('hidden');
     el.bossCard.classList.remove('hidden');
 
+    const bossTitleEl = el.bossCard.querySelector('.boss-title');
+    if (bossTitleEl) {
+        bossTitleEl.textContent = cossack ? stTexts.bossTitle.cossack : stTexts.bossTitle.normal;
+    }
+
     // ── Стадія закрита ──
     if (!info.unlocked) {
+        el.lockedMsg.textContent = cossack ? stTexts.stageLockedMsg.cossack : stTexts.stageLockedMsg.normal;
         el.lockedMsg.classList.remove('hidden');
         el.levels.classList.add('hidden');
         el.bossCard.classList.add('hidden');
@@ -84,34 +97,54 @@ function render(info) {
         card.className = 'level-card styled';
         if (lvl.completed) card.classList.add('done');
 
-        card.innerHTML = `
-            <div class="level-num">${lvl.level}</div>
-            <div class="level-stars">${starsText(lvl.stars)}</div>
-        `;
-        card.addEventListener('click', () => goToLevel(info.stage, lvl.level));
+        const isGuestLock = !uid && lvl.level > 1;
+        if (isGuestLock) {
+            card.classList.add('guest-locked');
+            card.innerHTML = `
+                <div class="level-num">${lvl.level} <span class="guest-lock-indicator">🔒</span></div>
+                <div class="level-stars">${cossack ? 'замок' : 'демо-замок'}</div>
+            `;
+            card.addEventListener('click', () => {
+                showGuestStageModal(
+                    cossack ? 'Рубіж закритий у поході' : 'Рівень закритий у демо-режимі',
+                    cossack
+                        ? 'У розвідувальному поході відкрито 1-й рубіж. Запишись до козацького реєстру через Google, аби зняти замок з усіх рубежів та вийти на супостата!'
+                        : 'У демо-режимі відкрито Рівень 1. Щоб розблокувати всі 4 рівні стадії, битву з Босом та зберігати свої зірки — увійдіть через Google!'
+                );
+            });
+        } else {
+            card.innerHTML = `
+                <div class="level-num">${lvl.level}</div>
+                <div class="level-stars">${starsText(lvl.stars)}</div>
+            `;
+            card.addEventListener('click', () => goToLevel(info.stage, lvl.level));
+        }
+
         el.levels.appendChild(card);
     });
 
     // ── Бос ──
     if (info.bossDefeated) {
-        el.hint.textContent = info.stage < TOTAL_STAGES
-            ? 'Боса переможено — наступна стадія відкрита'
-            : 'Боса переможено — гру пройдено!';
+        const isFinal = info.stage >= TOTAL_STAGES;
+        el.hint.textContent = cossack ? stTexts.bossDefeatedHint(isFinal).cossack : stTexts.bossDefeatedHint(isFinal).normal;
         el.bossIcon.textContent = '🏆';
-        el.bossSub.textContent = 'Переможено';
+        el.bossSub.textContent = cossack ? stTexts.bossDefeatedSub.cossack : stTexts.bossDefeatedSub.normal;
         el.bossCard.classList.add('defeated');
         el.bossCard.disabled = false;
     } else if (info.bossUnlocked) {
-        el.hint.textContent = 'Боса відкрито — час для бою';
+        el.hint.textContent = cossack ? stTexts.bossReadyHint.cossack : stTexts.bossReadyHint.normal;
         el.bossIcon.textContent = '⚔';
-        el.bossSub.textContent = 'Виклик прийнято?';
+        el.bossSub.textContent = cossack ? stTexts.bossReadySub.cossack : stTexts.bossReadySub.normal;
         el.bossCard.classList.add('unlocked');
         el.bossCard.disabled = false;
     } else {
-        el.hint.textContent =
-            `Ще ${info.starsNeeded} ⭐ до боса (потрібно ${info.threshold} з ${info.maxStars})`;
+        el.hint.textContent = cossack
+            ? stTexts.bossLockedHint(info.starsNeeded, info.threshold, info.maxStars).cossack
+            : stTexts.bossLockedHint(info.starsNeeded, info.threshold, info.maxStars).normal;
         el.bossIcon.textContent = '🔒';
-        el.bossSub.textContent = `Потрібно ${info.threshold} ⭐`;
+        el.bossSub.textContent = cossack
+            ? stTexts.bossLockedSub(info.threshold).cossack
+            : stTexts.bossLockedSub(info.threshold).normal;
         el.bossCard.disabled = true;
     }
 }
@@ -119,6 +152,8 @@ function render(info) {
 // Бонусний блок: пропозиція витратити зароблені в аркаді зірки на боса.
 function renderBonus(info) {
     const balance = currentProgress?.bonus?.balance || 0;
+    const cossack = isCossack();
+    const stTexts = COSSACK_TEXTS.stage;
 
     // Показуємо лише коли є сенс: стадія відкрита, бос ще закритий,
     // і на балансі щось є.
@@ -131,14 +166,19 @@ function renderBonus(info) {
 
     if (balance >= info.starsNeeded) {
         // Вистачає, щоб одразу відкрити боса.
-        el.bonusText.textContent = `Бонусних ★: ${balance}`;
-        el.bonusBtn.textContent = `Відкрити боса за ${info.starsNeeded} ★`;
+        el.bonusText.textContent = cossack
+            ? stTexts.bonusAffordText(balance).cossack
+            : stTexts.bonusAffordText(balance).normal;
+        el.bonusBtn.textContent = cossack
+            ? stTexts.bonusAffordBtn(info.starsNeeded).cossack
+            : stTexts.bonusAffordBtn(info.starsNeeded).normal;
         el.bonusBtn.classList.remove('hidden');
         el.bonusBtn.disabled = false;
     } else {
         // Замало — не даємо витратити частково (зірки списуються назавжди).
-        el.bonusText.textContent =
-            `Бонусних ★: ${balance}. До боса бракує ${info.starsNeeded} — заробляй час в аркаді.`;
+        el.bonusText.textContent = cossack
+            ? stTexts.bonusShortText(balance, info.starsNeeded).cossack
+            : stTexts.bonusShortText(balance, info.starsNeeded).normal;
         el.bonusBtn.classList.add('hidden');
     }
 }
@@ -181,8 +221,61 @@ if (window.limboReady) {
     });
 }
 
+function showGuestStageModal(title, text) {
+    const existing = document.getElementById('stage-guest-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'stage-guest-modal';
+    modal.className = 'stage-guest-modal';
+    modal.innerHTML = `
+        <div class="stage-guest-dialog">
+            <div style="font-size: 40px; margin-bottom: 8px;">🔒</div>
+            <h3>${title}</h3>
+            <p>${text}</p>
+            <div class="stage-guest-actions">
+                <button type="button" class="gold-btn" id="modal-guest-login-btn">Увійти через Google</button>
+                <button type="button" class="close-btn" id="modal-guest-close-btn">Зрозуміло</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector('#modal-guest-login-btn').addEventListener('click', () => {
+        if (typeof window.signInWithGoogle === 'function') {
+            window.signInWithGoogle();
+        }
+    });
+    modal.querySelector('#modal-guest-close-btn').addEventListener('click', () => {
+        modal.remove();
+    });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+}
+
 el.back.addEventListener('click', () => goToMap());
-el.bossCard.addEventListener('click', () => goToBoss(stage));
+el.bossCard.addEventListener('click', () => {
+    if (!uid) {
+        const cossack = isCossack();
+        showGuestStageModal(
+            cossack ? 'Супостат чекає на козака з реєстру' : 'Бос закритий у демо-режимі',
+            cossack
+                ? 'Герць із супостатом відкривається після проходження випробувань авторизованим козаком. Увійди через Google!'
+                : 'Битва з Босом вимагає проходження рівнів і збереження результату. Увійдіть через Google, щоб отримати повний доступ!'
+        );
+        return;
+    }
+    goToBoss(stage);
+});
+window.addEventListener('cossackLangChange', () => refresh());
+window.addEventListener('istoriyaAuthChange', (e) => {
+    uid = e.detail?.uid ?? null;
+    currentProgress = e.detail?.progress ?? null;
+    const modal = document.getElementById('stage-guest-modal');
+    if (modal) modal.remove();
+    refresh();
+});
 
 el.bonusBtn.addEventListener('click', async () => {
     if (!uid) return;

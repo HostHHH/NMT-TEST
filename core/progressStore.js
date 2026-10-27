@@ -40,7 +40,9 @@ import {
     computeBonusSpend,
     clampPlaytimeDelta,
     getTotalStars,
-    generateCertificateCode
+    generateCertificateCode,
+    normalizeCertificateCode,
+    createFullProgress
 } from './rules.js';
 
 // ── Ініціалізація ────────────────────────────────────────────────────
@@ -86,35 +88,7 @@ function userRef(uid) {
 // Джерело істини — усе одно levels; totalStars перераховується при кожному
 // записі результату.
 
-export function createEmptyProgress() {
-    const stages = {};
-    for (let stage = 1; stage <= TOTAL_STAGES; stage++) {
-        stages[stage] = {
-            bossDefeated: false,
-            bonusApplied: 0,
-            levels: {}
-        };
-    }
-
-    return {
-        schemaVersion: SCHEMA_VERSION,
-        totalStars: 0,
-        bonus: {
-            balance: 0,
-            earnedTotal: 0,
-            spentTotal: 0,
-            todayEarned: 0,
-            todayDate: null
-        },
-        playtime: {
-            totalSeconds: 0,
-            creditedSeconds: 0,
-            lastHeartbeatAt: null
-        },
-        certificate: null,
-        stages
-    };
-}
+export { createEmptyProgress } from './rules.js';
 
 // Ключ доби у локальному часі гравця ('2026-07-22').
 // Передається в rules.computeBonusGrant, щоб та лишалась чистою.
@@ -316,6 +290,16 @@ export async function saveBossVictory(uid, stage) {
                 version: 1
             };
             nextProgress.certificate = certificate;
+
+            // Реєструємо в публічній колекції certificates для швидкої перевірки журі
+            const certRef = doc(requireDb(), 'certificates', normalizeCertificateCode(certificate.code));
+            tx.set(certRef, {
+                code: certificate.code,
+                uid: uid,
+                completedAt: completedAt,
+                course: 'Повний курс НМТ з історії України (8 стадій)',
+                status: 'verified'
+            });
         }
 
         tx.set(ref, { progress: nextProgress, progressUpdatedAt: serverTimestamp() }, { merge: true });
@@ -454,3 +438,57 @@ function toMillis(value) {
 // Прапорець BOSS_LEVEL реекспортуємо, щоб сторінки не імпортували config
 // заради одного числа.
 export { BOSS_LEVEL };
+
+// ── Керування прогресом розробника (100% Unlock) ─────────────────────
+
+export async function grantFullProgress(uid, displayName = 'Мацевич Орест Дмитрович') {
+    const completedAt = Date.now();
+    const fullProgress = createFullProgress(uid, completedAt);
+    fullProgress.bonus.todayDate = todayKey();
+
+    const firestoreDb = requireDb();
+    const ref = userRef(uid);
+
+    // 1. Запис у власний документ users/{uid}
+    await setDoc(ref, {
+        progress: fullProgress,
+        displayName,
+        progressUpdatedAt: serverTimestamp()
+    }, { merge: true });
+
+    // 2. Реєстрація сертифіката у відкритому реєстрі (якщо правила на сервері дозволяють)
+    try {
+        const certCode = fullProgress.certificate.code;
+        const certRef = doc(firestoreDb, 'certificates', normalizeCertificateCode(certCode));
+        await setDoc(certRef, {
+            code: certCode,
+            uid: uid,
+            completedAt: completedAt,
+            course: 'Повний курс НМТ з історії України (8 стадій)',
+            status: 'verified'
+        });
+    } catch (certErr) {
+        console.warn('[Certificate Registry Warning] Не вдалося записати сертифікат у /certificates (перевірте хмарні правила):', certErr);
+    }
+
+    // 3. Синхронізація лідерборду
+    try {
+        const leaderRef = doc(firestoreDb, 'leaderboard', uid);
+        await setDoc(leaderRef, {
+            displayName,
+            highScore: 2500,
+            updatedAt: serverTimestamp()
+        }, { merge: true });
+    } catch (leaderErr) {
+        console.warn('[Leaderboard Warning] Не вдалося оновити /leaderboard (перевірте хмарні правила):', leaderErr);
+    }
+
+    return fullProgress;
+}
+
+export async function resetProgress(uid) {
+    const ref = userRef(uid);
+    const empty = createEmptyProgress();
+    await setDoc(ref, { progress: empty, progressUpdatedAt: serverTimestamp() }, { merge: true });
+    return empty;
+}

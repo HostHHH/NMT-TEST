@@ -14,6 +14,7 @@
 // обірваний запис), тож усі звернення захищені значеннями за замовчуванням.
 
 import {
+    SCHEMA_VERSION,
     STAR_THRESHOLDS,
     PASS_MIN_CORRECT,
     STARS_MAX_PER_LEVEL,
@@ -378,3 +379,76 @@ export function verifyCertificateCode(code, uid, completedAtMs) {
     const expected = normalizeCertificateCode(generateCertificateCode(uid, completedAtMs));
     return normalizeCertificateCode(code) === expected;
 }
+
+// ── Початковий стан прогресу ─────────────────────────────────────────
+
+export function createEmptyProgress() {
+    const stages = {};
+    for (let stage = 1; stage <= TOTAL_STAGES; stage++) {
+        stages[stage] = {
+            bossDefeated: false,
+            bonusApplied: 0,
+            levels: {}
+        };
+    }
+
+    return {
+        schemaVersion: SCHEMA_VERSION,
+        totalStars: 0,
+        bonus: {
+            balance: 0,
+            earnedTotal: 0,
+            spentTotal: 0,
+            todayEarned: 0,
+            todayDate: null
+        },
+        playtime: {
+            totalSeconds: 0,
+            creditedSeconds: 0,
+            lastHeartbeatAt: null
+        },
+        certificate: null,
+        stages
+    };
+}
+
+// ── Повний 100% прогрес (для тестування та автора проєкту) ─────────────
+
+export function createFullProgress(uid = 'IW5LKzQM5jQJergx42elqvQv28V2', completedAt = Date.now()) {
+    const stages = {};
+    for (let stage = 1; stage <= TOTAL_STAGES; stage++) {
+        const levels = {};
+        for (let lvl = 1; lvl <= NORMAL_LEVELS_PER_STAGE; lvl++) {
+            levels[lvl] = { stars: 3, bestScore: 5, passedAt: completedAt };
+        }
+        stages[stage] = {
+            bossDefeated: true,
+            bonusApplied: 0,
+            levels
+        };
+    }
+
+    return {
+        schemaVersion: SCHEMA_VERSION,
+        totalStars: TOTAL_STAGES * NORMAL_LEVELS_PER_STAGE * 3, // 96 зірок
+        bonus: {
+            balance: 3,
+            earnedTotal: 24,
+            spentTotal: 0,
+            todayEarned: 3,
+            todayDate: null
+        },
+        playtime: {
+            totalSeconds: 7200,
+            creditedSeconds: 7200,
+            lastHeartbeatAt: completedAt
+        },
+        certificate: {
+            code: generateCertificateCode(uid, completedAt),
+            completedAt,
+            version: 1
+        },
+        stages
+    };
+}
+

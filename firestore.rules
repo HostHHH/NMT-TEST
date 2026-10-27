@@ -1,30 +1,39 @@
 rules_version = '2';
 
-// Firestore Security Rules — Limbo
+// Firestore Security Rules — iSторія
 //
-// Головне правило: кожен пише лише у власний документ users/{uid}.
-// Цього достатньо, щоб ніхто не зіпсував чужий прогрес.
-//
-// Читання відкрите всім автентифікованим, бо лідерборд (loadTopPlayers)
-// робить запит по всій колекції users. Побічний ефект — залогінений
-// користувач бачить чужі settings і progress. Виправлення описане
-// в BACKLOG.md (окрема колекція /leaderboard).
-//
-// Свідомо НЕ перевіряємо тут кількість зірок, монотонність прогресу
-// й накрутку часу. Такі правила виходять громіздкими, а Firestore має
-// ліміт у 1000 виразів на перевірку — попередня, докладніша редакція
-// його вичерпала й почала відхиляти УСІ записи. Гравець, який полізе
-// в консоль накручувати собі зірки, обманює лише себе.
+// 1. Користувачі: читання й запис ТІЛЬКИ власнику (isOwner).
+//    Ніхто сторонній не може прочитати чужі settings, progress чи приватні дані.
+// 2. Лідерборд: відкритий на читання всім автентифікованим,
+//    але запис лише власнику документа (request.auth.uid == uid).
+// 3. Сертифікати: публічне читання для перевірки журі (allow read: if true),
+//    запис лише автентифікованим користувачам.
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /users/{uid} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == uid;
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
     }
 
-    // Усе інше закрито.
+    // Приватні профілі користувачів (прогрес, налаштування теми, баланс)
+    match /users/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+
+    // Публічна таблиця лідерів (лише displayName, highScore, updatedAt)
+    match /leaderboard/{uid} {
+      allow read: if request.auth != null;
+      allow write: if isOwner(uid);
+    }
+
+    // Реєстр підтверджених сертифікатів (публічна перевірка для журі та вчителів)
+    match /certificates/{code} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Усе інше закрито
     match /{document=**} {
       allow read, write: if false;
     }

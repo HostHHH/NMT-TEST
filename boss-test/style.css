@@ -1,9 +1,37 @@
+@font-face {
+    font-family: 'Tektur';
+    src: url('../shared/fonts/Tektur-VariableFont_wdth\,wght.ttf') format('truetype');
+    font-weight: 400 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mariupol';
+    font-weight: bold;
+    src: url('../shared/fonts/Mariupol-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Kobzar KS';
+    src: url('../shared/fonts/KobzarKS_v1-020.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Rutenia';
+    src: url('../shared/fonts/Rutenia2008VasylChebanyk.ttf') format('truetype');
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Tektur', sans-serif;
+}
+
 body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
     background: #05030a;
-    font-family: sans-serif;
+    font-family: 'Tektur', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -326,7 +354,7 @@ body.screen-shake {
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.88);
+    background: rgba(0, 0, 0, 0.92);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -336,6 +364,62 @@ body.screen-shake {
     text-align: center;
     color: white;
     z-index: 10;
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
+.universal-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    max-width: 600px;
+    width: 100%;
+    margin: 4px 0;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.universal-preview-wrapper {
+    width: 100%;
+    max-width: 540px;
+    border: 2px solid rgba(255, 215, 0, 0.45);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+    background: #000;
+}
+
+.universal-canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.universal-download-btn {
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    color: #1a1612;
+    font-size: 14.5px;
+    font-weight: 800;
+    font-family: 'Mariupol', sans-serif;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(255, 215, 0, 0.35);
+    transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.universal-download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(255, 215, 0, 0.5);
+    opacity: 0.95;
+}
+
+.universal-download-btn:active {
+    transform: translateY(1px);
 }
 
 .overlay-icon {
@@ -361,6 +445,26 @@ body.screen-shake {
     font-size: 20px;
     letter-spacing: 2px;
     color: gold;
+}
+
+.cert-hint {
+    margin: 4px 0 0;
+    font-size: 13.5px;
+    color: var(--text-secondary, #b8c0cc);
+    line-height: 1.5;
+    text-align: center;
+}
+
+.cert-link {
+    color: #ffd700;
+    text-decoration: underline;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.cert-link:hover {
+    opacity: 0.85;
 }
 
 .save-state {

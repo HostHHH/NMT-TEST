@@ -246,3 +246,69 @@ body {
     .question { font-size: 17px; min-height: 90px; }
     .stars { font-size: 42px; }
 }
+
+/* ── Демо-підказка на екрані результату ── */
+.guest-prompt-box {
+    margin-top: 16px;
+    padding: 20px 22px;
+    background: rgba(197, 164, 126, 0.12);
+    border: 1px solid rgba(197, 164, 126, 0.45);
+    border-radius: 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    animation: guestResultFade 0.3s ease-out;
+}
+
+@keyframes guestResultFade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.guest-prompt-badge {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #c5a47e;
+    text-transform: uppercase;
+}
+
+.guest-prompt-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.guest-prompt-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #dedede;
+    max-width: 480px;
+}
+
+.guest-prompt-btn {
+    margin-top: 6px;
+    background: #c5a47e;
+    color: #0e1117;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guest-prompt-btn:hover {
+    background: #dfbc94;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px rgba(197, 164, 126, 0.45);
+}

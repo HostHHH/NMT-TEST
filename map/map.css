@@ -108,12 +108,47 @@ model-viewer {
 .hs.locked .hs-dot { box-shadow: none; opacity: 0.85; }
 .hs.available  { --c: #3a86c8; }
 .hs.boss-ready { --c: #c83c3c; }
-.hs.boss-ready .hs-dot { animation: hsPulse 1.4s ease-in-out infinite; }
+.hs.boss-ready .hs-dot { 
+  animation: hsPulse 1.4s ease-in-out infinite; 
+  will-change: transform, opacity;
+}
 .hs.done { --c: #d4af37; }
 
 @keyframes hsPulse {
-  0%, 100% { box-shadow: 0 0 8px var(--c); }
-  50%      { box-shadow: 0 0 22px var(--c); }
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50%      { transform: scale(1.14); opacity: 1; }
+}
+
+/* ── Стильний лоадер під час завантаження моделі ── */
+.map-loader-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #000;
+  color: var(--gui-color, #c5a47e);
+  font-family: 'Tektur', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+
+.map-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(197, 164, 126, 0.2);
+  border-top-color: var(--gui-color, #c5a47e);
+  border-radius: 50%;
+  animation: mapSpin 0.9s linear infinite;
+  will-change: transform;
+}
+
+@keyframes mapSpin {
+  to { transform: rotate(360deg); }
 }
 
 /* model-viewer ховає точки на зворотному боці глобуса */

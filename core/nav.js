@@ -66,7 +66,8 @@ export function buildUrl(route, params = {}, pathname = '') {
 // або він поза межами — сторінка сама вирішує, що робити з null
 // (зазвичай відправити на карту).
 export function parseStage(search) {
-    const raw = new URLSearchParams(search || '').get('stage');
+    const params = new URLSearchParams(search || '');
+    const raw = params.get('stage') ?? params.get('boss');
     const value = Number(raw);
 
     if (raw === null || raw === '' || !Number.isInteger(value)) return null;
@@ -136,6 +137,7 @@ export function goToLobby() { return navigate(lobbyUrl(currentPath())); }
 export function goToHome() { return navigate(homeUrl(currentPath())); }
 export function goToMap() { return navigate(mapUrl(currentPath())); }
 export function goToGame() { return navigate(gameUrl(currentPath())); }
+export function goToAbout() { return navigate(aboutUrl(currentPath())); }
 export function goToStage(stage) { return navigate(stageUrl(stage, currentPath())); }
 export function goToLevel(stage, level) { return navigate(levelUrl(stage, level, currentPath())); }
 export function goToBoss(stage) { return navigate(bossUrl(stage, currentPath())); }
@@ -159,7 +161,9 @@ export function getLevelParam() { return parseLevel(currentSearch()); }
 // а цей блок разом із ним.
 if (hasWindow) {
     window.goToMap = goToMap;
-    window.goToDef = goToHome;   // стара назва головної сторінки
+    window.goToDef = goToAbout;   // за замовчуванням веде на "Про проєкт"
+    window.goToAbout = goToAbout;
+    window.goToHome = goToHome;
     window.goToGame = goToGame;
     window.goToTest = () => goToMap();  // застаріле: тест тепер потребує stage/level
 }

@@ -43,7 +43,21 @@
         <div class="overlay-icon" id="overlay-icon"></div>
         <h2 class="overlay-title" id="overlay-title"></h2>
         <p class="overlay-text" id="overlay-text"></p>
+
+        <!-- Блок візуального Гетьманського Універсалу -->
+        <div class="universal-block hidden" id="universal-block">
+            <div class="universal-preview-wrapper">
+                <canvas id="universal-canvas" class="universal-canvas"></canvas>
+            </div>
+            <button class="universal-download-btn" id="universal-download-btn">
+                <span>📜</span> Завантажити Гетьманський Універсал (PNG)
+            </button>
+        </div>
+
         <p class="cert hidden" id="cert"></p>
+        <p class="cert-hint hidden" id="cert-hint">
+            🔍 Підтвердити та перевірити дійсність коду можна в розділі <a href="../about/about.html#verification" class="cert-link">«Про проєкт»</a>
+        </p>
         <p class="save-state" id="save-state"></p>
         <div class="overlay-actions">
             <button class="overlay-btn" id="retry-btn">Ще раз</button>

@@ -57,9 +57,101 @@ body.custom-font * {
     font-family: 'Mariupol', 'KyivType Sans', sans-serif !important;
 }
 
-body.glow-effects .ctrl-play,
+body.glow-effects {
+    --glow-ambient: color-mix(in srgb, var(--gui-color) 35%, transparent);
+    --glow-strong: color-mix(in srgb, var(--gui-color) 65%, transparent);
+    --glow-subtle: color-mix(in srgb, var(--gui-color) 15%, transparent);
+}
+
+body.glow-effects .top-nav {
+    box-shadow: 0 4px 20px -2px var(--glow-ambient);
+    border-bottom-color: color-mix(in srgb, var(--gui-color) 40%, transparent);
+}
+
+body.glow-effects .nav-brand-tag {
+    box-shadow: 0 0 14px var(--gui-color);
+}
+
+body.glow-effects .nav-link.active {
+    box-shadow: 0 0 16px var(--glow-ambient);
+    border-color: var(--gui-color);
+    text-shadow: 0 0 8px var(--glow-strong);
+}
+
+body.glow-effects .settings-card,
+body.glow-effects .info-card,
+body.glow-effects .music-player-box {
+    box-shadow: 0 0 25px -5px var(--glow-ambient), 0 0 0 1px var(--glow-subtle);
+    border-color: color-mix(in srgb, var(--gui-color) 40%, transparent);
+}
+
+body.glow-effects .settings-card:hover {
+    box-shadow: 0 0 30px -2px var(--glow-strong), 0 0 0 1px var(--gui-color);
+}
+
+body.glow-effects .card-tag {
+    box-shadow: 0 0 10px var(--glow-ambient);
+    text-shadow: 0 0 6px var(--gui-color);
+}
+
+body.glow-effects .ctrl-play {
+    box-shadow: 0 0 20px var(--gui-color), 0 0 40px var(--glow-ambient);
+}
+
+body.glow-effects .ctrl-btn:hover {
+    box-shadow: 0 0 14px var(--glow-ambient);
+    border-color: var(--gui-color);
+}
+
+body.glow-effects .playlist-chip.active {
+    box-shadow: 0 0 14px var(--gui-color);
+    border-color: var(--gui-color);
+}
+
+body.glow-effects .live-radio-pill {
+    box-shadow: 0 0 14px rgba(255, 71, 87, 0.6);
+}
+
 body.glow-effects .color-square {
+    box-shadow: 0 0 20px var(--gui-color);
+    border-color: #ffffff;
+}
+
+body.glow-effects .preset-square-btn:hover {
+    box-shadow: 0 0 14px var(--gui-color);
+}
+
+body.glow-effects .timeline-bar::-webkit-slider-thumb,
+body.glow-effects .volume-slider::-webkit-slider-thumb {
+    box-shadow: 0 0 14px var(--gui-color), 0 0 22px var(--gui-color);
+}
+
+body.glow-effects .timeline-bar::-moz-range-thumb,
+body.glow-effects .volume-slider::-moz-range-thumb {
+    box-shadow: 0 0 14px var(--gui-color), 0 0 22px var(--gui-color);
+}
+
+body.glow-effects .switch input:checked + .slider {
     box-shadow: 0 0 16px var(--gui-color);
+}
+
+body.glow-effects .wood-btn,
+body.glow-effects .action-btn,
+body.glow-effects .overlay-btn,
+body.glow-effects .next-btn:not(:disabled) {
+    box-shadow: 0 0 18px var(--glow-ambient), 0 0 3px var(--gui-color);
+}
+
+body.glow-effects .wood-btn:hover,
+body.glow-effects .action-btn:hover,
+body.glow-effects .overlay-btn:hover,
+body.glow-effects .next-btn:not(:disabled):hover {
+    box-shadow: 0 0 24px var(--gui-color);
+}
+
+body.glow-effects .boss-card,
+body.glow-effects .hs {
+    filter: drop-shadow(0 0 8px var(--gui-color));
 }
 
 .hidden {
@@ -365,6 +457,130 @@ body.pattern-back {
     color: #ff7b85;
 }
 
+/* ══════════════════════════════════════════
+   БІГУЧА СТРІЧКА ЦИТАТ ГЕТЬМАНІВ (TICKER)
+   ══════════════════════════════════════════ */
+.quotes-ticker-bar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    background: rgba(12, 15, 21, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    z-index: 99;
+    user-select: none;
+}
+
+.ticker-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 16px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.ticker-icon {
+    font-size: 13px;
+}
+
+.ticker-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--gui-color, #c5a47e);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.ticker-track-wrapper {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+
+.ticker-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: tickerLoop 72s linear infinite;
+}
+
+.ticker-track:hover {
+    animation-play-state: paused;
+    cursor: pointer;
+}
+
+.ticker-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding-right: 24px;
+    white-space: nowrap;
+}
+
+.ticker-item {
+    font-size: 12.5px;
+    color: var(--text-primary, #e6edf3);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+.ticker-author {
+    color: var(--gui-color, #c5a47e);
+    font-weight: 700;
+    margin-right: 6px;
+}
+
+.ticker-dot {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 10px;
+}
+
+body.glow-effects .quotes-ticker-bar {
+    box-shadow: 0 4px 18px -4px var(--glow-ambient, rgba(197, 164, 126, 0.35));
+    border-bottom-color: color-mix(in srgb, var(--gui-color) 45%, transparent);
+}
+
+body.glow-effects .ticker-label,
+body.glow-effects .ticker-author {
+    text-shadow: 0 0 8px var(--gui-color);
+}
+
+@keyframes tickerLoop {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 650px) {
+    .ticker-label {
+        display: none;
+    }
+    .ticker-badge {
+        padding: 0 10px;
+    }
+    .ticker-item {
+        font-size: 11.5px;
+    }
+}
+
 /* ── Контейнер сторінки ── */
 .page-main {
     flex: 1;
@@ -373,6 +589,10 @@ body.pattern-back {
     padding: 76px 16px 36px;
     position: relative;
     z-index: 1;
+}
+
+.quotes-ticker-bar ~ .page-main {
+    padding-top: 110px;
 }
 
 .settings-grid {
@@ -1185,3 +1405,219 @@ input:checked + .slider:before {
         padding: 16px;
     }
 }
+
+/* ══════════════════════════════════════════
+   ДЕМО-РЕЖИМ (ГІСТЬ ДЛЯ ЖУРІ ТА ОЗНАЙОМЛЕННЯ)
+   ══════════════════════════════════════════ */
+.nav-guest-pill {
+    background: rgba(197, 164, 126, 0.18);
+    color: var(--accent-gold, #c5a47e);
+    border: 1px solid rgba(197, 164, 126, 0.45);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 10px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.nav-login-btn {
+    background: rgba(197, 164, 126, 0.16) !important;
+    border: 1px solid rgba(197, 164, 126, 0.5) !important;
+    color: var(--accent-gold, #c5a47e) !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+}
+
+.nav-login-btn:hover {
+    background: var(--accent-gold, #c5a47e) !important;
+    color: #0e1117 !important;
+}
+
+/* Оверлей замка для сторінки налаштувань */
+.guest-lock-overlay {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(14, 17, 23, 0.82);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    padding: 20px;
+}
+
+.guest-lock-card {
+    background: #181d26;
+    border: 1px solid rgba(197, 164, 126, 0.45);
+    border-radius: 18px;
+    padding: 40px 32px;
+    max-width: 540px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(197, 164, 126, 0.15);
+    animation: guestFadeIn 0.35s ease-out;
+}
+
+@keyframes guestFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.guest-lock-icon {
+    font-size: 46px;
+    margin-bottom: 12px;
+}
+
+.guest-lock-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-gold, #c5a47e);
+    background: rgba(197, 164, 126, 0.14);
+    border: 1px solid rgba(197, 164, 126, 0.35);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.guest-lock-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 14px;
+    font-family: 'Mariupol-Bold', 'Montserrat', sans-serif;
+}
+
+.guest-lock-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #dedede;
+    margin-bottom: 10px;
+}
+
+.guest-lock-sub {
+    font-size: 13px;
+    color: #9c9c9c;
+    margin-bottom: 26px;
+}
+
+.guest-lock-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.guest-lock-login-btn {
+    background: var(--accent-gold, #c5a47e);
+    color: #0e1117;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.guest-lock-login-btn:hover {
+    background: #dfbc94;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(197, 164, 126, 0.4);
+}
+
+.guest-lock-back-btn {
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.guest-lock-back-btn:hover {
+    border-color: rgba(197, 164, 126, 0.6);
+    color: #ffffff;
+}
+
+/* ── Панель автора / Dev Admin ── */
+.dev-section {
+    border-top: 3px solid #ffd700 !important;
+}
+
+.dev-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dev-desc {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.dev-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dev-btn {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-family: 'Mariupol', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
+}
+
+.dev-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+.dev-btn:active {
+    transform: translateY(1px);
+}
+
+.dev-btn-unlock {
+    background: linear-gradient(135deg, #ffd700, #b8860b);
+    color: #121212;
+    box-shadow: 0 4px 14px rgba(255, 215, 0, 0.3);
+}
+
+.dev-btn-reset {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: #f87171;
+}
+

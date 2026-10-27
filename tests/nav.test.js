@@ -67,6 +67,7 @@ describe('parseStage', () => {
     it('порожнє значення', () => assert.equal(N.parseStage('?stage='), null));
     it('параметра немає', () => assert.equal(N.parseStage('?level=2'), null));
     it('порожній рядок запиту', () => assert.equal(N.parseStage(''), null));
+    it('передано ?boss= замість ?stage=', () => assert.equal(N.parseStage('?boss=8'), 8));
     it('серед інших параметрів', () => assert.equal(N.parseStage('?level=2&stage=6'), 6));
 });
 

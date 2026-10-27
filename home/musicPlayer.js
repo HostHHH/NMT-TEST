@@ -4,20 +4,19 @@
 export const PLAYLISTS = [
     {
         id: 'metal',
-        name: 'Метал-бенгери',
-        badge: 'Heavy & Fast',
+        name: 'Метал-підтримка',
+        badge: 'Світовий Рок за Україну',
         icon: '🎸',
-        desc: 'Качаючий важкий саунд із твого списку для тих, хто любить пожосткіше:',
+        desc: 'Легендарні світові рок- та метал-гурти, які відкрито підтримали Україну, виступали проти агресії та допомагають постраждалим:',
         liveStream: 'https://online.radioroks.ua/RadioROKS_HD',
         liveStreamName: 'Radio ROKS HD (Україна)',
         tracks: [
-            { title: 'Fast as a Shark', artist: 'Accept', duration: '3:49', src: '../music/fast_as_a_shark.mp3' },
-            { title: 'AC/DC - Thunderstruck', artist: 'Miro1973', duration: '4:52', src: '../music/thunderstruck.mp3' },
-            { title: 'Battery (Metallica)', artist: 'PROTOTYPE', duration: '5:12', src: '../music/battery.mp3' },
-            { title: 'Benzin', artist: 'Diezel / RammsteinTribute', duration: '3:46', src: '../music/benzin.mp3' },
-            { title: 'The Beautiful People (Marilyn Manson)', artist: 'SOS Management', duration: '3:38', src: '../music/the_beautiful_people.mp3' },
-            { title: 'Bloodline', artist: 'TrueStar / Slayer', duration: '3:36', src: '../music/bloodline.mp3' },
-            { title: 'Radio', artist: 'Rammstein', duration: '4:37', src: '../music/radio.mp3' }
+            { title: 'Battery', artist: 'Metallica', duration: '5:12', src: '../music/battery.mp3' },
+            { title: 'The Trooper', artist: 'Iron Maiden', duration: '4:11', src: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/7f/34/0c/7f340c2b-93b3-b188-cb6b-76e5c6ab3ec7/mzaf_11925375451620085601.plus.aac.p.m4a' },
+            { title: 'Breaking the Law', artist: 'Judas Priest', duration: '2:35', src: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/d1/13/15/d113155f-6fbb-d883-740d-faee46fadc1f/mzaf_4958056101472605211.plus.aac.p.m4a' },
+            { title: 'Symphony of Destruction', artist: 'Megadeth', duration: '4:02', src: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/e9/e2/2c/e9e22c1d-2781-0629-b6f9-472a2107d35d/mzaf_901045915115560835.plus.aac.p.m4a' },
+            { title: 'Paranoid', artist: 'Black Sabbath (Ozzy Osbourne)', duration: '2:48', src: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/be/9d/07/be9d07a7-0e2b-7973-a503-87e12c564d22/mzaf_11577128408735924283.plus.aac.p.m4a' },
+            { title: 'Hey Hey Rise Up (feat. Андрій Хливнюк)', artist: 'Pink Floyd', duration: '3:27', src: 'https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/1e/2c/80/1e2c80f4-dac1-26bc-1515-79ca311d2600/mzaf_10685187440115987750.plus.aac.p.m4a' }
         ]
     },
     {
